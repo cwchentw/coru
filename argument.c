@@ -9,6 +9,7 @@ struct lai_argument_t {
     char **argv;
     int index;
     COMMAND cmd;
+    char *path;
 };
 
 lai_argument_t * lai_argument_parse(int argc, char **argv)
@@ -42,6 +43,7 @@ lai_argument_t * lai_argument_parse(int argc, char **argv)
             }
             else {
                 arg->cmd = COMMAND_LOAD;
+                arg->path = arg->argv[arg->index];
                 arg->index += 1;
             }
         }
@@ -62,4 +64,11 @@ COMMAND lai_argument_command(lai_argument_t *self)
     assert(self);
 
     return self->cmd;
+}
+
+char * lai_argument_path(lai_argument_t *self)
+{
+    assert(self);
+
+    return self->path;
 }
