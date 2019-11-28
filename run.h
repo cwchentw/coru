@@ -4,6 +4,6 @@
 #include "argument.h"
 #include "boolean.h"
 
-BOOL lai_run(lai_argument_t *arg);
+BOOL lai_run(lai_argument_t *arg, char *out);
 
 #endif  /* LAI_RUN_H */

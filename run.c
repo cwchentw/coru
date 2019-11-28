@@ -5,7 +5,7 @@
 #include "metadata.h"
 #include "utils.h"
 
-BOOL lai_run(lai_argument_t *arg)
+BOOL lai_run(lai_argument_t *arg, char *out)
 {
     if (is_command_equal(lai_argument_command(arg), COMMAND_VERSION)) {
         help_version();
