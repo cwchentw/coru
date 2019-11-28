@@ -21,6 +21,13 @@ lai_argument_t * lai_argument_parse(int argc, char **argv)
     arg->argc = argc;
     arg->argv = argv;
     arg->index = 1;
+    arg->cmd = COMMAND_UNKNOWN;
+    arg->path = NULL;
+
+    if (argc < 2) {
+        arg->cmd = COMMAND_TOO_FEW;
+        return arg;
+    }
 
     while (arg->index < arg->argc) {
         if (0 == strcmp(arg->argv[arg->index], "-v")
