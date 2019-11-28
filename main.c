@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         PUTERR("Failed to parse argument(s)");
         goto ERROR;
     }
-    
+
     if (!run(arg)) {
         PUTERR("Unknown option");
         goto ERROR;

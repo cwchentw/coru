@@ -50,6 +50,6 @@ void lai_argument_delete(void *self)
 COMMAND lai_argument_command(lai_argument_t *self)
 {
     assert(self);
-    
+
     return self->cmd;
 }
