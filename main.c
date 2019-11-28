@@ -1,5 +1,6 @@
 #include "argument.h"
 #include "help.h"
+#include "metadata.h"
 #include "utils.h"
 
 BOOL run(lai_argument_t *arg);
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
     }
 
     if (!run(arg)) {
-        PUTERR("Unknown option");
+
         goto ERROR;
     }
 
@@ -45,6 +46,16 @@ BOOL run(lai_argument_t *arg)
         help_license();
         return TRUE;
     }
-
-    return FALSE;
+    else if (is_command_equal(lai_argument_command(arg), COMMAND_LOAD)) {
+        PUTERR("Not implemented yet");
+        return FALSE;
+    }
+    else if (is_command_equal(lai_argument_command(arg), COMMAND_TOO_MANY)) {
+        PUTERR("%s only accepts single file", LAI_PROGRAM);
+        return FALSE;
+    }
+    else {
+        PUTERR("Unknown option");
+        return FALSE;
+    }
 }

@@ -31,9 +31,19 @@ lai_argument_t * lai_argument_parse(int argc, char **argv)
             arg->cmd = COMMAND_LICENSE;
             break;
         }
-        else {
+        else if ('-' == arg->argv[arg->index][0]) {
             arg->cmd = COMMAND_UNKNOWN;
             break;
+        }
+        else {
+            if (COMMAND_LOAD == arg->cmd) {
+                arg->cmd = COMMAND_TOO_MANY;
+                break;
+            }
+            else {
+                arg->cmd = COMMAND_LOAD;
+                arg->index += 1;
+            }
         }
     }
 
