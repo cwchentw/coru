@@ -32,14 +32,21 @@ BOOL lai_run(lai_argument_t *arg, char *out)
             PUTERR("Failed to load stats");
             goto ERROR_LOAD;
         }
+        
+        /* Use stat() to check that file at path is available. */
+
+        /* Check this statement later. */
+        /* detect_target_language() may detect target language by
+           opening target source. Hence, we put the statement before
+           fopen() statement. */
+        char *lang = detect_target_language(lai_argument_path(arg));
 
         fp = fopen(lai_argument_path(arg), "r");
         if (!fp) {
             PUTERR("Failed to open file at %s", lai_argument_path(arg));
             goto ERROR_LOAD;
         }
-        
-        char *lang = detect_target_language(lai_argument_path(arg));
+
 #if DEBUG
         if (is_string_equal(lang, "")) {
             PUTERR("Unsupported language");
