@@ -49,7 +49,7 @@ $ lai --ruler path/to/Klass.java
 
 There are three options to add ruler(s):
 
-* `--ruler` to add a ruler at the top of target source 
+* `--ruler` to add a ruler at the top of target source
 * `--ruler-footer` to add a ruler at the bottom of target source
 * `--ruler-both` to add rulers at both the top and the buttom of target source
 
@@ -62,6 +62,10 @@ $ lai --start "/*" --end "*/"  path/to/unknown.ext
 ## Options
 
 Pending.
+
+## Note
+
+We copy the source code of `snprintf(3)` [here](https://www.ijs.si/software/snprintf/).
 
 ## Copyright
 

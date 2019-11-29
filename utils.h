@@ -27,4 +27,8 @@ BOOL is_command_equal(COMMAND a, COMMAND b);
 char * detect_target_language(char *path);
 BOOL is_string_equal(char *a, char *b);
 
+#if __STDC_VERSION__ < 199901L
+    int snprintf( char * s, size_t n, const char * format, ... );
+#endif
+
 #endif  /* LAI_UTILS_H */

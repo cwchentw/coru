@@ -30,7 +30,7 @@ char * detect_target_language(char *path)
     char *sp = path;
     char ext[BUF_SIZE];
     
-    sprintf(ext, "%s", sp + index);
+    snprintf(ext, BUF_SIZE, "%s", sp + index);
 
     #define LANG_C   "C"
     #define LANG_CPP "C++"
