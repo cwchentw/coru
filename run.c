@@ -38,6 +38,16 @@ BOOL lai_run(lai_argument_t *arg, char *out)
             PUTERR("Failed to open file at %s", lai_argument_path(arg));
             goto ERROR_LOAD;
         }
+        
+        char *lang = detect_target_language(lai_argument_path(arg));
+#if DEBUG
+        if (is_string_equal(lang, "")) {
+            PUTERR("Unsupported language");
+        }
+        else {
+            PUTS("Target language: %s", lang);   
+        }
+#endif
 
         size_t line_size = 150;  /* Sensible line size */
         line = (char *) malloc(line_size * sizeof(char));
@@ -71,6 +81,19 @@ BOOL lai_run(lai_argument_t *arg, char *out)
         PUTS("Source width: %lu", lai_stats_width(stats));
         PUTS("Source height: %lu", lai_stats_height(stats));
 #endif
+
+        /* The format of line number:
+             *start*    1 *end*
+           ^^ --> indent after original source code
+              ^^^^^^ --> start word of comment
+                    ^ --> one space
+                     ^^^ --> indent for line number
+                        ^ --> line number
+                         ^ --> one space (optional)
+                          ^^^^^ --> end word of comment (optional)
+        */
+        /* Implement two hash tables to store the start word and the end word
+           of source code of specific language. */
 
         /* Free system resources. */
         free(line);

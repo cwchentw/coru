@@ -24,5 +24,7 @@
     }
 
 BOOL is_command_equal(COMMAND a, COMMAND b);
+char * detect_target_language(char *path);
+BOOL is_string_equal(char *a, char *b);
 
 #endif  /* LAI_UTILS_H */
