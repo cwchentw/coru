@@ -1,4 +1,4 @@
-CFLAGS=-O2 -Wall -Wextra -std=c89
+CFLAGS=-Wall -Wextra -std=c89
 RMFLAGS=-f
 TARGET=lai
 OBJS=argument.o help.o utils.o stats.o run.o main.o
@@ -6,11 +6,18 @@ OBJS=argument.o help.o utils.o stats.o run.o main.o
 
 .PHONY: clean
 
-$(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+debug: $(OBJS)
+	$(CC) -DDEBUG -o $(TARGET) $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+
+release: $(OBJS)
+	$(CC) -O2 -o $(TARGET) $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 %.o: %.c
+ifeq ($(MAKECMDGOALS),rlease)
 	$(CC) -c $< $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
+	$(CC) -DDEBUG -c $< $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 
 clean:
 	$(RM) $(OBJS) $(TARGET)
