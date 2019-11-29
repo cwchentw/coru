@@ -1,7 +1,7 @@
 CFLAGS=-O2 -Wall -Wextra -std=c89
 RMFLAGS=-f
 TARGET=lai
-OBJS=argument.o help.o utils.o run.o main.o
+OBJS=argument.o help.o utils.o stats.o run.o main.o
 
 
 .PHONY: clean
