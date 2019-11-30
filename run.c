@@ -87,6 +87,7 @@ BOOL lai_run(lai_argument_t *arg, char *out)
 #if DEBUG
         PUTS("Source width: %lu", lai_stats_width(stats));
         PUTS("Source height: %lu", lai_stats_height(stats));
+        /* Add stats for non-comment lines. */
 #endif
 
         /* The format of line number:
