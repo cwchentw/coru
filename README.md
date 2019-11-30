@@ -29,7 +29,7 @@ Most major tier languages are supported. Here are currently supported ones:
 * Swift
 * Golang
 * Rust
-* Bash
+* Sh-compatible Shells
 
 For unsupported language, you may set custom character for single line comment. It should work as well.
 
@@ -41,17 +41,11 @@ Just feed your sample source file:
 $ lai path/to/file.c
 ```
 
-Add optional width rulers:
+Add an optional width ruler:
 
 ```console
 $ lai --ruler path/to/Klass.java
 ```
-
-There are three options to add ruler(s):
-
-* `--ruler` to add a ruler at the top of target source
-* `--ruler-footer` to add a ruler at the bottom of target source
-* `--ruler-both` to add rulers at both the top and the buttom of target source
 
 For unknown source, you may apply start text and, optionally, end text.
 
@@ -61,7 +55,26 @@ $ lai --start "/*" --end "*/"  path/to/unknown.ext
 
 ## Options
 
+### General Options
+
+* `-v` or `--version` to show version info and exit
+* `--license` to show license info and exit
+* `-h` or `--help` to show help info and exit
+
+### Options for its Output
+
 Pending.
+
+### Options related to Rulers
+
+* `--ruler` to add a ruler at the top of target source
+* `--ruler-footer` to add a ruler at the bottom of target source
+* `--ruler-both` to add rulers at both the top and the buttom of target source
+
+### Options related to Comments for Unknown Languages
+
+* `--start` to set start word of comment text
+* `--end` to set end word of comment text, default to an empty string
 
 ## Note
 
