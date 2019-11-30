@@ -68,7 +68,10 @@ Pending.
 
 ### Options related to Line Numbers
 
-Pending.
+* `--all` to add line numbers to all lines of source (default)
+* `--non-empty` to add line numbers to only non-empty lines of source
+
+`lai` will skip blocked comments in either parameter.
 
 ### Options related to Rulers
 
