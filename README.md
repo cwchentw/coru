@@ -82,6 +82,8 @@ The width of a ruler is set by the maximal width of target source code. Neverthe
 
 * `--start` to set start word of comment text
 * `--end` to set end word of comment text, default to an empty string
+* `--block-start` to set start word of comment block text, default to an empty string
+* `--block-end` to set end word of comment block text, default to an empty string
 
 ## Note
 
