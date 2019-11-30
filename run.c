@@ -23,6 +23,7 @@ BOOL lai_run(lai_argument_t *arg, char *out)
         return FALSE;
     }
     else if (is_command_equal(lai_argument_command(arg), COMMAND_LOAD)) {
+        /* Refactor COMMAND_LOAD to an external function. */
         lai_stats_t *stats = NULL;
         FILE *fp = NULL;
         char *line = NULL;
