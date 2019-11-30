@@ -1,6 +1,6 @@
 # lai
 
-`lai`, prounced as *line*, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
+`lai`, pounced as *line*, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
 ## Warning
 
@@ -9,6 +9,7 @@
 ## System Requirements
 
 * A C compiler that supports ANSI C
+* Make
 
 We tested `lai` on Ubuntu 18.04 LTS. It should work on any platform that owns a standard C compiler.
 
