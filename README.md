@@ -66,11 +66,17 @@ $ lai --start "/*" --end "*/"  path/to/unknown.ext
 
 Pending.
 
+### Options related to Line Numbers
+
+Pending.
+
 ### Options related to Rulers
 
 * `--ruler` to add a ruler at the top of target source
 * `--ruler-footer` to add a ruler at the bottom of target source
 * `--ruler-both` to add rulers at both the top and the buttom of target source
+
+The width of a ruler is set by the maximal width of target source code. Nevertheless, its maximal width doesn't exceed 100, which is a sensible number for typical source codes.
 
 ### Options related to Comments for Unknown Languages
 
