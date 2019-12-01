@@ -1,5 +1,20 @@
-RMFLAGS=-f
-TARGET=lai
+# Detect system OS.
+ifeq ($(OS),Windows_NT)
+    detected_OS := Windows
+else
+    detected_OS := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+endif
+
+ifeq ($(detected_OS),Windows)
+	RM=del
+endif
+
+ifeq ($(detected_OS),Windows)
+	TARGET=lai.exe
+else
+	TARGET=lai
+endif
+
 OBJS=argument.o help.o utils.o stats.o run.o snprintf.o main.o
 
 ifeq ($(CC),cc)
@@ -20,16 +35,27 @@ else ifeq ($(CC),clang)
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_TARGET=-o $(TARGET)
 	DEBUG=-DDEBUG
+else ifeq ($(CC),cl)
+	CFLAGS_INTERNAL=/W4
+	OPTIMIZE=/O2
+	SRC_TO_OBJ=
+	OBJ_TO_TARGET=/Fe $(TARGET)
+	DEBUG=/D DEBUG
 endif
 
 
 .PHONY: debug release clean
 
-debug: $(OBJS)
-	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+debug: $(TARGET)
 
-release: $(OBJS)
+release: $(TARGET)
+
+$(TARGET): $(OBJS)
+ifeq ($(MAKECMDGOALS),release)
 	$(CC) $(OBJ_TO_TARGET) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
+	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 
 snprintf.o: snprintf.c
 ifeq ($(MAKECMDGOALS),release)
