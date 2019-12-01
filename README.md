@@ -11,7 +11,7 @@
 * A C compiler that supports ANSI C
 * Make
 
-We tested `lai` on Ubuntu 18.04 LTS. It should work on any platform that owns a standard C compiler.
+We tested `lai` on Ubuntu 18.04 LTS and Amazon Linux. The latter is largely RHEL or CentOS compatible. It should work on any platform that owns a standard C compiler.
 
 ## Supported Languages
 
