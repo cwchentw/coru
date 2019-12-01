@@ -15,7 +15,11 @@ else
 	TARGET=lai
 endif
 
-OBJS=argument.o help.o utils.o stats.o run.o snprintf.o main.o
+ifeq ($(CC),cl)
+	OBJS=argument.o help.o utils.o stats.o run.o main.o
+else
+	OBJS=argument.o help.o utils.o stats.o run.o snprintf.o main.o
+endif
 
 ifeq ($(CC),cc)
 	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
