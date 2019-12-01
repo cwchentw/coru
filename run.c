@@ -1,5 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
+
+#if _WIN32
+    #include "Shlwapi.h"
+#elif __unix__ || __apple
+    #include <unistd.h>
+    #include <sys/stat.h>
+#else
+    #error "Unsupported platform"
+#endif
+
 #include "argument.h"
 #include "boolean.h"
 #include "command.h"
@@ -34,7 +44,6 @@ BOOL lai_run(lai_argument_t * arg, char *out)
 
 static BOOL lai_run_load(lai_argument_t * arg, char *out)
 {
-    /* Refactor COMMAND_LOAD to an external function. */
     lai_stats_t *stats = NULL;
     FILE *fp = NULL;
     char *line = NULL;
@@ -45,7 +54,21 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
         goto ERROR_LOAD;
     }
 
-    /* Use stat() to check that file at path is available. */
+#if _WIN32
+    if (!PathFileExists(lai_argument_path(arg))) {
+        PUTERR("Failed to open file at %s", lai_argument_path(arg));
+        goto ERROR_LOAD;
+    }
+#elif __unix__ || __apple__
+    struct stat st;
+
+    if (stat(lai_argument_path(arg), &st) & F_OK) {
+        PUTERR("Failed to open file at %s", lai_argument_path(arg));
+        goto ERROR_LOAD;
+    }
+#else
+    #error "Unsupported platform"
+#endif
 
     /* Check this statement later. */
     /* detect_target_language() may detect target language by
@@ -66,7 +89,7 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
     }
 #endif
 
-    size_t line_size = 150;	/* Sensible line size */
+    size_t line_size = 150;	 /* Sensible line size */
     line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");
@@ -100,14 +123,14 @@ LOAD_LINE:
 #endif
 
     /* The format of line number:
-     *start*    1 *end*
+       *start*    1 *end*
      ^^ --> indent after original source code
-     ^^^^^^ --> start word of comment
-     ^ --> one space
-     ^^^ --> indent for line number
-     ^ --> line number
-     ^ --> one space (optional)
-     ^^^^^ --> end word of comment (optional)
+       ^^^^^^^ --> start word of comment
+              ^ --> one space
+               ^^^ --> indent for line number
+                  ^ --> line number
+                   ^ --> one space (optional)
+                    ^^^^^ --> end word of comment (optional)
      */
     /* Implement two hash tables to store the start word and the end word
        of source code of specific language. */
