@@ -284,6 +284,8 @@
 /* NO USER SERVICABLE PARTS FOLLOWING THIS POINT */
 /* ============================================= */
 
+#if __STDC_VERSION__ < 199901L
+
 #include "utils.h"
 
 #define PORTABLE_SNPRINTF_VERSION_MAJOR 2
@@ -1025,3 +1027,5 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
   return (int) str_l;
 }
 #endif
+
+#endif  /* Only compile it on ANSI C */

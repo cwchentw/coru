@@ -16,7 +16,7 @@ else
 endif
 
 ifeq ($(CC),cl)
-	OBJS=argument.o help.o utils.o stats.o run.o main.o
+	OBJS=argument.obj help.obj utils.obj stats.obj run.obj main.obj
 else
 	OBJS=argument.o help.o utils.o stats.o run.o snprintf.o main.o
 endif
@@ -42,8 +42,8 @@ else ifeq ($(CC),clang)
 else ifeq ($(CC),cl)
 	CFLAGS_INTERNAL=/W4
 	OPTIMIZE=/O2
-	SRC_TO_OBJ=
-	OBJ_TO_TARGET=/Fe $(TARGET)
+	SRC_TO_OBJ=/c $<
+	OBJ_TO_TARGET=/Fe:$(TARGET)
 	DEBUG=/D DEBUG
 endif
 
@@ -66,6 +66,13 @@ ifeq ($(MAKECMDGOALS),release)
 	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 else
 	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
+
+%.obj: %.c
+ifeq ($(MAKECMDGOALS),release)
+	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
+	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 %.o: %.c
