@@ -61,13 +61,6 @@ else
 	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
-snprintf.o: snprintf.c
-ifeq ($(MAKECMDGOALS),release)
-	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
-else
-	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS) $(LIBS)
-endif
-
 %.obj: %.c
 ifeq ($(MAKECMDGOALS),release)
 	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
