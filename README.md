@@ -1,6 +1,6 @@
 # lai
 
-`lai`, pounced as *line*, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
+`lai`,pounced as *line* , add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
 ## Warning
 
@@ -9,9 +9,11 @@
 ## System Requirements
 
 * A C compiler that supports ANSI C
-* Make
+* GNU Make
 
-We tested `lai` on Ubuntu 18.04 LTS and Amazon Linux. The latter is largely RHEL or CentOS compatible. It should work on any platform that owns a standard C compiler.
+We tested `lai` on Ubuntu 18.04 LTS, Amazon Linux and TrueOS. Among these OSes, Amazon Linux is largely RHEL or CentOS compatible while TrueOS is FreeBSD-based. It should work on any platform that owns a standard C compiler.
+
+Currently, the Makefile in the project works with GNU Make. We may modify it for the compatibilities with other Make implementations.
 
 ## Supported Languages
 
