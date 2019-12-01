@@ -23,20 +23,24 @@ else ifeq ($(CC),clang)
 endif
 
 
-.PHONY: clean
+.PHONY: debug release clean
 
 debug: $(OBJS)
 	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 release: $(OBJS)
-	$(CC) $(OPTIMIZE) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) $(OBJ_TO_TARGET) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 
 snprintf.o: snprintf.c
+ifeq ($(MAKECMDGOALS),release)
+	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
 	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 
 %.o: %.c
-ifeq ($(MAKECMDGOALS),rlease)
-	$(CC) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+ifeq ($(MAKECMDGOALS),release)
+	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 else
 	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
