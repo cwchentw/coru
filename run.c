@@ -3,7 +3,7 @@
 
 #if _WIN32
     #include "Shlwapi.h"
-#elif __unix__ || __apple
+#elif __unix__ || __APPLE__
     #include <unistd.h>
     #include <sys/stat.h>
 #else
@@ -59,7 +59,7 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
         PUTERR("Failed to open file at %s", lai_argument_path(arg));
         goto ERROR_LOAD;
     }
-#elif __unix__ || __apple__
+#elif __unix__ || __APPLE__
     struct stat st;
 
     if (stat(lai_argument_path(arg), &st) & F_OK) {
