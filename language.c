@@ -53,6 +53,15 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".mm", ext)) {
         return LANGUAGE_OBJCPP;
     }
+    else if (is_string_equal(".pl", ext)) {
+        return LANGUAGE_PERL;
+    }
+    else if (is_string_equal(".py", ext)) {
+        return LANGUAGE_PYTHON;
+    }
+    else if (is_string_equal(".rb", ext)) {
+        return LANGUAGE_RUBY;
+    }
     else if (is_string_equal(".csh", ext)) {
         return LANGUAGE_CSH;
     }
@@ -94,7 +103,16 @@ language_t detect_target_language(char *path)
         else {
 PARSE_LINE:
             if (string_starts_with(line, "#!")) {
-                if (string_contains(line, "csh")) {
+                if (string_contains(line, "perl")) {
+                    lang = LANGUAGE_PERL;
+                }
+                else if (string_contains(line, "python")) {
+                    lang = LANGUAGE_PYTHON;
+                }
+                else if (string_contains(line, "ruby")) {
+                    lang = LANGUAGE_RUBY;
+                }
+                else if (string_contains(line, "csh")) {
                     lang = LANGUAGE_CSH;
                 }
                 else if (string_contains(line, "sh")) {
@@ -143,6 +161,12 @@ char * language_to_string(language_t lang)
         return "Objective-C";
     case LANGUAGE_OBJCPP:
         return "Objective-C++";
+    case LANGUAGE_PERL:
+        return "Perl";
+    case LANGUAGE_PYTHON:
+        return "Python";
+    case LANGUAGE_RUBY:
+        return "Ruby";
     case LANGUAGE_CSH:
         return "C Shell";
     case LANGUAGE_SH:
