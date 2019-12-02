@@ -51,5 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Backup files
+*~
+
 # Target file(s)
 lai
