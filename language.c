@@ -57,20 +57,23 @@ language_t detect_target_language(char *path)
         return LANGUAGE_SH;
     }
 
-    FILE *fp = fopen(path, "r");
+    FILE *fp = NULL;
+    char *line = NULL;
+    language_t lang = LANGUAGE_UNKNOWN;
+
+    fp = fopen(path, "r");
     if (!fp) {
         PUTERR("Unable to load file: %s", path);
         goto ERROR;
     }
 
     size_t size = 150;
-    char *line = (char *) malloc(size * sizeof(char));
+    line = (char *) malloc(size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line");
         goto ERROR;
     }
 
-    language_t lang;
     while(fgets(line, size, fp)) {
         if (size == strlen(line)) {
             if ('\n' != line[size-1]) {
