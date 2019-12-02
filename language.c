@@ -42,6 +42,15 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".cc", ext)) {
         return LANGUAGE_CPP;
     }
+    else if (is_string_equal(".hpp", ext)) {
+        return LANGUAGE_CPP;
+    }
+    else if (is_string_equal(".m", ext)) {
+        return LANGUAGE_OBJC;
+    }
+    else if (is_string_equal(".mm", ext)) {
+        return LANGUAGE_OBJCPP;
+    }
 
     return LANGUAGE_UNKNOWN;
 }
@@ -60,6 +69,8 @@ char * language_to_string(language_t lang)
         return "C++";
     case LANGUAGE_OBJC:
         return "Objective-C";
+    case LANGUAGE_OBJCPP:
+        return "Objective-C++";
     default:
         return "";
     }
