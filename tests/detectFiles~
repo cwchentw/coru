@@ -21,9 +21,3 @@ lai=./lai
     echo "$result" | fgrep "Perl";
     [ $? -eq 0 ];
 }
-
-@test "Detect Perl by Shebang" {
-    result="$($lai scripts/helloInPerl | head -n1)";
-    echo "$result" | fgrep "Perl";
-    [ $? -eq 0 ];
-}
