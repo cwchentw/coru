@@ -62,6 +62,9 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".rb", ext)) {
         return LANGUAGE_RUBY;
     }
+    else if (is_string_equal(".php", ext)) {
+        return LANGUAGE_PHP;
+    }
     else if (is_string_equal(".csh", ext)) {
         return LANGUAGE_CSH;
     }
@@ -90,7 +93,7 @@ language_t detect_target_language(char *path)
         if (size == strlen(line)) {
             if ('\n' != line[size-1]) {
                 /* Double the size of the buffer. */
-                sz <<= 1;
+                size <<= 1;
                 line = realloc(line, size);
                 if (!line) {
                     PUTERR("Failed to reallocate line");
@@ -111,6 +114,9 @@ PARSE_LINE:
                 }
                 else if (string_contains(line, "ruby")) {
                     lang = LANGUAGE_RUBY;
+                }
+                else if (string_contains(line, "php")) {
+                    lang = LANGUAGE_PHP;
                 }
                 else if (string_contains(line, "csh")) {
                     lang = LANGUAGE_CSH;
