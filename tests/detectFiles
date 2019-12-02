@@ -27,3 +27,16 @@ lai=./lai
     echo "$result" | fgrep "Perl";
     [ $? -eq 0 ];
 }
+
+@test "Detect Python by Suffix" {
+    result="$($lai scripts/hello.py | head -n1)";
+    echo "$result" | fgrep "Python";
+    [ $? -eq 0 ];
+}
+
+@test "Detect Python by Shebang" {
+    result="$($lai scripts/helloInPython | head -n1)";
+    echo "$result" | fgrep "Python";
+    [ $? -eq 0 ];
+}
+
