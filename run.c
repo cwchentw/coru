@@ -14,6 +14,7 @@
 #include "boolean.h"
 #include "command.h"
 #include "help.h"
+#include "language.h"
 #include "metadata.h"
 #include "stats.h"
 #include "utils.h"
@@ -74,7 +75,7 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
     /* detect_target_language() may detect target language by
        opening target source. Hence, we put the statement before
        fopen() statement. */
-    char *lang = detect_target_language(lai_argument_path(arg));
+    language_t lang = detect_target_language(lai_argument_path(arg));
 
     fp = fopen(lai_argument_path(arg), "r");
     if (!fp) {
@@ -82,10 +83,10 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
         goto ERROR_LOAD;
     }
 #if DEBUG
-    if (is_string_equal(lang, "")) {
+    if (is_language_equal(lang, LANGUAGE_UNKNOWN)) {
         PUTERR("Unsupported language");
     } else {
-        PUTS("Target language: %s", lang);
+        PUTS("Target language: %s", language_to_string(lang));
     }
 #endif
 
