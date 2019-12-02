@@ -20,9 +20,6 @@ language_t detect_target_language(char *path)
         }
     }
 
-    if (index == 0)
-        return LANGUAGE_UNKNOWN;
-
 #define BUF_SIZE 100
     char *sp = path;
     char ext[BUF_SIZE];
