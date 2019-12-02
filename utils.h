@@ -25,6 +25,8 @@
 
 BOOL is_command_equal(COMMAND a, COMMAND b);
 BOOL is_string_equal(char *a, char *b);
+BOOL string_starts_with(char *a, char *b);
+BOOL string_contains(char *a, char *b);
 
 #ifndef __APPLE__
 #if __STDC_VERSION__ < 199901L

@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "boolean.h"
 #include "language.h"
@@ -51,6 +53,68 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".mm", ext)) {
         return LANGUAGE_OBJCPP;
     }
+    else if (is_string_equal(".sh", ext)) {
+        return LANGUAGE_SH;
+    }
+
+    FILE *fp = fopen(path, "r");
+    if (!fp) {
+        PUTERR("Unable to load file: %s", path);
+        goto ERROR;
+    }
+
+    size_t size = 150;
+    char *line = (char *) malloc(size * sizeof(char));
+    if (!line) {
+        PUTERR("Failed to allocate line");
+        goto ERROR;
+    }
+
+    language_t lang;
+    while(fgets(line, size, fp)) {
+        if (size == strlen(line)) {
+            if ('\n' != line[size-1]) {
+                /* Double the size of the buffer. */
+                sz <<= 1;
+                line = realloc(line, size);
+                if (!line) {
+                    PUTERR("Failed to reallocate line");
+                    goto ERROR;
+                }
+            }
+            else {
+                goto PARSE_LINE;
+            }
+        }
+        else {
+PARSE_LINE:
+            if (string_starts_with(line, "#!")) {
+                if (string_contains(line, "sh")) {
+                    lang = LANGUAGE_SH;
+                }
+                else {
+                    lang = LANGUAGE_UNKNOWN;
+                }
+            }
+            else {
+                lang = LANGUAGE_UNKNOWN;
+            }
+
+            break;
+        }
+    }
+
+    free(line);
+    fclose(fp);
+
+    return lang;
+
+ERROR:
+    if (line)
+        free(line);
+
+    if (fp)
+        fclose(fp);
 
     return LANGUAGE_UNKNOWN;
 }
@@ -71,6 +135,8 @@ char * language_to_string(language_t lang)
         return "Objective-C";
     case LANGUAGE_OBJCPP:
         return "Objective-C++";
+    case LANGUAGE_SH:
+        return "Bourne shell";
     default:
         return "";
     }
