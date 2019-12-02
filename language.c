@@ -23,7 +23,7 @@ language_t detect_target_language(char *path)
     if (index == 0)
         return LANGUAGE_UNKNOWN;
 
-    #define BUF_SIZE 100
+#define BUF_SIZE 100
     char *sp = path;
     char ext[BUF_SIZE];
 
@@ -52,6 +52,9 @@ language_t detect_target_language(char *path)
     }
     else if (is_string_equal(".mm", ext)) {
         return LANGUAGE_OBJCPP;
+    }
+    else if (is_string_equal(".csh", ext)) {
+        return LANGUAGE_CSH;
     }
     else if (is_string_equal(".sh", ext)) {
         return LANGUAGE_SH;
@@ -84,15 +87,17 @@ language_t detect_target_language(char *path)
                     PUTERR("Failed to reallocate line");
                     goto ERROR;
                 }
-            }
-            else {
+            } else {
                 goto PARSE_LINE;
             }
         }
         else {
 PARSE_LINE:
             if (string_starts_with(line, "#!")) {
-                if (string_contains(line, "sh")) {
+                if (string_contains(line, "csh")) {
+                    lang = LANGUAGE_CSH;
+                }
+                else if (string_contains(line, "sh")) {
                     lang = LANGUAGE_SH;
                 }
                 else {
@@ -138,8 +143,10 @@ char * language_to_string(language_t lang)
         return "Objective-C";
     case LANGUAGE_OBJCPP:
         return "Objective-C++";
+    case LANGUAGE_CSH:
+        return "C Shell";
     case LANGUAGE_SH:
-        return "Bourne shell";
+        return "Bourne Shell";
     default:
         return "";
     }
