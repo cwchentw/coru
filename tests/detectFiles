@@ -48,6 +48,32 @@ assert ()
 }
 
 lai=./lai
+test_c_by_extension ()
+{
+    local result="$($lai scripts/hello.c | head -n1)";
+
+    if ! echo "$result" | fgrep "C" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_cpp_by_extension ()
+{
+    local result="$($lai scripts/hello.cpp | head -n1)";
+
+    if ! echo "$result" | fgrep "C++" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
 test_bourne_shell_by_extension ()
 {
     local result="$($lai scripts/hello.sh | head -n1)";
@@ -204,6 +230,8 @@ test_php_by_shebang ()
     echo 0;
 }
 
+assert $(test_c_by_extension) "Failed to detect C by Extension";
+assert $(test_cpp_by_extension) "Failed to detect C++ by Extension";
 assert $(test_bourne_shell_by_extension) "Failed to detect Bourne Shell by Extension";
 assert $(test_bourne_shell_by_shebang) "Failed to detect Bourne Shell by Shebang";
 assert $(test_c_shell_by_extension) "Failed to detect C Shell by Extension";
@@ -219,6 +247,8 @@ assert $(test_php_by_shebang) "Failed to detect PHP by Shebang";
 
 unset lai;
 unset -f assert;
+unset -f test_c_by_extension;
+unset -f test_cpp_by_extension;
 unset -f test_bourne_shell_by_extension;
 unset -f test_bourne_shell_by_shebang;
 unset -f test_c_shell_by_extension;
