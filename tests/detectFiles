@@ -1,10 +1,7 @@
-#!/usr/bin/env bats
-
+#!/bin/sh
 # Test with the debug build of `lai`.
 
-lai=./lai
-
-_check_tool_exists ()
+check_tool_exists ()
 {
     local tool=$1;
 
@@ -21,83 +18,225 @@ _check_tool_exists ()
     fi
 }
 
-_check_tool_exists sh;
-_check_tool_exists csh;
-_check_tool_exists perl;
-_check_tool_exists python;
-_check_tool_exists ruby;
-_check_tool_exists php;
+check_tool_exists sh;
+check_tool_exists csh;
+check_tool_exists perl;
+check_tool_exists python;
+check_tool_exists ruby;
+check_tool_exists php;
 
-unset -f _check_tool_exists;
+unset -f check_tool_exists;
 
-@test "Detect Bourne Shell by Suffix" {
-    result="$($lai scripts/hello.sh | head -n1)";
-    echo "$result" | fgrep "Bourne";
-    [ $? -eq 0 ];
+_assert=0;
+assert ()
+{
+    local condition=$1;
+
+    if [ -z "$condition" ];
+    then
+        "No valid condition" >&2;
+        exit 1;
+    fi
+
+    shift;
+
+    if [ "$condition" -ne 0 ];
+    then
+        echo $@ >&2;
+        _assert=1;
+    fi
 }
 
-@test "Detect Bourne Shell by Shebang" {
-    result="$($lai scripts/helloInSh | head -n1)";
-    echo "$result" | fgrep "Bourne";
-    [ $? -eq 0 ];
+lai=./lai
+test_bourne_shell_by_extension ()
+{
+    local result="$($lai scripts/hello.sh | head -n1)";
+
+    if ! echo "$result" | fgrep "Bourne" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect C Shell by Suffix" {
-    result="$($lai scripts/hello.csh | head -n1)";
-    echo "$result" | fgrep "C Shell";
-    [ $? -eq 0 ];
+test_bourne_shell_by_shebang ()
+{
+    local result="$($lai scripts/helloInSh | head -n1)";
+
+    if ! echo "$result" | fgrep "Bourne" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect C Shell by Shebang" {
-    result="$($lai scripts/helloInCsh | head -n1)";
-    echo "$result" | fgrep "C Shell";
-    [ $? -eq 0 ];
+test_c_shell_by_extension ()
+{
+    local result="$($lai scripts/hello.csh | head -n1)";
+
+    if ! echo "$result" | fgrep "C Shell" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Perl by Suffix" {
-    result="$($lai scripts/hello.pl | head -n1)";
-    echo "$result" | fgrep "Perl";
-    [ $? -eq 0 ];
+test_c_shell_by_shebang ()
+{
+    local result="$($lai scripts/helloInCsh | head -n1)";
+
+    if ! echo "$result" | fgrep "C Shell" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Perl by Shebang" {
-    result="$($lai scripts/helloInPerl | head -n1)";
-    echo "$result" | fgrep "Perl";
-    [ $? -eq 0 ];
+test_perl_by_extension ()
+{
+    local result="$($lai scripts/hello.pl | head -n1)";
+
+    if ! echo "$result" | fgrep "Perl" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Python by Suffix" {
-    result="$($lai scripts/hello.py | head -n1)";
-    echo "$result" | fgrep "Python";
-    [ $? -eq 0 ];
+test_perl_by_shebang ()
+{
+    local result="$($lai scripts/helloInPerl | head -n1)";
+
+    if ! echo "$result" | fgrep "Perl" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Python by Shebang" {
-    result="$($lai scripts/helloInPython | head -n1)";
-    echo "$result" | fgrep "Python";
-    [ $? -eq 0 ];
+test_python_by_extension ()
+{
+    local result="$($lai scripts/hello.py | head -n1)";
+
+    if ! echo "$result" | fgrep "Python" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Ruby by Suffix" {
-    result="$($lai scripts/hello.rb | head -n1)";
-    echo "$result" | fgrep "Ruby";
-    [ $? -eq 0 ];
+test_python_by_shebang ()
+{
+    local result="$($lai scripts/helloInPython | head -n1)";
+
+    if ! echo "$result" | fgrep "Python" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect Ruby by Shebang" {
-    result="$($lai scripts/helloInRuby | head -n1)";
-    echo "$result" | fgrep "Ruby";
-    [ $? -eq 0 ];
+test_ruby_by_extension ()
+{
+    local result="$($lai scripts/hello.rb | head -n1)";
+
+    if ! echo "$result" | fgrep "Ruby" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect PHP by Suffix" {
-    result="$($lai scripts/hello.php | head -n1)";
-    echo "$result" | fgrep "PHP";
-    [ $? -eq 0 ];
+test_ruby_by_shebang ()
+{
+    local result="$($lai scripts/helloInRuby | head -n1)";
+
+    if ! echo "$result" | fgrep "Ruby" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
 
-@test "Detect PHP by Shebang" {
-    result="$($lai scripts/helloInPHP | head -n1)";
-    echo "$result" | fgrep "PHP";
-    [ $? -eq 0 ];
+test_php_by_extension ()
+{
+    local result="$($lai scripts/hello.php | head -n1)";
+
+    if ! echo "$result" | fgrep "PHP" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
 }
+
+test_php_by_shebang ()
+{
+    local result="$($lai scripts/helloInPHP | head -n1)";
+
+    if ! echo "$result" | fgrep "PHP" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+assert $(test_bourne_shell_by_extension) "Failed to detect Bourne Shell by Suffix";
+assert $(test_bourne_shell_by_shebang) "Failed to detect Bourne Shell by Shebang";
+assert $(test_c_shell_by_extension) "Failed to detect C Shell by Suffix";
+assert $(test_c_shell_by_shebang) "Failed to detect C Shell by Shebang";
+assert $(test_perl_by_extension) "Failed to detect Perl by Suffix";
+assert $(test_perl_by_shebang) "Failed to detect Perl by Shebang";
+assert $(test_python_by_extension) "Failed to detect Python by Suffix";
+assert $(test_python_by_shebang) "Failed to detect Python by Shebang";
+assert $(test_ruby_by_extension) "Failed to detect Ruby by Suffix";
+assert $(test_ruby_by_shebang) "Failed to detect Ruby by Shebang";
+assert $(test_php_by_extension) "Failed to detect PHP by Suffix";
+assert $(test_php_by_shebang) "Failed to detect PHP by Shebang";
+
+unset lai;
+unset -f assert;
+unset -f test_bourne_shell_by_extension;
+unset -f test_bourne_shell_by_shebang;
+unset -f test_c_shell_by_extension;
+unset -f test_c_shell_by_shebang;
+unset -f test_perl_by_extension;
+unset -f test_perl_by_shebang;
+unset -f test_python_by_extension;
+unset -f test_python_by_shebang;
+unset -f test_ruby_by_extension;
+unset -f test_ruby_by_shebang;
+unset -f test_php_by_extension;
+unset -f test_php_by_shebang;
+
+if [ $_assert -ne 0 ];
+then
+    unset _assert;
+    exit 1;
+fi
+
+unset _assert;
+exit 0;

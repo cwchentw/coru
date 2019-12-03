@@ -55,10 +55,6 @@ endif
 all: debug
 
 test: debug $(TARGET)
-	if ! command -v bats 2>/dev/null 1>&2; then \
-		echo "No bats on your system" >&2; \
-		exit 1; \
-	fi
 	tests/detectFiles
 
 debug: $(TARGET)
