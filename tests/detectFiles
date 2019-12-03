@@ -204,17 +204,17 @@ test_php_by_shebang ()
     echo 0;
 }
 
-assert $(test_bourne_shell_by_extension) "Failed to detect Bourne Shell by Suffix";
+assert $(test_bourne_shell_by_extension) "Failed to detect Bourne Shell by Extension";
 assert $(test_bourne_shell_by_shebang) "Failed to detect Bourne Shell by Shebang";
-assert $(test_c_shell_by_extension) "Failed to detect C Shell by Suffix";
+assert $(test_c_shell_by_extension) "Failed to detect C Shell by Extension";
 assert $(test_c_shell_by_shebang) "Failed to detect C Shell by Shebang";
-assert $(test_perl_by_extension) "Failed to detect Perl by Suffix";
+assert $(test_perl_by_extension) "Failed to detect Perl by Extension";
 assert $(test_perl_by_shebang) "Failed to detect Perl by Shebang";
-assert $(test_python_by_extension) "Failed to detect Python by Suffix";
+assert $(test_python_by_extension) "Failed to detect Python by Extension";
 assert $(test_python_by_shebang) "Failed to detect Python by Shebang";
-assert $(test_ruby_by_extension) "Failed to detect Ruby by Suffix";
+assert $(test_ruby_by_extension) "Failed to detect Ruby by Extension";
 assert $(test_ruby_by_shebang) "Failed to detect Ruby by Shebang";
-assert $(test_php_by_extension) "Failed to detect PHP by Suffix";
+assert $(test_php_by_extension) "Failed to detect PHP by Extension";
 assert $(test_php_by_shebang) "Failed to detect PHP by Shebang";
 
 unset lai;
