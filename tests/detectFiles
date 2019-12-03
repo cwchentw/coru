@@ -40,3 +40,14 @@ lai=./lai
     [ $? -eq 0 ];
 }
 
+@test "Detect PHP by Suffix" {
+    result="$($lai scripts/hello.php | head -n1)";
+    echo "$result" | fgrep "PHP";
+    [ $? -eq 0 ];
+}
+
+@test "Detect PHP by Shebang" {
+    result="$($lai scripts/helloInPHP | head -n1)";
+    echo "$result" | fgrep "PHP";
+    [ $? -eq 0 ];
+}

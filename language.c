@@ -170,6 +170,8 @@ char * language_to_string(language_t lang)
         return "Python";
     case LANGUAGE_RUBY:
         return "Ruby";
+    case LANGUAGE_PHP:
+        return "PHP";
     case LANGUAGE_CSH:
         return "C Shell";
     case LANGUAGE_SH:
