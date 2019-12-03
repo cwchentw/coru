@@ -4,6 +4,32 @@
 
 lai=./lai
 
+_check_tool_exists ()
+{
+    local tool=$1;
+
+    if [ -z "$tool" ];
+    then
+        echo "No valid tool" >&2;
+        exit 1;
+    fi
+
+    if ! command -v $tool 2>/dev/null 1>&2;
+    then
+        echo "No $tool installed on your system" >&2;
+        exit 1;
+    fi
+}
+
+_check_tool_exists sh;
+_check_tool_exists csh;
+_check_tool_exists perl;
+_check_tool_exists python;
+_check_tool_exists ruby;
+_check_tool_exists php;
+
+unset -f _check_tool_exists;
+
 @test "Detect Bourne Shell by Suffix" {
     result="$($lai scripts/hello.sh | head -n1)";
     echo "$result" | fgrep "Bourne";
@@ -13,6 +39,18 @@ lai=./lai
 @test "Detect Bourne Shell by Shebang" {
     result="$($lai scripts/helloInSh | head -n1)";
     echo "$result" | fgrep "Bourne";
+    [ $? -eq 0 ];
+}
+
+@test "Detect C Shell by Suffix" {
+    result="$($lai scripts/hello.csh | head -n1)";
+    echo "$result" | fgrep "C Shell";
+    [ $? -eq 0 ];
+}
+
+@test "Detect C Shell by Shebang" {
+    result="$($lai scripts/helloInCsh | head -n1)";
+    echo "$result" | fgrep "C Shell";
     [ $? -eq 0 ];
 }
 
@@ -37,6 +75,18 @@ lai=./lai
 @test "Detect Python by Shebang" {
     result="$($lai scripts/helloInPython | head -n1)";
     echo "$result" | fgrep "Python";
+    [ $? -eq 0 ];
+}
+
+@test "Detect Ruby by Suffix" {
+    result="$($lai scripts/hello.rb | head -n1)";
+    echo "$result" | fgrep "Ruby";
+    [ $? -eq 0 ];
+}
+
+@test "Detect Ruby by Shebang" {
+    result="$($lai scripts/helloInRuby | head -n1)";
+    echo "$result" | fgrep "Ruby";
     [ $? -eq 0 ];
 }
 
