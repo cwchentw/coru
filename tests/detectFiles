@@ -14,7 +14,6 @@ check_tool_exists ()
     if ! command -v $tool 2>/dev/null 1>&2;
     then
         echo "No $tool installed on your system" >&2;
-        exit 1;
     fi
 }
 
