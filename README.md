@@ -18,7 +18,7 @@ We tested `lai` against several Unix or Unix-like systems:
 * TrueOS, FreeBSD compatible
 * Solaris
 
-It should work on other Unix or Unix-like systems as well.
+It should work on any platform that owns a standard C compiler.
 
 Currently, our Makefile works with GNU Make. On some Unix or Unix-like systems, use `gmake` instead of `make`.
 
