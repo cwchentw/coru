@@ -55,7 +55,15 @@ endif
 all: debug
 
 test: debug $(TARGET)
+ifeq ($(detected_OS),Windows)
+	echo "Not supported yet"
+else
+ifeq ($(detected_OS),SunOS)
+	bash tests/detectFiles
+else
 	tests/detectFiles
+endif
+endif
 
 debug: $(TARGET)
 
