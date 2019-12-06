@@ -11,14 +11,16 @@
 * A C compiler that supports ANSI C
 * GNU Make
 
-We tested `lai` on several Unix or Unix-like systems
+We tested `lai` against several Unix or Unix-like systems:
 
 * Ubuntu 18.04 LTS
 * Amazon Linux, largely RHEL or CentOS compatible
-* TrueOS, FreeBSD derivated
+* TrueOS, FreeBSD compatible
 * Solaris
 
-Currently, our Makefile works with GNU Make. On some Unix or Unix-like systems, use `gmake` instead of `make`. We may modify it for the compatibilities with other Make implementations.
+It should work on other Unix or Unix-like systems as well.
+
+Currently, our Makefile works with GNU Make. On some Unix or Unix-like systems, use `gmake` instead of `make`.
 
 ## Supported Languages
 
