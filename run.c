@@ -266,6 +266,7 @@ static hash_table_t * _init_comment_single_start(void)
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
+	STRING_JS,
         STRING_SWIFT,
         STRING_GO,
         STRING_RUST,
@@ -284,6 +285,7 @@ static hash_table_t * _init_comment_single_start(void)
         "#",   /* Python */
         "#",   /* Ruby */
         "#",   /* PHP */
+	"//",  /* JavaScript */
         "//",  /* Swift */
         "//",  /* Golang */
         "//",  /* Rust */
@@ -329,6 +331,7 @@ static hash_table_t * _init_comment_single_end(void)
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
+	STRING_JS,
         STRING_SWIFT,
         STRING_GO,
         STRING_RUST,
@@ -347,6 +350,7 @@ static hash_table_t * _init_comment_single_end(void)
         "",    /* Python */
         "",    /* Ruby */
         "",    /* PHP */
+	"",    /* JavaScript */
         "",    /* Swift */
         "",    /* Golang */
         "",    /* Rust */
@@ -392,6 +396,7 @@ static hash_table_t * _init_comment_multiple_start(void)
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
+	STRING_JS,
         STRING_SWIFT,
         STRING_GO,
         STRING_RUST,
@@ -410,6 +415,7 @@ static hash_table_t * _init_comment_multiple_start(void)
         "",    /* Python */
         "",    /* Ruby */
         "/*",  /* PHP */
+	"/*",  /* JavaScript */
         "/*",  /* Swift */
         "/*",  /* Golang */
         "/*",  /* Rust */
@@ -440,7 +446,7 @@ ERROR:
 
 static hash_table_t * _init_comment_multiple_end(void)
 {
-        hash_table_t *table = hash_table_new();
+    hash_table_t *table = hash_table_new();
     if (!table)
         return table;
 
@@ -455,6 +461,7 @@ static hash_table_t * _init_comment_multiple_end(void)
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
+	STRING_JS,
         STRING_SWIFT,
         STRING_GO,
         STRING_RUST,
@@ -473,6 +480,7 @@ static hash_table_t * _init_comment_multiple_end(void)
         "",    /* Python */
         "",    /* Ruby */
         "*/",  /* PHP */
+	"*/",  /* JavaScript */
         "*/",  /* Swift */
         "*/",  /* Golang */
         "*/",  /* Rust */
