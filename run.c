@@ -19,22 +19,22 @@
 #include "stats.h"
 #include "utils.h"
 
-static BOOL lai_run_load(lai_argument_t * arg, char *out);
+static BOOL coru_run_load(coru_argument_t * arg, char *out);
 
-BOOL lai_run(lai_argument_t * arg, char *out)
+BOOL coru_run(coru_argument_t * arg, char *out)
 {
-    if (is_command_equal(lai_argument_command(arg), COMMAND_VERSION)) {
+    if (is_command_equal(coru_argument_command(arg), COMMAND_VERSION)) {
         help_version();
         return TRUE;
-    } else if (is_command_equal(lai_argument_command(arg), COMMAND_LICENSE)) {
+    } else if (is_command_equal(coru_argument_command(arg), COMMAND_LICENSE)) {
         help_license();
         return TRUE;
-    } else if (is_command_equal(lai_argument_command(arg), COMMAND_TOO_FEW)) {
+    } else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         return FALSE;
-    } else if (is_command_equal(lai_argument_command(arg), COMMAND_LOAD)) {
-        return lai_run_load(arg, out);
-    } else if (is_command_equal(lai_argument_command(arg), COMMAND_TOO_MANY)) {
+    } else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
+        return coru_run_load(arg, out);
+    } else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", LAI_PROGRAM);
         return FALSE;
     } else {
@@ -43,28 +43,28 @@ BOOL lai_run(lai_argument_t * arg, char *out)
     }
 }
 
-static BOOL lai_run_load(lai_argument_t * arg, char *out)
+static BOOL coru_run_load(coru_argument_t * arg, char *out)
 {
-    lai_stats_t *stats = NULL;
+    coru_stats_t *stats = NULL;
     FILE *fp = NULL;
     char *line = NULL;
 
-    stats = lai_stats_new();
+    stats = coru_stats_new();
     if (!stats) {
         PUTERR("Failed to load stats");
         goto ERROR_LOAD;
     }
 
 #if _WIN32
-    if (!PathFileExists(lai_argument_path(arg))) {
-        PUTERR("Failed to open file at %s", lai_argument_path(arg));
+    if (!PathFileExists(coru_argument_path(arg))) {
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
         goto ERROR_LOAD;
     }
 #elif __unix__ || __APPLE__
     struct stat st;
 
-    if (stat(lai_argument_path(arg), &st) & F_OK) {
-        PUTERR("Failed to open file at %s", lai_argument_path(arg));
+    if (stat(coru_argument_path(arg), &st) & F_OK) {
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
         goto ERROR_LOAD;
     }
 #else
@@ -75,11 +75,11 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
     /* detect_target_language() may detect target language by
        opening target source. Hence, we put the statement before
        fopen() statement. */
-    language_t lang = detect_target_language(lai_argument_path(arg));
+    language_t lang = detect_target_language(coru_argument_path(arg));
 
-    fp = fopen(lai_argument_path(arg), "r");
+    fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
-        PUTERR("Failed to open file at %s", lai_argument_path(arg));
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
         goto ERROR_LOAD;
     }
 #if DEBUG
@@ -109,17 +109,17 @@ static BOOL lai_run_load(lai_argument_t * arg, char *out)
                 goto LOAD_LINE;
         } else {
 LOAD_LINE:
-            if (strlen(line) > lai_stats_width(stats)) {
-                lai_stats_set_width(stats, strlen(line));
+            if (strlen(line) > coru_stats_width(stats)) {
+                coru_stats_set_width(stats, strlen(line));
             }
 
-            lai_stats_set_height(stats, lai_stats_height(stats) + 1);
+            coru_stats_set_height(stats, coru_stats_height(stats) + 1);
         }
     }
 
 #if DEBUG
-    PUTS("Source width: %lu", lai_stats_width(stats));
-    PUTS("Source height: %lu", lai_stats_height(stats));
+    PUTS("Source width: %lu", coru_stats_width(stats));
+    PUTS("Source height: %lu", coru_stats_height(stats));
     /* Add stats for non-comment lines. */
 #endif
 
@@ -139,7 +139,7 @@ LOAD_LINE:
     /* Free system resources. */
     free(line);
     fclose(fp);
-    lai_stats_delete((void *) stats);
+    coru_stats_delete((void *) stats);
 
     return TRUE;
 
@@ -152,7 +152,7 @@ ERROR_LOAD:
         fclose(fp);
 
     if (stats)
-        lai_stats_delete((void *) stats);
+        coru_stats_delete((void *) stats);
 
     return FALSE;
 }

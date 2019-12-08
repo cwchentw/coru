@@ -4,11 +4,11 @@
 #include "boolean.h"
 #include "command.h"
 
-typedef struct lai_argument_t lai_argument_t;
+typedef struct coru_argument_t coru_argument_t;
 
-lai_argument_t * lai_argument_parse(int argc, char **argv);
-void lai_argument_delete(void *self);
-COMMAND lai_argument_command(lai_argument_t *self);
-char * lai_argument_path(lai_argument_t *self);
+coru_argument_t * coru_argument_parse(int argc, char **argv);
+void coru_argument_delete(void *self);
+COMMAND coru_argument_command(coru_argument_t *self);
+char * coru_argument_path(coru_argument_t *self);
 
 #endif  /* LAI_ARGUMENT_H */

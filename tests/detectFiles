@@ -1,5 +1,5 @@
 #!/bin/sh
-# Test with the debug build of `lai`.
+# Test with the debug build of `coru`.
 
 check_tool_exists ()
 {
@@ -46,10 +46,10 @@ assert ()
     fi
 }
 
-lai=./lai
+coru=./coru
 test_c_by_extension ()
 {
-    local result="$($lai scripts/hello.c | head -n1)";
+    local result="$($coru scripts/hello.c | head -n1)";
 
     if ! echo "$result" | fgrep "C" >/dev/null;
     then
@@ -62,7 +62,7 @@ test_c_by_extension ()
 
 test_cpp_by_extension ()
 {
-    local result="$($lai scripts/hello.cpp | head -n1)";
+    local result="$($coru scripts/hello.cpp | head -n1)";
 
     if ! echo "$result" | fgrep "C++" >/dev/null;
     then
@@ -75,7 +75,7 @@ test_cpp_by_extension ()
 
 test_bourne_shell_by_extension ()
 {
-    local result="$($lai scripts/hello.sh | head -n1)";
+    local result="$($coru scripts/hello.sh | head -n1)";
 
     if ! echo "$result" | fgrep "Bourne" >/dev/null;
     then
@@ -88,7 +88,7 @@ test_bourne_shell_by_extension ()
 
 test_bourne_shell_by_shebang ()
 {
-    local result="$($lai scripts/helloInSh | head -n1)";
+    local result="$($coru scripts/helloInSh | head -n1)";
 
     if ! echo "$result" | fgrep "Bourne" >/dev/null;
     then
@@ -101,7 +101,7 @@ test_bourne_shell_by_shebang ()
 
 test_c_shell_by_extension ()
 {
-    local result="$($lai scripts/hello.csh | head -n1)";
+    local result="$($coru scripts/hello.csh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
     then
@@ -114,7 +114,7 @@ test_c_shell_by_extension ()
 
 test_c_shell_by_shebang ()
 {
-    local result="$($lai scripts/helloInCsh | head -n1)";
+    local result="$($coru scripts/helloInCsh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
     then
@@ -127,7 +127,7 @@ test_c_shell_by_shebang ()
 
 test_perl_by_extension ()
 {
-    local result="$($lai scripts/hello.pl | head -n1)";
+    local result="$($coru scripts/hello.pl | head -n1)";
 
     if ! echo "$result" | fgrep "Perl" >/dev/null;
     then
@@ -140,7 +140,7 @@ test_perl_by_extension ()
 
 test_perl_by_shebang ()
 {
-    local result="$($lai scripts/helloInPerl | head -n1)";
+    local result="$($coru scripts/helloInPerl | head -n1)";
 
     if ! echo "$result" | fgrep "Perl" >/dev/null;
     then
@@ -153,7 +153,7 @@ test_perl_by_shebang ()
 
 test_python_by_extension ()
 {
-    local result="$($lai scripts/hello.py | head -n1)";
+    local result="$($coru scripts/hello.py | head -n1)";
 
     if ! echo "$result" | fgrep "Python" >/dev/null;
     then
@@ -166,7 +166,7 @@ test_python_by_extension ()
 
 test_python_by_shebang ()
 {
-    local result="$($lai scripts/helloInPython | head -n1)";
+    local result="$($coru scripts/helloInPython | head -n1)";
 
     if ! echo "$result" | fgrep "Python" >/dev/null;
     then
@@ -179,7 +179,7 @@ test_python_by_shebang ()
 
 test_ruby_by_extension ()
 {
-    local result="$($lai scripts/hello.rb | head -n1)";
+    local result="$($coru scripts/hello.rb | head -n1)";
 
     if ! echo "$result" | fgrep "Ruby" >/dev/null;
     then
@@ -192,7 +192,7 @@ test_ruby_by_extension ()
 
 test_ruby_by_shebang ()
 {
-    local result="$($lai scripts/helloInRuby | head -n1)";
+    local result="$($coru scripts/helloInRuby | head -n1)";
 
     if ! echo "$result" | fgrep "Ruby" >/dev/null;
     then
@@ -205,7 +205,7 @@ test_ruby_by_shebang ()
 
 test_php_by_extension ()
 {
-    local result="$($lai scripts/hello.php | head -n1)";
+    local result="$($coru scripts/hello.php | head -n1)";
 
     if ! echo "$result" | fgrep "PHP" >/dev/null;
     then
@@ -218,7 +218,7 @@ test_php_by_extension ()
 
 test_php_by_shebang ()
 {
-    local result="$($lai scripts/helloInPHP | head -n1)";
+    local result="$($coru scripts/helloInPHP | head -n1)";
 
     if ! echo "$result" | fgrep "PHP" >/dev/null;
     then
@@ -244,7 +244,7 @@ assert $(test_ruby_by_shebang) "Failed to detect Ruby by Shebang";
 assert $(test_php_by_extension) "Failed to detect PHP by Extension";
 assert $(test_php_by_shebang) "Failed to detect PHP by Shebang";
 
-unset lai;
+unset coru;
 unset -f assert;
 unset -f test_c_by_extension;
 unset -f test_cpp_by_extension;

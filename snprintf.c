@@ -180,7 +180,7 @@
  *		  'alternative form' -> 'alternate form',
  *		  'data type modifier' -> 'length modifier';
  *		- several comments rephrased and new ones added;
- *		- make compiler not complain about 'credits' defined but
+ *		- make compiler not compcorun about 'credits' defined but
  *		  not used;
  */
 
@@ -273,7 +273,7 @@
  * - 'x'_BUG_COMPATIBLE refers to (and enables) a behaviour of system's sprintf
  *   that contradicts the sprintf man page on the same operating system.
  *
- * - I do not claim that the 'x'_COMPATIBLE and 'x'_BUG_COMPATIBLE
+ * - I do not ccorum that the 'x'_COMPATIBLE and 'x'_BUG_COMPATIBLE
  *   conditionals take into account all idiosyncrasies of a particular
  *   implementation, there may be other incompatibilities.
  */
@@ -643,9 +643,9 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
           else {
             precision_specified = 0; precision = 0;
          /* NOTE:
-          *   Solaris 2.6 man page claims that in this case the precision
+          *   Solaris 2.6 man page ccorums that in this case the precision
           *   should be set to 0.  Digital Unix 4.0, HPUX 10 and BSD man page
-          *   claim that this case should be treated as unspecified precision,
+          *   ccorum that this case should be treated as unspecified precision,
           *   which is what we do here.
           */
           }
@@ -845,7 +845,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
         if (precision == 0 && arg_sign == 0
 #if defined(HPUX_BUG_COMPATIBLE) || defined(LINUX_COMPATIBLE)
             && fmt_spec != 'p'
-         /* HPUX 10 man page claims: With conversion character p the result of
+         /* HPUX 10 man page ccorums: With conversion character p the result of
           * converting a zero value with a precision of zero is a null string.
           * Actually HP returns all zeroes, and Linux returns "(nil)". */
 #endif

@@ -5,20 +5,20 @@
 #include "run.h"
 #include "utils.h"
 
-BOOL run(lai_argument_t *arg);
+BOOL run(coru_argument_t *arg);
 
 int main(int argc, char *argv[])
 {
-    lai_argument_t *arg = NULL;
+    coru_argument_t *arg = NULL;
     char *out = NULL;
 
-    arg = lai_argument_parse(argc, argv);
+    arg = coru_argument_parse(argc, argv);
     if (!arg) {
         PUTERR("Failed to parse argument(s)");
         goto ERROR;
     }
 
-    if (!lai_run(arg, out)) {
+    if (!coru_run(arg, out)) {
         goto ERROR;
     }
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     if (out)
         PUTS("%s", out);
 
-    lai_argument_delete((void *) arg);
+    coru_argument_delete((void *) arg);
 
     return 0;
 
@@ -35,7 +35,7 @@ ERROR:
         free(out);
 
     if (arg)
-        lai_argument_delete((void *) arg);
+        coru_argument_delete((void *) arg);
 
     return 1;
 }

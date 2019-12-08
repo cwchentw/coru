@@ -1,17 +1,17 @@
-# lai
+# coru
 
-`lai`,pounced as *line* , add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
+`coru`, aka code ruler, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
 ## Warning
 
-`lai` is still experimental. Back up your code before using `lai`.
+`coru` is still experimental. Back up your code before using `coru`.
 
 ## System Requirements
 
 * A C compiler that supports ANSI C
 * GNU Make
 
-We tested `lai` against several Unix or Unix-like systems:
+We tested `coru` against several Unix or Unix-like systems:
 
 * Ubuntu 18.04 LTS
 * Amazon Linux, largely RHEL or CentOS compatible
@@ -48,19 +48,19 @@ For unsupported language, you may set custom character for single line comment. 
 Just feed your sample source file:
 
 ```console
-$ lai path/to/file.c
+$ coru path/to/file.c
 ```
 
 Add an optional width ruler:
 
 ```console
-$ lai --ruler path/to/Klass.java
+$ coru --ruler path/to/Klass.java
 ```
 
 For unknown source, you may apply start text and, optionally, end text.
 
 ```console
-$ lai --start "/*" --end "*/"  path/to/unknown.ext
+$ coru --start "/*" --end "*/"  path/to/unknown.ext
 ```
 
 ## Options
@@ -80,7 +80,7 @@ Pending.
 * `--all` to add line numbers to all lines of source (default)
 * `--non-empty` to add line numbers to only non-empty lines of source
 
-`lai` will skip blocked comments in either parameter.
+`coru` will skip blocked comments in either parameter.
 
 ### Options related to Rulers
 

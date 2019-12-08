@@ -4,7 +4,7 @@
 #include "argument.h"
 #include "boolean.h"
 
-struct lai_argument_t {
+struct coru_argument_t {
     int argc;
     char **argv;
     int index;
@@ -12,9 +12,9 @@ struct lai_argument_t {
     char *path;
 };
 
-lai_argument_t * lai_argument_parse(int argc, char **argv)
+coru_argument_t * coru_argument_parse(int argc, char **argv)
 {
-    lai_argument_t *arg = (lai_argument_t *) malloc(sizeof(lai_argument_t));
+    coru_argument_t *arg = (coru_argument_t *) malloc(sizeof(coru_argument_t));
     if (!arg)
         return arg;
 
@@ -59,21 +59,21 @@ lai_argument_t * lai_argument_parse(int argc, char **argv)
     return arg;
 }
 
-void lai_argument_delete(void *self)
+void coru_argument_delete(void *self)
 {
     assert(self);
 
     free(self);
 }
 
-COMMAND lai_argument_command(lai_argument_t *self)
+COMMAND coru_argument_command(coru_argument_t *self)
 {
     assert(self);
 
     return self->cmd;
 }
 
-char * lai_argument_path(lai_argument_t *self)
+char * coru_argument_path(coru_argument_t *self)
 {
     assert(self);
 

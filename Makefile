@@ -10,17 +10,17 @@ ifeq ($(detected_OS),Windows)
 endif
 
 ifeq ($(detected_OS),Windows)
-	TARGET=lai.exe
+	TARGET=coru.exe
 else
-	TARGET=lai
+	TARGET=coru
 endif
 
 ifeq ($(CC),cl)
-	OBJS=argument.obj help.obj language.obj utils.obj stats.obj run.obj main.obj
+	OBJS=argument.obj help.obj language.obj utils.obj stats.obj run.obj coru.obj
 else ifeq ($(detected_OS),Darwin)
-	OBJS=argument.o help.o language.o utils.o stats.o run.o main.o
+	OBJS=argument.o help.o language.o utils.o stats.o run.o coru.o
 else
-	OBJS=argument.o help.o language.o utils.o stats.o run.o snprintf.o main.o
+	OBJS=argument.o help.o language.o utils.o stats.o run.o snprintf.o coru.o
 endif
 
 ifeq ($(CC),cc)
@@ -29,18 +29,21 @@ ifeq ($(CC),cc)
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_TARGET=-o $(TARGET)
 	DEBUG=-DDEBUG
+	DEBUG_INFO=-g
 else ifeq ($(CC),gcc)
 	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
 	OPTIMIZE=-O2
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_TARGET=-o $(TARGET)
 	DEBUG=-DDEBUG
+	DEBUG_INFO=-g
 else ifeq ($(CC),clang)
 	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
 	OPTIMIZE=-O2
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_TARGET=-o $(TARGET)
 	DEBUG=-DDEBUG
+	DEBUG_INFO=-g
 else ifeq ($(CC),cl)
 	CFLAGS_INTERNAL=/W4
 	OPTIMIZE=/O2
@@ -49,10 +52,12 @@ else ifeq ($(CC),cl)
 	DEBUG=/D DEBUG
 endif
 
+GOAL_DEBUG := test debug
+
 
 .PHONY: all test debug release clean
 
-all: debug
+all: release
 
 test: debug $(TARGET)
 ifeq ($(detected_OS),Windows)
@@ -70,24 +75,27 @@ debug: $(TARGET)
 release: $(TARGET)
 
 $(TARGET): $(OBJS)
-ifeq ($(MAKECMDGOALS),release)
-	$(CC) $(OBJ_TO_TARGET) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
+	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) \
+		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
 else
-	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) $(OBJ_TO_TARGET) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 %.obj: %.c
-ifeq ($(MAKECMDGOALS),release)
-	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
+	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
+		$(LDFLAGS) $(LIBS)
 else
-	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 %.o: %.c
-ifeq ($(MAKECMDGOALS),release)
-	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
+	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
+		$(LDFLAGS) $(LIBS)
 else
-	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 clean:
