@@ -31,6 +31,7 @@ check_tool_exists perl "Perl";
 check_tool_exists python "Python";
 check_tool_exists ruby "Ruby";
 check_tool_exists php "PHP";
+check_tool_exists go "Golang";
 
 _assert=0;
 assert ()
@@ -313,6 +314,18 @@ detect_js_by_shebang ()
     echo 0;
 }
 
+detect_golang_by_extension ()
+{
+    local result="$($coru scripts/hello.go | head -n 1)";
+    if ! echo "$result" | fgrep "Golang" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
 assert $(detect_c_by_extension) "Failed to detect C by Extension";
 assert $(detect_cpp_by_extension) "Failed to detect C++ by Extension";
 assert $(detect_objc_by_extension) "Failed to detect Objective-C by Extension";
@@ -333,6 +346,7 @@ assert $(detect_php_by_extension) "Failed to detect PHP by Extension";
 assert $(detect_php_by_shebang) "Failed to detect PHP by Shebang";
 assert $(detect_js_by_extension) "Failed to detect JavaScript by Extension";
 assert $(detect_js_by_shebang) "Failed to detect JavaScript by Shebang";
+assert $(detect_golang_by_extension) "Failed to detect Golang by Extension";
 
 if [ $_assert -ne 0 ];
 then

@@ -77,6 +77,9 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".js", ext)) {
         lang = LANGUAGE_JS;
     }
+    else if (is_string_equal(".go", ext)) {
+        lang = LANGUAGE_GO;
+    }
     else if (is_string_equal(".csh", ext)) {
         lang = LANGUAGE_CSH;
     }
@@ -209,6 +212,8 @@ char * language_to_string(language_t lang)
         return STRING_PHP;
     case LANGUAGE_JS:
         return STRING_JS;
+    case LANGUAGE_GO:
+        return STRING_GO;
     case LANGUAGE_CSH:
         return STRING_CSH;
     case LANGUAGE_SH:

@@ -17,8 +17,9 @@ typedef char language_t;
 #define LANGUAGE_RUBY      9
 #define LANGUAGE_PHP      10
 #define LANGUAGE_JS       11
-#define LANGUAGE_CSH      12
-#define LANGUAGE_SH       13
+#define LANGUAGE_GO       12
+#define LANGUAGE_CSH      13
+#define LANGUAGE_SH       14
 
 #define STRING_C       "C"
 #define STRING_CPP     "C++"
