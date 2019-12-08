@@ -10,7 +10,6 @@ BOOL run(coru_argument_t *arg);
 int main(int argc, char *argv[])
 {
     coru_argument_t *arg = NULL;
-    char *out = NULL;
 
     arg = coru_argument_parse(argc, argv);
     if (!arg) {
@@ -20,22 +19,15 @@ int main(int argc, char *argv[])
         goto ERROR;
     }
 
-    if (!coru_run(arg, out)) {
+    if (!coru_run(arg)) {
         goto ERROR;
     }
-
-    /* Remove it later. */
-    if (out)
-        PUTS("%s", out);
 
     coru_argument_delete((void *) arg);
 
     return 0;
 
 ERROR:
-    if (out)
-        free(out);
-
     if (arg)
         coru_argument_delete((void *) arg);
 

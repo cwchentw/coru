@@ -46,7 +46,7 @@ BOOL string_contains(char *a, char *b)
         return FALSE;
 
     size_t i = 0;
-    while (i + sz_b < sz_a) {
+    while (i + sz_b <= sz_a) {
         size_t _i = i;
         size_t _j = 0;
 
