@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "hash_table.h"
@@ -20,8 +21,11 @@ struct key_value_pair_t {
 hash_table_t * hash_table_new(void)
 {
     hash_table_t *table = (hash_table_t *) malloc(sizeof(hash_table_t));
-    if (!table)
+    if (!table) {
+        fprintf(stderr, "Failed to allocate memory for a hash table\n");
+        fprintf(stderr, "Check available system memory\n");
         return table;
+    }
 
     table->size = 0;
     table->capacity = 11;  /* Sensible initial capacity for a hash table. */

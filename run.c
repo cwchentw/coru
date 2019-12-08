@@ -168,32 +168,20 @@ LOAD_LINE:
                     ^^^^^ --> end word of comment (optional)
      */
     comment_single_start = _init_comment_single_start();
-    if (!comment_single_start) {
-        PUTERR("Failed to init comment single start table");
-        PUTERR("Check available system memory");
+    if (!comment_single_start)
         goto ERROR_LOAD;
-    }
 
     comment_single_end = _init_comment_single_end();
-    if (!comment_single_end) {
-        PUTERR("Failed to init comment single end table");
-        PUTERR("Check available system memory");
+    if (!comment_single_end)
         goto ERROR_LOAD;
-    }
 
     comment_multiple_start = _init_comment_multiple_start();
-    if (!comment_multiple_start) {
-        PUTERR("Failed to init comment multiple start table");
-        PUTERR("Check available system memory");
+    if (!comment_multiple_start)
         goto ERROR_LOAD;
-    }
 
     comment_multiple_end = _init_comment_multiple_end();
-    if (!comment_multiple_end) {
-        PUTERR("Failed to init comment multiple end table");
-        PUTERR("Check available system memory");
+    if (!comment_multiple_end)
         goto ERROR_LOAD;
-    }
 
     /* Free system resources. */
     hash_table_delete(comment_multiple_end);
