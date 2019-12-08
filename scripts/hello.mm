@@ -17,9 +17,9 @@ int main(void)
 
     NSString *greet = [[[NSString alloc] initWithString: @"Hello World"] autorelease];
     string s([greet UTF8String]);
-    
+
     cout << s << endl;
-    
+
     [pool drain];
 
     return 0;
