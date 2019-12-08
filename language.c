@@ -50,12 +50,6 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".hpp", ext)) {
         lang = LANGUAGE_CPP;
     }
-    else if (is_string_equal(".m", ext)) {
-        lang = LANGUAGE_OBJC;
-    }
-    else if (is_string_equal(".mm", ext)) {
-        lang = LANGUAGE_OBJCPP;
-    }
     else if (is_string_equal(".java", ext)) {
         lang = LANGUAGE_JAVA;
     }
@@ -82,6 +76,15 @@ language_t detect_target_language(char *path)
     }
     else if (is_string_equal(".rs", ext)) {
         lang = LANGUAGE_RUST;
+    }
+    else if (is_string_equal(".m", ext)) {
+        lang = LANGUAGE_OBJC;
+    }
+    else if (is_string_equal(".mm", ext)) {
+        lang = LANGUAGE_OBJCPP;
+    }
+    else if (is_string_equal(".swift", ext)) {
+        lang = LANGUAGE_SWIFT;
     }
     else if (is_string_equal(".csh", ext)) {
         lang = LANGUAGE_CSH;
@@ -151,6 +154,9 @@ PARSE_LINE:
                 else if (string_contains(line, "node")) {
                     lang = LANGUAGE_JS;
                 }
+                else if (string_contains(line, "swift")) {
+                    lang = LANGUAGE_SWIFT;
+                }
                 else if (string_contains(line, "csh")) {
                     lang = LANGUAGE_CSH;
                 }
@@ -197,10 +203,6 @@ char * language_to_string(language_t lang)
         return STRING_C;
     case LANGUAGE_CPP:
         return STRING_CPP;
-    case LANGUAGE_OBJC:
-        return STRING_OBJC;
-    case LANGUAGE_OBJCPP:
-        return STRING_OBJCPP;
     case LANGUAGE_JAVA:
         return STRING_JAVA;
     case LANGUAGE_CSHARP:
@@ -219,6 +221,12 @@ char * language_to_string(language_t lang)
         return STRING_GO;
     case LANGUAGE_RUST:
         return STRING_RUST;
+    case LANGUAGE_OBJC:
+        return STRING_OBJC;
+    case LANGUAGE_OBJCPP:
+        return STRING_OBJCPP;
+    case LANGUAGE_SWIFT:
+        return STRING_SWIFT;
     case LANGUAGE_CSH:
         return STRING_CSH;
     case LANGUAGE_SH:

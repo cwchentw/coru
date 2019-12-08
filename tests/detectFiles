@@ -33,6 +33,7 @@ check_tool_exists ruby "Ruby";
 check_tool_exists php "PHP";
 check_tool_exists go "Golang";
 check_tool_exists rustc "Rust";
+check_tool_exists swift "Swift";
 
 _assert=0;
 assert ()
@@ -73,32 +74,6 @@ detect_cpp_by_extension ()
     local result="$($coru scripts/hello.cpp | head -n1)";
 
     if ! echo "$result" | fgrep "C++" >/dev/null;
-    then
-        echo 1;
-        return 1;
-    fi
-
-    echo 0;
-}
-
-detect_objc_by_extension ()
-{
-    local result="$($coru scripts/hello.m | head -n 1)";
-
-    if ! echo "$result" | fgrep "Objective-C" >/dev/null;
-    then
-        echo 1;
-        return 1;
-    fi
-
-    echo 0;
-}
-
-detect_objcpp_by_extension ()
-{
-    local result="$($coru scripts/hello.mm | head -n 1)";
-
-    if ! echo "$result" | fgrep "Objective-C++" >/dev/null;
     then
         echo 1;
         return 1;
@@ -339,10 +314,46 @@ detect_rust_by_extension ()
     echo 0;
 }
 
+detect_objc_by_extension ()
+{
+    local result="$($coru scripts/hello.m | head -n 1)";
+
+    if ! echo "$result" | fgrep "Objective-C" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+detect_objcpp_by_extension ()
+{
+    local result="$($coru scripts/hello.mm | head -n 1)";
+
+    if ! echo "$result" | fgrep "Objective-C++" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+detect_swift_by_extension ()
+{
+    local result="$($coru scripts/hello.swift | head -n 1)";
+    if ! echo "$result" | fgrep "Swift" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
 assert $(detect_c_by_extension) "Failed to detect C by extension";
 assert $(detect_cpp_by_extension) "Failed to detect C++ by extension";
-assert $(detect_objc_by_extension) "Failed to detect Objective-C by extension";
-assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by extension";
 assert $(detect_java_by_extension) "Failed to detect Java by extension";
 assert $(detect_csharp_by_extension) "Failed to detect C sharp by extension";
 assert $(detect_bourne_shell_by_extension) "Failed to detect Bourne Shell by extension";
@@ -361,6 +372,9 @@ assert $(detect_js_by_extension) "Failed to detect JavaScript by extension";
 assert $(detect_js_by_shebang) "Failed to detect JavaScript by Shebang";
 assert $(detect_golang_by_extension) "Failed to detect Golang by extension";
 assert $(detect_rust_by_extension) "Failed to detect Rust by extension";
+assert $(detect_objc_by_extension) "Failed to detect Objective-C by extension";
+assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by extension";
+assert $(detect_swift_by_extension) "Failed to detect Swift by extension";
 
 if [ $_assert -ne 0 ];
 then
