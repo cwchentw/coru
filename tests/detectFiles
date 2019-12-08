@@ -32,6 +32,7 @@ check_tool_exists python "Python";
 check_tool_exists ruby "Ruby";
 check_tool_exists php "PHP";
 check_tool_exists go "Golang";
+check_tool_exists rustc "Rust";
 
 _assert=0;
 assert ()
@@ -326,27 +327,40 @@ detect_golang_by_extension ()
     echo 0;
 }
 
-assert $(detect_c_by_extension) "Failed to detect C by Extension";
-assert $(detect_cpp_by_extension) "Failed to detect C++ by Extension";
-assert $(detect_objc_by_extension) "Failed to detect Objective-C by Extension";
-assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by Extension";
-assert $(detect_java_by_extension) "Failed to detect Java by Extension";
-assert $(detect_csharp_by_extension) "Failed to detect C sharp by Extension";
-assert $(detect_bourne_shell_by_extension) "Failed to detect Bourne Shell by Extension";
+detect_rust_by_extension ()
+{
+    local result="$($coru scripts/hello.rs | head -n 1)";
+    if ! echo "$result" | fgrep "Rust" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+assert $(detect_c_by_extension) "Failed to detect C by extension";
+assert $(detect_cpp_by_extension) "Failed to detect C++ by extension";
+assert $(detect_objc_by_extension) "Failed to detect Objective-C by extension";
+assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by extension";
+assert $(detect_java_by_extension) "Failed to detect Java by extension";
+assert $(detect_csharp_by_extension) "Failed to detect C sharp by extension";
+assert $(detect_bourne_shell_by_extension) "Failed to detect Bourne Shell by extension";
 assert $(detect_bourne_shell_by_shebang) "Failed to detect Bourne Shell by Shebang";
-assert $(detect_c_shell_by_extension) "Failed to detect C Shell by Extension";
+assert $(detect_c_shell_by_extension) "Failed to detect C Shell by extension";
 assert $(detect_c_shell_by_shebang) "Failed to detect C Shell by Shebang";
-assert $(detect_perl_by_extension) "Failed to detect Perl by Extension";
+assert $(detect_perl_by_extension) "Failed to detect Perl by extension";
 assert $(detect_perl_by_shebang) "Failed to detect Perl by Shebang";
-assert $(detect_python_by_extension) "Failed to detect Python by Extension";
+assert $(detect_python_by_extension) "Failed to detect Python by extension";
 assert $(detect_python_by_shebang) "Failed to detect Python by Shebang";
-assert $(detect_ruby_by_extension) "Failed to detect Ruby by Extension";
+assert $(detect_ruby_by_extension) "Failed to detect Ruby by extension";
 assert $(detect_ruby_by_shebang) "Failed to detect Ruby by Shebang";
-assert $(detect_php_by_extension) "Failed to detect PHP by Extension";
+assert $(detect_php_by_extension) "Failed to detect PHP by extension";
 assert $(detect_php_by_shebang) "Failed to detect PHP by Shebang";
-assert $(detect_js_by_extension) "Failed to detect JavaScript by Extension";
+assert $(detect_js_by_extension) "Failed to detect JavaScript by extension";
 assert $(detect_js_by_shebang) "Failed to detect JavaScript by Shebang";
-assert $(detect_golang_by_extension) "Failed to detect Golang by Extension";
+assert $(detect_golang_by_extension) "Failed to detect Golang by extension";
+assert $(detect_rust_by_extension) "Failed to detect Rust by extension";
 
 if [ $_assert -ne 0 ];
 then
