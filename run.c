@@ -258,18 +258,18 @@ static hash_table_t * _init_comment_single_start(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
-        STRING_OBJC,
-        STRING_OBJCPP,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
-	STRING_JS,
-        STRING_SWIFT,
+        STRING_JS,
         STRING_GO,
         STRING_RUST,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_SWIFT,
         STRING_CSH,
         STRING_SH
     };
@@ -277,20 +277,20 @@ static hash_table_t * _init_comment_single_start(void)
     char *values[] = {
         "/*",  /* C */
         "//",  /* C++ */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
         "//",  /* Java */
         "//",  /* C# */
         "#",   /* Perl */
         "#",   /* Python */
         "#",   /* Ruby */
         "#",   /* PHP */
-	"//",  /* JavaScript */
-        "//",  /* Swift */
+        "//",  /* JavaScript */
         "//",  /* Golang */
         "//",  /* Rust */
+        "/*",  /* ObjC */
+        "/*",  /* ObjC++ */
+        "//",  /* Swift */
         "#",   /* C shell */
-        "#"    /* POSIX shell */
+        "#"    /* Bourne shell */
     };
 
     {
@@ -323,18 +323,18 @@ static hash_table_t * _init_comment_single_end(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
-        STRING_OBJC,
-        STRING_OBJCPP,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
-	STRING_JS,
-        STRING_SWIFT,
+        STRING_JS,
         STRING_GO,
         STRING_RUST,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_SWIFT,
         STRING_CSH,
         STRING_SH
     };
@@ -342,20 +342,20 @@ static hash_table_t * _init_comment_single_end(void)
     char *values[] = {
         "*/",  /* C */
         "",    /* C++ */
-        "*/",  /* ObjC */
-        "*/",  /* ObjC++ */
         "",    /* Java */
         "",    /* C# */
         "",    /* Perl */
         "",    /* Python */
         "",    /* Ruby */
         "",    /* PHP */
-	"",    /* JavaScript */
-        "",    /* Swift */
+        "",    /* JavaScript */
         "",    /* Golang */
         "",    /* Rust */
+        "*/",  /* ObjC */
+        "*/",  /* ObjC++ */
+        "",    /* Swift */
         "",    /* C shell */
-        ""     /* POSIX shell */
+        ""     /* Bourne shell */
     };
 
     {
@@ -388,18 +388,18 @@ static hash_table_t * _init_comment_multiple_start(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
-        STRING_OBJC,
-        STRING_OBJCPP,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
-	STRING_JS,
-        STRING_SWIFT,
+        STRING_JS,
         STRING_GO,
         STRING_RUST,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_SWIFT,
         STRING_CSH,
         STRING_SH
     };
@@ -407,20 +407,20 @@ static hash_table_t * _init_comment_multiple_start(void)
     char *values[] = {
         "/*",  /* C */
         "/*",  /* C++ */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
         "/*",  /* Java */
         "/*",  /* C# */
         "",    /* Perl */
         "",    /* Python */
         "",    /* Ruby */
         "/*",  /* PHP */
-	"/*",  /* JavaScript */
-        "/*",  /* Swift */
+	    "/*",  /* JavaScript */
         "/*",  /* Golang */
         "/*",  /* Rust */
+        "/*",  /* ObjC */
+        "/*",  /* ObjC++ */
+        "/*",  /* Swift */
         "",    /* C shell */
-        ""     /* POSIX shell */
+        ""     /* Bourne shell */
     };
 
     {
@@ -453,18 +453,18 @@ static hash_table_t * _init_comment_multiple_end(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
-        STRING_OBJC,
-        STRING_OBJCPP,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
         STRING_PYTHON,
         STRING_RUBY,
         STRING_PHP,
-	STRING_JS,
-        STRING_SWIFT,
+        STRING_JS,
         STRING_GO,
         STRING_RUST,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_SWIFT,
         STRING_CSH,
         STRING_SH
     };
@@ -472,20 +472,20 @@ static hash_table_t * _init_comment_multiple_end(void)
     char *values[] = {
         "*/",  /* C */
         "*/",  /* C++ */
-        "*/",  /* ObjC */
-        "*/",  /* ObjC++ */
         "*/",  /* Java */
         "*/",  /* C# */
         "",    /* Perl */
         "",    /* Python */
         "",    /* Ruby */
         "*/",  /* PHP */
-	"*/",  /* JavaScript */
-        "*/",  /* Swift */
+        "*/",  /* JavaScript */
         "*/",  /* Golang */
         "*/",  /* Rust */
+        "*/",  /* ObjC */
+        "*/",  /* ObjC++ */
+        "*/",  /* Swift */
         "",    /* C shell */
-        ""     /* POSIX shell */
+        ""     /* Bourne shell */
     };
 
     {

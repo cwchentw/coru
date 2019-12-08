@@ -1,5 +1,5 @@
-#ifndef CORU_BOOLEAN_H
-#define CORU_BOOLEAN_H
+#ifndef BOOLEAN_H
+#define BOOLEAN_H
 
 #if __STDC_VERSION__ < 199901L
     #ifndef __cplusplus
