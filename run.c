@@ -63,6 +63,7 @@ BOOL coru_run(coru_argument_t * arg, char *out)
 static hash_table_t * _init_comment_single_start(void);
 static hash_table_t * _init_comment_single_end(void);
 static hash_table_t * _init_comment_multiple_start(void);
+static hash_table_t * _init_comment_multiple_end(void);
 
 static BOOL coru_run_load(coru_argument_t * arg, char *out)
 {
@@ -72,6 +73,7 @@ static BOOL coru_run_load(coru_argument_t * arg, char *out)
     hash_table_t *comment_single_start = NULL;
     hash_table_t *comment_single_end = NULL;
     hash_table_t *comment_multiple_start = NULL;
+    hash_table_t *comment_multiple_end = NULL;
 
     stats = coru_stats_new();
     if (!stats) {
@@ -189,7 +191,16 @@ LOAD_LINE:
         goto ERROR_LOAD;
     }
 
+    comment_multiple_end = _init_comment_multiple_end();
+    if (!comment_multiple_end) {
+    #if DEBUG
+        PUTERR("Failed to init comment multiple end table");
+    #endif
+        goto ERROR_LOAD;
+    }
+
     /* Free system resources. */
+    hash_table_delete(comment_multiple_end);
     hash_table_delete(comment_multiple_start);
     hash_table_delete(comment_single_end);
     hash_table_delete(comment_single_start);
@@ -200,6 +211,9 @@ LOAD_LINE:
     return TRUE;
 
 ERROR_LOAD:
+    if (comment_multiple_end)
+        hash_table_delete(comment_multiple_end);
+
     if (comment_multiple_start)
         hash_table_delete(comment_multiple_start);
 
@@ -385,6 +399,69 @@ static hash_table_t * _init_comment_multiple_start(void)
         "/*",  /* Swift */
         "/*",  /* Golang */
         "/*",  /* Rust */
+        "",    /* C shell */
+        ""     /* POSIX shell */
+    };
+
+    {
+        size_t i;
+        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
+            if (!hash_table_add(table, keys[i], values[i])) {
+            #if DEBUG
+                PUTERR("Failed to add key-value to the hash table");
+            #endif
+                goto ERROR;
+            }
+        }
+    }
+
+    return table;
+
+ERROR:
+    if (table)
+        hash_table_delete(table);
+
+    return NULL;
+}
+
+static hash_table_t * _init_comment_multiple_end(void)
+{
+        hash_table_t *table = hash_table_new();
+    if (!table)
+        return table;
+
+    char *keys[] = {
+        STRING_C,
+        STRING_CPP,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_JAVA,
+        STRING_CSHARP,
+        STRING_PERL,
+        STRING_PYTHON,
+        STRING_RUBY,
+        STRING_PHP,
+        STRING_SWIFT,
+        STRING_GO,
+        STRING_RUST,
+        STRING_CSH,
+        STRING_SH
+    };
+
+    char *values[] = {
+        "*/",  /* C */
+        "*/",  /* C++ */
+        "*/",  /* ObjC */
+        "*/",  /* ObjC++ */
+        "*/",  /* Java */
+        "*/",  /* C# */
+        "",    /* Perl */
+        "",    /* Python */
+        "",    /* Ruby */
+        "*/",  /* PHP */
+        "*/",  /* Swift */
+        "*/",  /* Golang */
+        "*/",  /* Rust */
         "",    /* C shell */
         ""     /* POSIX shell */
     };
