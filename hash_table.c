@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "hash_table.h"
@@ -21,11 +20,8 @@ struct key_value_pair_t {
 hash_table_t * hash_table_new(void)
 {
     hash_table_t *table = (hash_table_t *) malloc(sizeof(hash_table_t));
-    if (!table) {
-        fprintf(stderr, "Failed to allocate memory for a hash table\n");
-        fprintf(stderr, "Check available system memory\n");
+    if (!table)
         return table;
-    }
 
     table->size = 0;
     table->capacity = 11;  /* Sensible initial capacity for a hash table. */
@@ -58,6 +54,7 @@ static size_t primes[_PRMIE_SIZE] = {11, 23, 47, 97, 197, 397, 797, 1597, 3203,
 BOOL hash_table_add(hash_table_t *self, char *key, char *value)
 {
     assert(self);
+    assert(key && 0 != strcmp("", key));
 
     if (!_expand(self))
         return FALSE;
@@ -237,6 +234,7 @@ ERROR:
 char * hash_table_get(hash_table_t *self, char *key)
 {
     assert(self);
+    assert(key && 0 != strcmp("", key));
 
     unsigned long code = _hash(key);
     size_t index = code % self->capacity;
@@ -265,6 +263,7 @@ static BOOL _shrink(hash_table_t *self);
 BOOL hash_table_remove(hash_table_t *self, char *key)
 {
     assert(self);
+    assert(key && 0 != strcmp("", key));
 
     if (!_shrink(self))
         return FALSE;
