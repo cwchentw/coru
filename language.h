@@ -5,25 +5,26 @@
 
 typedef char language_t;
 
-#define LANGUAGE_UNKNOWN  0
-#define LANGUAGE_C        1
-#define LANGUAGE_CPP      2
-#define LANGUAGE_OBJC     3
-#define LANGUAGE_OBJCPP   4
-#define LANGUAGE_JAVA     5
-#define LANGUAGE_PERL     6
-#define LANGUAGE_PYTHON   7
-#define LANGUAGE_RUBY     8
-#define LANGUAGE_PHP      9
-#define LANGUAGE_CSH     10
-#define LANGUAGE_SH      11
+#define LANGUAGE_UNKNOWN   0
+#define LANGUAGE_C         1
+#define LANGUAGE_CPP       2
+#define LANGUAGE_OBJC      3
+#define LANGUAGE_OBJCPP    4
+#define LANGUAGE_JAVA      5
+#define LANGUAGE_CSHARP    6
+#define LANGUAGE_PERL      7
+#define LANGUAGE_PYTHON    8
+#define LANGUAGE_RUBY      9
+#define LANGUAGE_PHP      10
+#define LANGUAGE_CSH      11
+#define LANGUAGE_SH       12
 
 #define STRING_C       "C"
 #define STRING_CPP     "C++"
 #define STRING_OBJC    "Objective-C"
 #define STRING_OBJCPP  "Objective-C++"
 #define STRING_JAVA    "Java"
-#define STRING_CSHARP  "C#"
+#define STRING_CSHARP  "C sharp"
 #define STRING_PERL    "Perl"
 #define STRING_PYTHON  "Python"
 #define STRING_RUBY    "Ruby"

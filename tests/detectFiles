@@ -3,7 +3,8 @@
 
 check_tool_exists ()
 {
-    local tool=$1;
+    local tool="$1";
+    local software="$2";
 
     if [ -z "$tool" ];
     then
@@ -13,19 +14,23 @@ check_tool_exists ()
 
     if ! command -v $tool 2>/dev/null 1>&2;
     then
-        echo "No $tool installed on your system" >&2;
+        if [ "$software" != "" ];
+        then
+            echo "No $software installed on your system" >&2;
+        else
+            echo "No $tool installed on your system" >&2;
+        fi
     fi
 }
 
-check_tool_exists sh;
-check_tool_exists csh;
-check_tool_exists javac;
-check_tool_exists perl;
-check_tool_exists python;
-check_tool_exists ruby;
-check_tool_exists php;
-
-unset -f check_tool_exists;
+check_tool_exists sh "Bourne Shell";
+check_tool_exists csh "C Shell";
+check_tool_exists javac "JDK";
+check_tool_exists mcs "Mono";
+check_tool_exists perl "Perl";
+check_tool_exists python "Python";
+check_tool_exists ruby "Ruby";
+check_tool_exists php "PHP";
 
 _assert=0;
 assert ()
@@ -66,6 +71,32 @@ test_cpp_by_extension ()
     local result="$($coru scripts/hello.cpp | head -n1)";
 
     if ! echo "$result" | fgrep "C++" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_java_by_extension ()
+{
+    local result="$($coru scripts/HelloWorld.java | head -n1)";
+
+    if ! echo "$result" | fgrep "Java" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_csharp_by_extension ()
+{
+    local result="$($coru scripts/HelloWorld.cs | head -n 1)";
+
+    if ! echo "$result" | fgrep "C sharp" >/dev/null;
     then
         echo 1;
         return 1;
@@ -118,19 +149,6 @@ test_c_shell_by_shebang ()
     local result="$($coru scripts/helloInCsh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
-    then
-        echo 1;
-        return 1;
-    fi
-
-    echo 0;
-}
-
-test_java_by_extension ()
-{
-    local result="$($coru scripts/HelloWorld.java | head -n1)";
-
-    if ! echo $result | fgrep "Java" >/dev/null;
     then
         echo 1;
         return 1;
@@ -245,6 +263,8 @@ test_php_by_shebang ()
 
 assert $(test_c_by_extension) "Failed to detect C by Extension";
 assert $(test_cpp_by_extension) "Failed to detect C++ by Extension";
+assert $(test_java_by_extension) "Failed to detect Java by Extension";
+assert $(test_csharp_by_extension) "Failed to detect C sharp by Extension";
 assert $(test_bourne_shell_by_extension) "Failed to detect Bourne Shell by Extension";
 assert $(test_bourne_shell_by_shebang) "Failed to detect Bourne Shell by Shebang";
 assert $(test_c_shell_by_extension) "Failed to detect C Shell by Extension";
@@ -258,28 +278,9 @@ assert $(test_ruby_by_shebang) "Failed to detect Ruby by Shebang";
 assert $(test_php_by_extension) "Failed to detect PHP by Extension";
 assert $(test_php_by_shebang) "Failed to detect PHP by Shebang";
 
-unset coru;
-unset -f assert;
-unset -f test_c_by_extension;
-unset -f test_cpp_by_extension;
-unset -f test_bourne_shell_by_extension;
-unset -f test_bourne_shell_by_shebang;
-unset -f test_c_shell_by_extension;
-unset -f test_c_shell_by_shebang;
-unset -f test_perl_by_extension;
-unset -f test_perl_by_shebang;
-unset -f test_python_by_extension;
-unset -f test_python_by_shebang;
-unset -f test_ruby_by_extension;
-unset -f test_ruby_by_shebang;
-unset -f test_php_by_extension;
-unset -f test_php_by_shebang;
-
 if [ $_assert -ne 0 ];
 then
-    unset _assert;
     exit 1;
 fi
 
-unset _assert;
 exit 0;

@@ -59,6 +59,9 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".java", ext)) {
         lang = LANGUAGE_JAVA;
     }
+    else if (is_string_equal(".cs", ext)) {
+        lang = LANGUAGE_CSHARP;
+    }
     else if (is_string_equal(".pl", ext)) {
         lang = LANGUAGE_PERL;
     }
@@ -188,6 +191,8 @@ char * language_to_string(language_t lang)
         return STRING_OBJCPP;
     case LANGUAGE_JAVA:
         return STRING_JAVA;
+    case LANGUAGE_CSHARP:
+        return STRING_CSHARP;
     case LANGUAGE_PERL:
         return STRING_PERL;
     case LANGUAGE_PYTHON:
