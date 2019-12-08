@@ -19,6 +19,7 @@ check_tool_exists ()
 
 check_tool_exists sh;
 check_tool_exists csh;
+check_tool_exists javac;
 check_tool_exists perl;
 check_tool_exists python;
 check_tool_exists ruby;
@@ -117,6 +118,19 @@ test_c_shell_by_shebang ()
     local result="$($coru scripts/helloInCsh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_java_by_extension ()
+{
+    local result="$($coru scripts/HelloWorld.java | head -n1)";
+
+    if ! echo $result | fgrep "Java" >/dev/null;
     then
         echo 1;
         return 1;

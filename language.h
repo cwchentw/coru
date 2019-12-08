@@ -10,12 +10,13 @@ typedef char language_t;
 #define LANGUAGE_CPP      2
 #define LANGUAGE_OBJC     3
 #define LANGUAGE_OBJCPP   4
-#define LANGUAGE_PERL     5
-#define LANGUAGE_PYTHON   6
-#define LANGUAGE_RUBY     7
-#define LANGUAGE_PHP      8
-#define LANGUAGE_CSH      9
-#define LANGUAGE_SH      10
+#define LANGUAGE_JAVA     5
+#define LANGUAGE_PERL     6
+#define LANGUAGE_PYTHON   7
+#define LANGUAGE_RUBY     8
+#define LANGUAGE_PHP      9
+#define LANGUAGE_CSH     10
+#define LANGUAGE_SH      11
 
 #define STRING_C       "C"
 #define STRING_CPP     "C++"
