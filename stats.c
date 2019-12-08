@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "stats.h"
+#include "utils.h"
 
 struct coru_stats_t
 {
@@ -11,8 +12,11 @@ struct coru_stats_t
 coru_stats_t * coru_stats_new()
 {
     coru_stats_t *stats = (coru_stats_t *) malloc(sizeof(coru_stats_t));
-    if (!stats)
+    if (!stats) {
+        PUTERR("Failed to allocate memory for stats object");
+        PUTERR("Check available system memory");
         return stats;
+    }
 
     stats->width = 0;
     stats->height = 0;

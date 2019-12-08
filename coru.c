@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
 
     arg = coru_argument_parse(argc, argv);
     if (!arg) {
+    #if DEBUG
         PUTERR("Failed to parse argument(s)");
+    #endif
         goto ERROR;
     }
 

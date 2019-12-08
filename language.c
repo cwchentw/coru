@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if __unix__ || __APPLE__
+    #include <unistd.h>
+#endif
 #include "boolean.h"
 #include "language.h"
 #include "utils.h"
@@ -20,69 +23,97 @@ language_t detect_target_language(char *path)
         }
     }
 
-#define BUF_SIZE 100
-    char *sp = path;
-    char ext[BUF_SIZE];
+    language_t lang = LANGUAGE_UNKNOWN;
 
-    snprintf(ext, BUF_SIZE, "%s", sp + index);
+/* Visit https://support.microsoft.com/en-us/help/830473/command-prompt-cmd-exe-command-line-string-limitation
+   to get appropriate BUF_SIZE on Windows. */
+#ifdef _WIN32
+    size_t sz_buf = 8191;
+#elif __unix__
+    size_t sz_buf = sysconf(_SC_ARG_MAX);
+#elif __APPLE__
+    size_t sz_buf = sysconf(_SC_ARG_MAX);
+#else
+    #error "Unsupported system"
+#endif
+    char *sp = path;
+    char *ext = (char *) malloc(sz_buf);
+    if (!ext) {
+        PUTERR("Failed to allocate line buffer");
+        PUTERR("Check available system memory");
+        return LANGUAGE_UNKNOWN;
+    }
+
+
+    snprintf(ext, sz_buf, "%s", sp + index);
 
     if (is_string_equal(".c", ext)) {
-        return LANGUAGE_C;
+        lang = LANGUAGE_C;
     }
     else if (is_string_equal(".h", ext)) {
-        return LANGUAGE_C;
+        lang = LANGUAGE_C;
     }
     else if (is_string_equal(".cpp", ext)) {
-        return LANGUAGE_CPP;
+        lang = LANGUAGE_CPP;
     }
     else if (is_string_equal(".cxx", ext)) {
-        return LANGUAGE_CPP;
+        lang = LANGUAGE_CPP;
     }
     else if (is_string_equal(".cc", ext)) {
-        return LANGUAGE_CPP;
+        lang = LANGUAGE_CPP;
     }
     else if (is_string_equal(".hpp", ext)) {
-        return LANGUAGE_CPP;
+        lang = LANGUAGE_CPP;
     }
     else if (is_string_equal(".m", ext)) {
-        return LANGUAGE_OBJC;
+        lang = LANGUAGE_OBJC;
     }
     else if (is_string_equal(".mm", ext)) {
-        return LANGUAGE_OBJCPP;
+        lang = LANGUAGE_OBJCPP;
     }
     else if (is_string_equal(".pl", ext)) {
-        return LANGUAGE_PERL;
+        lang = LANGUAGE_PERL;
     }
     else if (is_string_equal(".py", ext)) {
-        return LANGUAGE_PYTHON;
+        lang = LANGUAGE_PYTHON;
     }
     else if (is_string_equal(".rb", ext)) {
-        return LANGUAGE_RUBY;
+        lang = LANGUAGE_RUBY;
     }
     else if (is_string_equal(".php", ext)) {
-        return LANGUAGE_PHP;
+        lang = LANGUAGE_PHP;
     }
     else if (is_string_equal(".csh", ext)) {
-        return LANGUAGE_CSH;
+        lang = LANGUAGE_CSH;
     }
     else if (is_string_equal(".sh", ext)) {
-        return LANGUAGE_SH;
+        lang = LANGUAGE_SH;
     }
+
+    if (lang != LANGUAGE_UNKNOWN) {
+        free(ext);
+        return lang;
+    }
+
+    free(ext);
 
     FILE *fp = NULL;
     char *line = NULL;
-    language_t lang = LANGUAGE_UNKNOWN;
 
     fp = fopen(path, "r");
     if (!fp) {
+    #if DEBUG
         PUTERR("Unable to load file: %s", path);
+    #endif
         goto ERROR;
     }
 
-    size_t size = 150;
+    size_t size = 150;  /* A sensible default line width. */
     line = (char *) malloc(size * sizeof(char));
     if (!line) {
+    #if DEBUG
         PUTERR("Failed to allocate line");
+    #endif
         goto ERROR;
     }
 
@@ -93,7 +124,9 @@ language_t detect_target_language(char *path)
                 size <<= 1;
                 line = realloc(line, size);
                 if (!line) {
+                #if DEBUG
                     PUTERR("Failed to reallocate line");
+                #endif
                     goto ERROR;
                 }
             } else {
@@ -129,6 +162,7 @@ PARSE_LINE:
                 lang = LANGUAGE_UNKNOWN;
             }
 
+            /* We only parse the first line of target source. */
             break;
         }
     }

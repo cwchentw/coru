@@ -27,18 +27,28 @@ BOOL coru_run(coru_argument_t * arg, char *out)
     if (is_command_equal(coru_argument_command(arg), COMMAND_VERSION)) {
         help_version();
         return TRUE;
-    } else if (is_command_equal(coru_argument_command(arg), COMMAND_LICENSE)) {
+    }
+    else if (is_command_equal(coru_argument_command(arg), COMMAND_LICENSE)) {
         help_license();
         return TRUE;
-    } else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_FEW)) {
+    }
+    else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         return FALSE;
-    } else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
-        return coru_run_load(arg, out);
-    } else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_MANY)) {
+    }
+    else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
+        if (!coru_run_load(arg, out)) {
+            PUTERR("Failed to load target file");
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+    else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", CORU_PROGRAM);
         return FALSE;
-    } else {
+    }
+    else {
         PUTERR("Unknown option");
         return FALSE;
     }
@@ -59,20 +69,26 @@ static BOOL coru_run_load(coru_argument_t * arg, char *out)
 
     stats = coru_stats_new();
     if (!stats) {
+    #if DEBUG
         PUTERR("Failed to load stats");
+    #endif
         goto ERROR_LOAD;
     }
 
 #if _WIN32
     if (!PathFileExists(coru_argument_path(arg))) {
+    #if DEBUG
         PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
         goto ERROR_LOAD;
     }
 #elif __unix__ || __APPLE__
     struct stat st;
 
     if (stat(coru_argument_path(arg), &st) & F_OK) {
+    #if DEBUG
         PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
         goto ERROR_LOAD;
     }
 #else
@@ -87,7 +103,9 @@ static BOOL coru_run_load(coru_argument_t * arg, char *out)
 
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
+    #if DEBUG
         PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
         goto ERROR_LOAD;
     }
 #if DEBUG
