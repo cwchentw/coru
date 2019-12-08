@@ -5,10 +5,10 @@
 
 void help_version(void)
 {
-    PUTS("%s", LAI_VERSION);
+    PUTS("%s", CORU_VERSION);
 }
 
 void help_license(void)
 {
-    PUTS("%s", LAI_LICENSE);
+    PUTS("%s", CORU_LICENSE);
 }

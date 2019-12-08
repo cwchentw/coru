@@ -36,7 +36,7 @@ BOOL coru_run(coru_argument_t * arg, char *out)
     } else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
         return coru_run_load(arg, out);
     } else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_MANY)) {
-        PUTERR("%s only accepts single file", LAI_PROGRAM);
+        PUTERR("%s only accepts single file", CORU_PROGRAM);
         return FALSE;
     } else {
         PUTERR("Unknown option");
@@ -46,12 +46,16 @@ BOOL coru_run(coru_argument_t * arg, char *out)
 
 static hash_table_t * _init_comment_single_start(void);
 static hash_table_t * _init_comment_single_end(void);
+static hash_table_t * _init_comment_multiple_start(void);
 
 static BOOL coru_run_load(coru_argument_t * arg, char *out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
     char *line = NULL;
+    hash_table_t *comment_single_start = NULL;
+    hash_table_t *comment_single_end = NULL;
+    hash_table_t *comment_multiple_start = NULL;
 
     stats = coru_stats_new();
     if (!stats) {
@@ -137,15 +141,34 @@ LOAD_LINE:
                    ^ --> one space (optional)
                     ^^^^^ --> end word of comment (optional)
      */
-    hash_table_t *comment_single_start = _init_comment_single_start();
-    if (!comment_single_start)
-        return FALSE;
+    comment_single_start = _init_comment_single_start();
+    if (!comment_single_start) {
+    #if DEBUG
+        PUTERR("Failed to init comment single start table");
+    #endif
+        goto ERROR_LOAD;
+    }
 
-    hash_table_t *comment_single_end = _init_comment_single_end();
-    if (!comment_single_end)
-        return FALSE;
+    comment_single_end = _init_comment_single_end();
+    if (!comment_single_end) {
+    #if DEBUG
+        PUTERR("Failed to init comment single end table");
+    #endif
+        goto ERROR_LOAD;
+    }
+
+    comment_multiple_start = _init_comment_multiple_start();
+    if (!comment_multiple_start) {
+    #if DEBUG
+        PUTERR("Failed to init comment multiple start table");
+    #endif
+        goto ERROR_LOAD;
+    }
 
     /* Free system resources. */
+    hash_table_delete(comment_multiple_start);
+    hash_table_delete(comment_single_end);
+    hash_table_delete(comment_single_start);
     free(line);
     fclose(fp);
     coru_stats_delete((void *) stats);
@@ -153,6 +176,15 @@ LOAD_LINE:
     return TRUE;
 
 ERROR_LOAD:
+    if (comment_multiple_start)
+        hash_table_delete(comment_multiple_start);
+
+    if (comment_single_end)
+        hash_table_delete(comment_single_end);
+
+    if (comment_single_start)
+        hash_table_delete(comment_single_start);
+
     if (line)
         free(line);
 
@@ -266,6 +298,69 @@ static hash_table_t * _init_comment_single_end(void)
         "",    /* Swift */
         "",    /* Golang */
         "",    /* Rust */
+        "",    /* C shell */
+        ""     /* POSIX shell */
+    };
+
+    {
+        size_t i;
+        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
+            if (!hash_table_add(table, keys[i], values[i])) {
+            #if DEBUG
+                PUTERR("Failed to add key-value to the hash table");
+            #endif
+                goto ERROR;
+            }
+        }
+    }
+
+    return table;
+
+ERROR:
+    if (table)
+        hash_table_delete(table);
+
+    return NULL;
+}
+
+static hash_table_t * _init_comment_multiple_start(void)
+{
+    hash_table_t *table = hash_table_new();
+    if (!table)
+        return table;
+
+    char *keys[] = {
+        STRING_C,
+        STRING_CPP,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_JAVA,
+        STRING_CSHARP,
+        STRING_PERL,
+        STRING_PYTHON,
+        STRING_RUBY,
+        STRING_PHP,
+        STRING_SWIFT,
+        STRING_GO,
+        STRING_RUST,
+        STRING_CSH,
+        STRING_SH
+    };
+
+    char *values[] = {
+        "/*",  /* C */
+        "/*",  /* C++ */
+        "/*",  /* ObjC */
+        "/*",  /* ObjC++ */
+        "/*",  /* Java */
+        "/*",  /* C# */
+        "",    /* Perl */
+        "",    /* Python */
+        "",    /* Ruby */
+        "/*",  /* PHP */
+        "/*",  /* Swift */
+        "/*",  /* Golang */
+        "/*",  /* Rust */
         "",    /* C shell */
         ""     /* POSIX shell */
     };

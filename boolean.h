@@ -1,5 +1,5 @@
-#ifndef LAI_BOOLEAN_H
-#define LAI_BOOLEAN_H
+#ifndef CORU_BOOLEAN_H
+#define CORU_BOOLEAN_H
 
 #if __STDC_VERSION__ < 199901L
     #ifndef __cplusplus
@@ -25,4 +25,4 @@
     #define TRUE   true
 #endif  /* C89 or C99 above */
 
-#endif  /* LAI_BOOLEAN_H */
+#endif  /* CORU_BOOLEAN_H */

@@ -1,5 +1,5 @@
-#ifndef LAI_LANGUAGE_H
-#define LAI_LANGUAGE_H
+#ifndef CORU_LANGUAGE_H
+#define CORU_LANGUAGE_H
 
 #include "boolean.h"
 
@@ -37,4 +37,4 @@ language_t detect_target_language(char *path);
 BOOL is_language_equal(language_t a, language_t b);
 char * language_to_string(language_t lang);
 
-#endif  /* LAI_LANGUAGE_H */
+#endif  /* CORU_LANGUAGE_H */

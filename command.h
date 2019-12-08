@@ -1,5 +1,5 @@
-#ifndef LAI_COMMAND_H
-#define LAI_COMMAND_H
+#ifndef CORU_COMMAND_H
+#define CORU_COMMAND_H
 
 typedef char COMMAND;
 
@@ -10,4 +10,4 @@ typedef char COMMAND;
 #define COMMAND_LOAD     4
 #define COMMAND_TOO_MANY 5
 
-#endif  /* LAI_COMMAND_H */
+#endif  /* CORU_COMMAND_H */

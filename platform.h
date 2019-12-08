@@ -1,5 +1,5 @@
-#ifndef LAI_PLATFORM_H
-#define LAI_PLATFORM_H
+#ifndef CORU_PLATFORM_H
+#define CORU_PLATFORM_H
 
 #ifdef _WIN32
     #define END_OF_LINE "\r\n"
@@ -21,4 +21,4 @@
     #error "Unsupported platform"
 #endif
 
-#endif  /* LAI_PLATFORM_H */
+#endif  /* CORU_PLATFORM_H */

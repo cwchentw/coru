@@ -1,5 +1,5 @@
-#ifndef LAI_UTILS_H
-#define LAI_UTILS_H
+#ifndef CORU_UTILS_H
+#define CORU_UTILS_H
 
 #include <stdio.h>
 #include "boolean.h"
@@ -34,4 +34,4 @@ BOOL string_contains(char *a, char *b);
 #endif
 #endif
 
-#endif  /* LAI_UTILS_H */
+#endif  /* CORU_UTILS_H */
