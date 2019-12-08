@@ -74,6 +74,9 @@ language_t detect_target_language(char *path)
     else if (is_string_equal(".php", ext)) {
         lang = LANGUAGE_PHP;
     }
+    else if (is_string_equal(".js", ext)) {
+        lang = LANGUAGE_JS;
+    }
     else if (is_string_equal(".csh", ext)) {
         lang = LANGUAGE_CSH;
     }
@@ -139,6 +142,9 @@ PARSE_LINE:
                 else if (string_contains(line, "php")) {
                     lang = LANGUAGE_PHP;
                 }
+                else if (string_contains(line, "node")) {
+                    lang = LANGUAGE_JS;
+                }
                 else if (string_contains(line, "csh")) {
                     lang = LANGUAGE_CSH;
                 }
@@ -201,6 +207,8 @@ char * language_to_string(language_t lang)
         return STRING_RUBY;
     case LANGUAGE_PHP:
         return STRING_PHP;
+    case LANGUAGE_JS:
+        return STRING_JS;
     case LANGUAGE_CSH:
         return STRING_CSH;
     case LANGUAGE_SH:
