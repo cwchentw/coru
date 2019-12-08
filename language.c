@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if __unix__ || __APPLE__
-    #include <unistd.h>
-#endif
 #include "boolean.h"
 #include "language.h"
 #include "utils.h"
@@ -25,27 +22,15 @@ language_t detect_target_language(char *path)
 
     language_t lang = LANGUAGE_UNKNOWN;
 
-/* Visit https://support.microsoft.com/en-us/help/830473/command-prompt-cmd-exe-command-line-string-limitation
-   to get appropriate BUF_SIZE on Windows. */
-#ifdef _WIN32
-    size_t sz_buf = 8191;
-#elif __unix__
-    size_t sz_buf = sysconf(_SC_ARG_MAX);
-#elif __APPLE__
-    size_t sz_buf = sysconf(_SC_ARG_MAX);
-#else
-    #error "Unsupported system"
-#endif
     char *sp = path;
-    char *ext = (char *) malloc(sz_buf);
+    char *ext = (char *) malloc(sz);
     if (!ext) {
         PUTERR("Failed to allocate line buffer");
         PUTERR("Check available system memory");
         return LANGUAGE_UNKNOWN;
     }
 
-
-    snprintf(ext, sz_buf, "%s", sp + index);
+    snprintf(ext, sz, "%s", sp + index);
 
     if (is_string_equal(".c", ext)) {
         lang = LANGUAGE_C;
