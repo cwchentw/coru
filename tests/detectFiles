@@ -293,6 +293,7 @@ detect_js_by_shebang ()
 detect_golang_by_extension ()
 {
     local result="$($coru scripts/hello.go | head -n 1)";
+
     if ! echo "$result" | fgrep "Golang" >/dev/null;
     then
         echo 1;
@@ -305,6 +306,7 @@ detect_golang_by_extension ()
 detect_rust_by_extension ()
 {
     local result="$($coru scripts/hello.rs | head -n 1)";
+
     if ! echo "$result" | fgrep "Rust" >/dev/null;
     then
         echo 1;
@@ -343,6 +345,20 @@ detect_objcpp_by_extension ()
 detect_swift_by_extension ()
 {
     local result="$($coru scripts/hello.swift | head -n 1)";
+
+    if ! echo "$result" | fgrep "Swift" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+detect_swift_by_shebang ()
+{
+    local result="$($coru scripts/helloInSwift | head -n 1)";
+
     if ! echo "$result" | fgrep "Swift" >/dev/null;
     then
         echo 1;
@@ -375,6 +391,7 @@ assert $(detect_rust_by_extension) "Failed to detect Rust by extension";
 assert $(detect_objc_by_extension) "Failed to detect Objective-C by extension";
 assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by extension";
 assert $(detect_swift_by_extension) "Failed to detect Swift by extension";
+assert $(detect_swift_by_shebang) "Failed to detect Swift by shebang";
 
 if [ $_assert -ne 0 ];
 then
