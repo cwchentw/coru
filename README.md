@@ -2,9 +2,11 @@
 
 `coru`, aka code ruler, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
+`uncoru`, the sister program of `coru`, removes line numbers and width rulers in target source commented by `coru`.
+
 ## Warning
 
-`coru` is still experimental. Back up your code before using `coru`.
+`coru` and `uncoru` are still experimental. Back up your code before using either.
 
 ## System Requirements
 
@@ -35,7 +37,7 @@ Most major tier languages are supported. Here are currently supported ones:
 * Ruby
 * PHP
 * JavaScript
-* Objective-C
+* Objective-C (and Objective-C++)
 * Swift
 * Golang
 * Rust
@@ -58,7 +60,7 @@ Add an optional width ruler:
 $ coru --ruler path/to/Klass.java
 ```
 
-For unknown source, you may apply start text and, optionally, end text.
+For unsupported target source, you may apply start text and, optionally, end text.
 
 ```console
 $ coru --start "/*" --end "*/"  path/to/unknown.ext
@@ -104,4 +106,4 @@ We copy the source code of `snprintf(3)` [here](https://www.ijs.si/software/snpr
 
 ## Copyright
 
-Copyright 2019 Michael Chen; the software is licensed under MIT.
+Copyright (c) 2019 Michael Chen. Licensed under MIT.
