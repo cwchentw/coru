@@ -136,12 +136,16 @@ static BOOL coru_run_load(coru_argument_t * arg, char *out)
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;
                 if (!realloc(line, line_size)) {
-                    PUTERR("Failed to realloc line object");
+                    PUTERR("Failed to realloc line buffer object");
+                    PUTERR("Check available system memory");
                     goto ERROR_LOAD;
                 }
-            } else
+            }
+            else {
                 goto LOAD_LINE;
-        } else {
+            }
+        }
+        else {
 LOAD_LINE:
             if (strlen(line) > coru_stats_width(stats)) {
                 coru_stats_set_width(stats, strlen(line));
@@ -157,16 +161,6 @@ LOAD_LINE:
     /* Add stats for non-comment lines. */
 #endif
 
-    /* The format of line number:
-       *start*    1 *end*
-     ^^ --> indent after original source code
-       ^^^^^^^ --> start word of comment
-              ^ --> one space
-               ^^^ --> indent for line number
-                  ^ --> line number
-                   ^ --> one space (optional)
-                    ^^^^^ --> end word of comment (optional)
-     */
     comment_single_start = _init_comment_single_start();
     if (!comment_single_start)
         goto ERROR_LOAD;
@@ -182,6 +176,42 @@ LOAD_LINE:
     comment_multiple_end = _init_comment_multiple_end();
     if (!comment_multiple_end)
         goto ERROR_LOAD;
+
+    /* The format of line number:
+       *start*    1 *end*
+     ^^ --> indent after original source code
+       ^^^^^^^ --> start word of comment
+              ^ --> one space
+               ^^^ --> indent for line number
+                  ^ --> line number
+                   ^ --> one space (optional)
+                    ^^^^^ --> end word of comment (optional)
+     */
+    /* Add line numbers to source later. */
+    size_t indent = 2;
+    size_t space = 1;
+
+    size_t digit = 0;
+    size_t temp = coru_stats_height(stats);
+    while (temp > 10) {
+        temp /= 10;
+        digit += 1;
+    }
+
+    size_t width_new = coru_stats_width(stats) + indent \
+        + strlen(hash_table_get(comment_single_start, language_to_string(lang))) \
+        + space + digit;
+
+    if (hash_table_get(comment_single_end, language_to_string(lang))) {
+        width_new += space \
+            + strlen(hash_table_get(comment_single_end, language_to_string(lang)));
+    }
+
+    width_new += 1;  /* Trailing zero. */
+
+#if DEBUG
+    PUTS("Destination width: %lu", width_new);
+#endif
 
     /* Free system resources. */
     hash_table_delete(comment_multiple_end);
