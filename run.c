@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -32,6 +33,10 @@ BOOL coru_run(coru_argument_t * arg, char *out)
         help_license();
         return TRUE;
     }
+    else if (is_command_equal(coru_argument_command(arg), COMMAND_HELP)) {
+        help_help(stdout);
+        return TRUE;
+    }
     else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         return FALSE;
@@ -50,6 +55,7 @@ BOOL coru_run(coru_argument_t * arg, char *out)
     }
     else {
         PUTERR("Unknown option");
+        help_help(stderr);
         return FALSE;
     }
 }

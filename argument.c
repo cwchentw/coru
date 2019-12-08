@@ -43,6 +43,11 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
             arg->cmd = COMMAND_LICENSE;
             break;
         }
+        else if (0 == strcmp(arg->argv[arg->index], "-h")
+            || 0 == strcmp(arg->argv[arg->index], "--help")) {
+            arg->cmd = COMMAND_HELP;
+            break;
+        }
         else if ('-' == arg->argv[arg->index][0]) {
             arg->cmd = COMMAND_UNKNOWN;
             break;
