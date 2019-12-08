@@ -18,7 +18,7 @@ We tested `coru` against several Unix or Unix-like systems:
 * Ubuntu 18.04 LTS
 * Amazon Linux, largely RHEL or CentOS compatible
 * TrueOS, FreeBSD compatible
-* Solaris
+* Solaris 11
 
 It should work on any platform that owns a standard C compiler.
 
