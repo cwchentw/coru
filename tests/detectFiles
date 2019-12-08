@@ -92,6 +92,19 @@ detect_objc_by_extension ()
     echo 0;
 }
 
+detect_objcpp_by_extension ()
+{
+    local result="$($coru scripts/hello.mm | head -n 1)";
+
+    if ! echo "$result" | fgrep "Objective-C++" >/dev/null;
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
 detect_java_by_extension ()
 {
     local result="$($coru scripts/HelloWorld.java | head -n1)";
@@ -303,6 +316,7 @@ detect_js_by_shebang ()
 assert $(detect_c_by_extension) "Failed to detect C by Extension";
 assert $(detect_cpp_by_extension) "Failed to detect C++ by Extension";
 assert $(detect_objc_by_extension) "Failed to detect Objective-C by Extension";
+assert $(detect_objcpp_by_extension) "Failed to detect Objective-C++ by Extension";
 assert $(detect_java_by_extension) "Failed to detect Java by Extension";
 assert $(detect_csharp_by_extension) "Failed to detect C sharp by Extension";
 assert $(detect_bourne_shell_by_extension) "Failed to detect Bourne Shell by Extension";
