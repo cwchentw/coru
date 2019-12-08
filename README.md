@@ -39,7 +39,8 @@ Most major tier languages are supported. Here are currently supported ones:
 * Swift
 * Golang
 * Rust
-* Sh-compatible Shells
+* C Shell
+* Bourne Shell
 
 For unsupported language, you may set custom character for single line comment. It should work as well.
 

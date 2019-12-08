@@ -16,11 +16,13 @@ else
 endif
 
 ifeq ($(CC),cl)
-	OBJS=argument.obj help.obj language.obj utils.obj stats.obj run.obj coru.obj
+	OBJS=argument.obj help.obj language.obj utils.obj stats.obj hash_table.obj \
+		run.obj coru.obj
 else ifeq ($(detected_OS),Darwin)
-	OBJS=argument.o help.o language.o utils.o stats.o run.o coru.o
+	OBJS=argument.o help.o language.o utils.o stats.o hash_table.o run.o coru.o
 else
-	OBJS=argument.o help.o language.o utils.o stats.o run.o snprintf.o coru.o
+	OBJS=argument.o help.o language.o utils.o stats.o hash_table.o run.o \
+		snprintf.o coru.o
 endif
 
 ifeq ($(CC),cc)

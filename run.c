@@ -13,6 +13,7 @@
 #include "argument.h"
 #include "boolean.h"
 #include "command.h"
+#include "hash_table.h"
 #include "help.h"
 #include "language.h"
 #include "metadata.h"
@@ -42,6 +43,9 @@ BOOL coru_run(coru_argument_t * arg, char *out)
         return FALSE;
     }
 }
+
+static hash_table_t * _init_comment_single_start(void);
+static hash_table_t * _init_comment_single_end(void);
 
 static BOOL coru_run_load(coru_argument_t * arg, char *out)
 {
@@ -133,8 +137,13 @@ LOAD_LINE:
                    ^ --> one space (optional)
                     ^^^^^ --> end word of comment (optional)
      */
-    /* Implement two hash tables to store the start word and the end word
-       of source code of specific language. */
+    hash_table_t *comment_single_start = _init_comment_single_start();
+    if (!comment_single_start)
+        return FALSE;
+
+    hash_table_t *comment_single_end = _init_comment_single_end();
+    if (!comment_single_end)
+        return FALSE;
 
     /* Free system resources. */
     free(line);
@@ -142,7 +151,6 @@ LOAD_LINE:
     coru_stats_delete((void *) stats);
 
     return TRUE;
-
 
 ERROR_LOAD:
     if (line)
@@ -155,4 +163,130 @@ ERROR_LOAD:
         coru_stats_delete((void *) stats);
 
     return FALSE;
+}
+
+static hash_table_t * _init_comment_single_start(void)
+{
+    hash_table_t *table = hash_table_new();
+    if (!table)
+        return table;
+
+    char *keys[] = {
+        STRING_C,
+        STRING_CPP,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_JAVA,
+        STRING_CSHARP,
+        STRING_PERL,
+        STRING_PYTHON,
+        STRING_RUBY,
+        STRING_PHP,
+        STRING_SWIFT,
+        STRING_GO,
+        STRING_RUST,
+        STRING_CSH,
+        STRING_SH
+    };
+
+    char *values[] = {
+        "/*",  /* C */
+        "//",  /* C++ */
+        "/*",  /* ObjC */
+        "/*",  /* ObjC++ */
+        "//",  /* Java */
+        "//",  /* C# */
+        "#",   /* Perl */
+        "#",   /* Python */
+        "#",   /* Ruby */
+        "#",   /* PHP */
+        "//",  /* Swift */
+        "//",  /* Golang */
+        "//",  /* Rust */
+        "#",   /* C shell */
+        "#"    /* POSIX shell */
+    };
+
+    {
+        size_t i;
+        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
+            if (!hash_table_add(table, keys[i], values[i])) {
+            #if DEBUG
+                PUTERR("Failed to add key-value to the hash table");
+            #endif
+                goto ERROR;
+            }
+        }
+    }
+
+    return table;
+
+ERROR:
+    if (table)
+        hash_table_delete(table);
+
+    return NULL;
+}
+
+static hash_table_t * _init_comment_single_end(void)
+{
+    hash_table_t *table = hash_table_new();
+    if (!table)
+        return table;
+
+    char *keys[] = {
+        STRING_C,
+        STRING_CPP,
+        STRING_OBJC,
+        STRING_OBJCPP,
+        STRING_JAVA,
+        STRING_CSHARP,
+        STRING_PERL,
+        STRING_PYTHON,
+        STRING_RUBY,
+        STRING_PHP,
+        STRING_SWIFT,
+        STRING_GO,
+        STRING_RUST,
+        STRING_CSH,
+        STRING_SH
+    };
+
+    char *values[] = {
+        "*/",  /* C */
+        "",    /* C++ */
+        "*/",  /* ObjC */
+        "*/",  /* ObjC++ */
+        "",    /* Java */
+        "",    /* C# */
+        "",    /* Perl */
+        "",    /* Python */
+        "",    /* Ruby */
+        "",    /* PHP */
+        "",    /* Swift */
+        "",    /* Golang */
+        "",    /* Rust */
+        "",    /* C shell */
+        ""     /* POSIX shell */
+    };
+
+    {
+        size_t i;
+        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
+            if (!hash_table_add(table, keys[i], values[i])) {
+            #if DEBUG
+                PUTERR("Failed to add key-value to the hash table");
+            #endif
+                goto ERROR;
+            }
+        }
+    }
+
+    return table;
+
+ERROR:
+    if (table)
+        hash_table_delete(table);
+
+    return NULL;
 }

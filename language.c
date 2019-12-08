@@ -157,25 +157,25 @@ char * language_to_string(language_t lang)
 {
     switch (lang) {
     case LANGUAGE_C:
-        return "C";
+        return STRING_C;
     case LANGUAGE_CPP:
-        return "C++";
+        return STRING_CPP;
     case LANGUAGE_OBJC:
-        return "Objective-C";
+        return STRING_OBJC;
     case LANGUAGE_OBJCPP:
-        return "Objective-C++";
+        return STRING_OBJCPP;
     case LANGUAGE_PERL:
-        return "Perl";
+        return STRING_PERL;
     case LANGUAGE_PYTHON:
-        return "Python";
+        return STRING_PYTHON;
     case LANGUAGE_RUBY:
-        return "Ruby";
+        return STRING_RUBY;
     case LANGUAGE_PHP:
-        return "PHP";
+        return STRING_PHP;
     case LANGUAGE_CSH:
-        return "C Shell";
+        return STRING_CSH;
     case LANGUAGE_SH:
-        return "Bourne Shell";
+        return STRING_SH;
     default:
         return "";
     }

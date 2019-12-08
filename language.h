@@ -17,6 +17,22 @@ typedef char language_t;
 #define LANGUAGE_CSH      9
 #define LANGUAGE_SH      10
 
+#define STRING_C       "C"
+#define STRING_CPP     "C++"
+#define STRING_OBJC    "Objective-C"
+#define STRING_OBJCPP  "Objective-C++"
+#define STRING_JAVA    "Java"
+#define STRING_CSHARP  "C#"
+#define STRING_PERL    "Perl"
+#define STRING_PYTHON  "Python"
+#define STRING_RUBY    "Ruby"
+#define STRING_PHP     "PHP"
+#define STRING_SWIFT   "Swift"
+#define STRING_GO      "Golang"
+#define STRING_RUST    "Rust"
+#define STRING_CSH     "C Shell"
+#define STRING_SH      "Bourne Shell"
+
 language_t detect_target_language(char *path);
 BOOL is_language_equal(language_t a, language_t b);
 char * language_to_string(language_t lang);
