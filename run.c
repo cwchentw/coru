@@ -198,16 +198,17 @@ LOAD_LINE:
         digit += 1;
     }
 
-    size_t width_new = coru_stats_width(stats) + indent \
+    size_t width_number = indent \
         + strlen(hash_table_get(comment_single_start, language_to_string(lang))) \
         + space + digit;
 
-    if (hash_table_get(comment_single_end, language_to_string(lang))) {
-        width_new += space \
+    if (0 != strcmp("", hash_table_get(comment_single_end, language_to_string(lang)))) {
+        width_number += space \
             + strlen(hash_table_get(comment_single_end, language_to_string(lang)));
     }
 
-    width_new += 1;  /* Trailing zero. */
+    size_t width_new = coru_stats_width(stats) + width_number \
+        + 1;  /* Trailing zero. */
 
 #if DEBUG
     PUTS("Destination width: %lu", width_new);

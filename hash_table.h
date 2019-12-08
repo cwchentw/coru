@@ -1,5 +1,5 @@
-#ifndef HASH_TABLE_H
-#define HASH_TABLE_H
+#ifndef CORU_HASH_TABLE_H
+#define CORU_HASH_TABLE_H
 
 #include "boolean.h"
 
@@ -19,4 +19,4 @@ void hash_table_delete(void *self);
 }
 #endif
 
-#endif  /* HASH_TABLE_H */
+#endif  /* CORU_HASH_TABLE_H */
