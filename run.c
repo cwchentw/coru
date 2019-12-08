@@ -169,33 +169,29 @@ LOAD_LINE:
      */
     comment_single_start = _init_comment_single_start();
     if (!comment_single_start) {
-    #if DEBUG
         PUTERR("Failed to init comment single start table");
-    #endif
+        PUTERR("Check available system memory");
         goto ERROR_LOAD;
     }
 
     comment_single_end = _init_comment_single_end();
     if (!comment_single_end) {
-    #if DEBUG
         PUTERR("Failed to init comment single end table");
-    #endif
+        PUTERR("Check available system memory");
         goto ERROR_LOAD;
     }
 
     comment_multiple_start = _init_comment_multiple_start();
     if (!comment_multiple_start) {
-    #if DEBUG
         PUTERR("Failed to init comment multiple start table");
-    #endif
+        PUTERR("Check available system memory");
         goto ERROR_LOAD;
     }
 
     comment_multiple_end = _init_comment_multiple_end();
     if (!comment_multiple_end) {
-    #if DEBUG
         PUTERR("Failed to init comment multiple end table");
-    #endif
+        PUTERR("Check available system memory");
         goto ERROR_LOAD;
     }
 
