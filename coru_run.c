@@ -16,6 +16,7 @@
 #include "coru_command.h"
 #include "coru_help.h"
 #include "coru_metadata.h"
+#include "coru_run.h"
 #include "coru_stats.h"
 #include "hash_table.h"
 #include "language.h"
@@ -60,20 +61,11 @@ BOOL coru_run(coru_argument_t * arg, char **out)
     }
 }
 
-static hash_table_t * _init_comment_single_start(void);
-static hash_table_t * _init_comment_single_end(void);
-static hash_table_t * _init_comment_multiple_start(void);
-static hash_table_t * _init_comment_multiple_end(void);
-
 static BOOL coru_run_load(coru_argument_t * arg, char **out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
     char *line = NULL;
-    hash_table_t *comment_single_start = NULL;
-    hash_table_t *comment_single_end = NULL;
-    hash_table_t *comment_multiple_start = NULL;
-    hash_table_t *comment_multiple_end = NULL;
 
 #if _WIN32
     if (!PathFileExists(coru_argument_path(arg))) {
@@ -94,9 +86,6 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
 #else
     #error "Unsupported platform"
 #endif
-
-    /* Set target language according to specific command-line argument. */
-
 
     language_t lang = LANGUAGE_UNKNOWN;
 
@@ -140,23 +129,84 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     /* Add stats for non-comment lines. */
 #endif
 
+    fp = fopen(coru_argument_path(arg), "r");
+    if (!fp) {
+    #if DEBUG
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
+        goto ERROR_LOAD;
+    }
+
+    BOOL is_all = coru_argument_is_all(arg);
+
+    if (is_all) {
+        if (!coru_load_all(fp, out, stats, lang)) {
+            goto ERROR_LOAD;
+        }
+    }
+    else {
+        if (!coru_load_non_empty(fp, out, stats, lang)) {
+            goto ERROR_LOAD;
+        }
+    }
+
+    /* Free system resources. */
+    fclose(fp);
+    coru_stats_delete((void *) stats);
+
+    return TRUE;
+
+ERROR_LOAD:
+    if (fp)
+        fclose(fp);
+
+    if (stats)
+        coru_stats_delete((void *) stats);
+
+    return FALSE;
+}
+
+static BOOL _coru_load(FILE *stream, char **out, coru_stats_t *stats, language_t lang, BOOL is_all);
+
+BOOL coru_load_all(FILE *stream, char **out, coru_stats_t *stats, language_t lang)
+{
+    return _coru_load(stream, out, stats, lang, TRUE);
+}
+
+BOOL coru_load_non_empty(FILE *stream, char **out, coru_stats_t *stats, language_t lang)
+{
+    return _coru_load(stream, out, stats, lang, FALSE);
+}
+
+static hash_table_t * _init_comment_single_start(void);
+static hash_table_t * _init_comment_single_end(void);
+static hash_table_t * _init_comment_multiple_start(void);
+static hash_table_t * _init_comment_multiple_end(void);
+
+static BOOL _coru_load(FILE *stream, char **out, coru_stats_t *stats, language_t lang, BOOL is_all)
+{
     char *lang_string = language_to_string(lang);
+
+    hash_table_t *comment_single_start = NULL;
+    hash_table_t *comment_single_end = NULL;
+    hash_table_t *comment_multiple_start = NULL;
+    hash_table_t *comment_multiple_end = NULL;
 
     comment_single_start = _init_comment_single_start();
     if (!comment_single_start)
-        goto ERROR_LOAD;
+        goto ERROR;
 
     comment_single_end = _init_comment_single_end();
     if (!comment_single_end)
-        goto ERROR_LOAD;
+        goto ERROR;
 
     comment_multiple_start = _init_comment_multiple_start();
     if (!comment_multiple_start)
-        goto ERROR_LOAD;
+        goto ERROR;
 
     comment_multiple_end = _init_comment_multiple_end();
     if (!comment_multiple_end)
-        goto ERROR_LOAD;
+        goto ERROR;
 
     char *single_start = hash_table_get(comment_single_start, lang_string);
     char *single_end = hash_table_get(comment_single_end, lang_string);
@@ -205,32 +255,23 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     if (!out) {
         PUTERR("Failed to allocate memory for output");
         PUTERR("Check available system memory");
-        goto ERROR_LOAD;
+        goto ERROR;
     }
 
     (*out)[0] = '\0';  /* Strip down the string to zero. */
 
-    fp = fopen(coru_argument_path(arg), "r");
-    if (!fp) {
-    #if DEBUG
-        PUTERR("Failed to open file at %s", coru_argument_path(arg));
-    #endif
-        goto ERROR_LOAD;
-    }
-
     size_t line_size = 150;  /* Sensible line width. */
-    line = (char *) malloc(line_size * sizeof(char));
+    char *line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");
-        goto ERROR_LOAD;
+        goto ERROR;
     }
 
-    BOOL is_all = coru_argument_is_all(arg);
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
 
-    while (fgets(line, line_size, fp)) {
+    while (fgets(line, line_size, stream)) {
         size_t sz_space;
         size_t sz_start;
         size_t sz_end;
@@ -240,7 +281,7 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
                 if (!realloc(line, line_size)) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
-                    goto ERROR_LOAD;
+                    goto ERROR;
                 }
             }
             else {
@@ -329,12 +370,12 @@ RELOAD_LINE:
             if (!num_s) {
                 PUTERR("Failed to allocate memory for number string");
                 PUTERR("Check available system memory");
-                goto ERROR_LOAD;
+                goto ERROR;
             }
 
             if (sprintf(num_s, "%lu", line_number) < 0) {
                 PUTERR("Failed to insert a number");
-                goto ERROR_LOAD;
+                goto ERROR;
             }
 
             strncat(*out, num_s, strlen(num_s) + 1);
@@ -355,14 +396,14 @@ RELOAD_LINE:
         }
     }
 
-    /* Free system resources. */
     free(line);
-    fclose(fp);
-    coru_stats_delete((void *) stats);
 
     return TRUE;
 
-ERROR_LOAD:
+ERROR:
+    if (line)
+        free(line);
+
     if (comment_multiple_end)
         hash_table_delete(comment_multiple_end);
 
@@ -374,15 +415,6 @@ ERROR_LOAD:
 
     if (comment_single_start)
         hash_table_delete(comment_single_start);
-
-    if (line)
-        free(line);
-
-    if (fp)
-        fclose(fp);
-
-    if (stats)
-        coru_stats_delete((void *) stats);
 
     return FALSE;
 }
