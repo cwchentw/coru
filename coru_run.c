@@ -103,7 +103,8 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     #error "Unsupported platform"
 #endif
 
-    /* Check this statement later. */
+    /* Set target language according to specific command-line argument. */
+
     /* detect_target_language() may detect target language by
        opening target source. Hence, we put the statement before
        fopen() statement. */
@@ -178,6 +179,8 @@ LOAD_LINE:
     /* Add stats for non-comment lines. */
 #endif
 
+    char *lang_string = language_to_string(lang);
+
     comment_single_start = _init_comment_single_start();
     if (!comment_single_start)
         goto ERROR_LOAD;
@@ -193,6 +196,16 @@ LOAD_LINE:
     comment_multiple_end = _init_comment_multiple_end();
     if (!comment_multiple_end)
         goto ERROR_LOAD;
+
+    char *single_start = hash_table_get(comment_single_start, lang_string);
+    char *single_end = hash_table_get(comment_single_end, lang_string);
+    char *multi_start = hash_table_get(comment_multiple_start, lang_string);
+    char *multi_end = hash_table_get(comment_multiple_end, lang_string);
+
+    hash_table_delete(comment_multiple_end);
+    hash_table_delete(comment_multiple_start);
+    hash_table_delete(comment_single_end);
+    hash_table_delete(comment_single_start);
 
     /* The format of line number:
        *start*    1 *end*
@@ -215,14 +228,10 @@ LOAD_LINE:
         digit += 1;
     }
 
-    size_t width_number = indent \
-        + strlen(hash_table_get(comment_single_start, language_to_string(lang))) \
-        + space + digit;
+    size_t width_number = indent + strlen(single_start) + space + digit;
 
-    if (0 != strcmp("", hash_table_get(comment_single_end, language_to_string(lang)))) {
-        width_number += space \
-            + strlen(hash_table_get(comment_single_end, language_to_string(lang)));
-    }
+    if (0 != strcmp("", single_end))
+        width_number += space + strlen(single_end);
 
     size_t width_new = coru_stats_width(stats) + width_number \
         + 1;  /* Trailing zero. */
@@ -257,9 +266,7 @@ LOAD_LINE:
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
-    char *lang_string = language_to_string(lang);
-    char *multi_start = hash_table_get(comment_multiple_start, lang_string);
-    char *multi_end = hash_table_get(comment_multiple_end, lang_string);
+
     while (fgets(line, line_size, fp)) {
         size_t sz_space;
         size_t sz_start;
@@ -329,9 +336,8 @@ RELOAD_LINE:
             strncat(*out, "  ", 2 + 1);
 
             /* Insert the start word of comment. */
-            sz_start = strlen(
-                hash_table_get(comment_single_start, lang_string));
-            strncat(*out, hash_table_get(comment_single_start, lang_string), sz_start);
+            sz_start = strlen(single_start);
+            strncat(*out, single_start, sz_start + 1);
 
             /* Insert a space. */
             strncat(*out, " ", 1 + 1);
@@ -367,16 +373,13 @@ RELOAD_LINE:
 
             free(num_s);
 
-            if (0 != strcmp("",
-                hash_table_get(comment_single_end, lang_string))) {
+            if (0 != strcmp("", single_end)) {
                 /* Insert a space. */
                 strncat(*out, " ", 1 + 1);
 
                 /* Insert the end word of single line comment. */
-                sz_end = strlen(
-                    hash_table_get(comment_single_end, lang_string));
-                strncat(*out, hash_table_get(comment_single_end, lang_string),
-                    sz_end + 1);
+                sz_end = strlen(single_end);
+                strncat(*out, single_end, sz_end + 1);
             }
 
             /* Insert EOL. */
@@ -387,10 +390,6 @@ RELOAD_LINE:
     /* Free system resources. */
     free(line);
     fclose(fp);
-    hash_table_delete(comment_multiple_end);
-    hash_table_delete(comment_multiple_start);
-    hash_table_delete(comment_single_end);
-    hash_table_delete(comment_single_start);
     coru_stats_delete((void *) stats);
 
     return TRUE;
