@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-void help_version(void);
-void help_license(void);
-void help_help(FILE *stream);
+void coru_help_version(void);
+void coru_help_license(void);
+void coru_help_help(FILE *stream);
 
 #endif  /* CORU_HELP_H */

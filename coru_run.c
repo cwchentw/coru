@@ -26,15 +26,15 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out);
 BOOL coru_run(coru_argument_t * arg, char **out)
 {
     if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_VERSION)) {
-        help_version();
+        coru_help_version();
         return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LICENSE)) {
-        help_license();
+        coru_help_license();
         return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_HELP)) {
-        help_help(stdout);
+        coru_help_help(stdout);
         return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_FEW)) {
@@ -55,7 +55,7 @@ BOOL coru_run(coru_argument_t * arg, char **out)
     }
     else {
         PUTERR("Unknown option");
-        help_help(stderr);
+        coru_help_help(stderr);
         return FALSE;
     }
 }

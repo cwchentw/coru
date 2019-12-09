@@ -5,19 +5,19 @@
 #include "platform.h"
 #include "utils.h"
 
-void help_version(void)
+void coru_help_version(void)
 {
     PUTS("%s", CORU_VERSION);
 }
 
-void help_license(void)
+void coru_help_license(void)
 {
     PUTS("%s", CORU_LICENSE);
 }
 
 /*-------1---------2---------3---------4---------5---------6---------7---------8*/
 /*345678901234567890123456789012345678901234567890123456789012345678901234567890*/
-void help_help(FILE *stream)
+void coru_help_help(FILE *stream)
 {
     fprintf(stream, "Usage: %s [option] path/to/source%s", CORU_PROGRAM, END_OF_LINE);
     fprintf(stream, "%s", END_OF_LINE);
