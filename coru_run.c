@@ -271,6 +271,7 @@ LOAD_LINE:
         goto ERROR_LOAD;
     }
 
+    BOOL is_all = coru_argument_is_all(arg);
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
@@ -314,6 +315,11 @@ RELOAD_LINE:
             strncat(*out, line, strlen(line) + 1);
 
             if (multi > 0 || (mstart ^ mend)) {
+                strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+                continue;
+            }
+
+            if (!is_all && string_is_space_only(line)) {
                 strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
                 continue;
             }

@@ -10,6 +10,7 @@ struct coru_argument_t {
     int argc;
     char **argv;
     int index;
+    BOOL is_all;
     language_t lang;
     CORU_COMMAND cmd;
     char *path;
@@ -32,6 +33,7 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
     arg->argc = argc;
     arg->argv = argv;
     arg->index = 1;
+    arg->is_all = TRUE;
     arg->lang = LANGUAGE_UNKNOWN;
     arg->cmd = CORU_COMMAND_UNKNOWN;
     arg->path = NULL;
@@ -55,6 +57,14 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         else if (0 == strcmp(opt, "-h") || 0 == strcmp(opt, "--help")) {
             arg->cmd = CORU_COMMAND_HELP;
             break;
+        }
+        else if (0 == strcmp(opt, "--all")) {
+            arg->is_all = TRUE;
+            arg->index += 1;
+        }
+        else if (0 == strcmp(opt, "--non-empty")) {
+            arg->is_all = FALSE;
+            arg->index += 1;
         }
         else if (_is_c(opt)) {
             arg->lang = LANGUAGE_C;
@@ -120,6 +130,13 @@ void coru_argument_delete(void *self)
     assert(self);
 
     free(self);
+}
+
+BOOL coru_argument_is_all(coru_argument_t *self)
+{
+    assert(self);
+
+    return self->is_all;
 }
 
 language_t coru_argument_language(coru_argument_t *self)

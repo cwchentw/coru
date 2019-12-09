@@ -26,6 +26,9 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --license\t\tShow license info and exit%s", END_OF_LINE);
     fprintf(stream, "    -h\t--help\t\tShow help info and exit%s", END_OF_LINE);
     fprintf(stream, "%s", END_OF_LINE);
+    fprintf(stream, "    --all\t\tAdd line numbers on all lines (default)%s", END_OF_LINE);
+    fprintf(stream, "    --non-empty\t\tAdd line numbers only on non-empty lines%s", END_OF_LINE);
+    fprintf(stream, "%s", END_OF_LINE);
     fprintf(stream, "    -c\t\t\tTreat target source as C%s", END_OF_LINE);
     fprintf(stream, "    --as-c%s", END_OF_LINE);
     fprintf(stream, "    -cpp  -cxx  -c++\tTreat target source as C++%s", END_OF_LINE);

@@ -64,3 +64,29 @@ BOOL string_contains(char *a, char *b)
 
     return FALSE;
 }
+
+BOOL string_is_space_only(char *a)
+{
+    size_t sz = strlen(a);
+
+    {
+        size_t i;
+        for (i = 0; i < sz; i++) {
+            /* Stop on EOL for Unix. */
+            if ('\n' == a[i])
+                break;
+
+            /* Stop on EOL for Windows. */
+            if ('\r' == a[i]) {
+                if (i + 1 < sz && '\n' == a[i+1]) {
+                    break;
+                }
+            }
+
+            if (!(' ' == a[i] || '\t' == a[i]))
+                return FALSE;
+        }
+    }
+
+    return TRUE;
+}
