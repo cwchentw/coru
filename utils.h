@@ -28,10 +28,4 @@ BOOL is_string_equal(char *a, char *b);
 BOOL string_starts_with(char *a, char *b);
 BOOL string_contains(char *a, char *b);
 
-#ifndef __APPLE__
-#if __STDC_VERSION__ < 199901L
-    int snprintf( char * s, size_t n, const char * format, ... );
-#endif
-#endif
-
 #endif  /* CORU_UTILS_H */

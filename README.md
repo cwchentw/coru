@@ -100,10 +100,6 @@ The width of a ruler is set by the maximal width of target source code. Neverthe
 * `--block-start` to set start word of comment block text, default to an empty string
 * `--block-end` to set end word of comment block text, default to an empty string
 
-## Note
-
-We copy the source code of `snprintf(3)` [here](https://www.ijs.si/software/snprintf/).
-
 ## Copyright
 
 Copyright (c) 2019 Michael Chen. Licensed under MIT.
