@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "boolean.h"
-#include "help.h"
-#include "metadata.h"
+#include "coru_help.h"
+#include "coru_metadata.h"
 #include "platform.h"
 #include "utils.h"
 

@@ -1,5 +1,5 @@
-#ifndef CORU_LANGUAGE_H
-#define CORU_LANGUAGE_H
+#ifndef LANGUAGE_H
+#define LANGUAGE_H
 
 #include "boolean.h"
 

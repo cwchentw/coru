@@ -1,8 +1,8 @@
 #include <stdlib.h>
-#include "argument.h"
-#include "help.h"
-#include "metadata.h"
-#include "run.h"
+#include "coru_argument.h"
+#include "coru_help.h"
+#include "coru_metadata.h"
+#include "coru_run.h"
 #include "utils.h"
 
 int main(int argc, char *argv[])

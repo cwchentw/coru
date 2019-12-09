@@ -11,37 +11,37 @@
     #error "Unsupported platform"
 #endif
 
-#include "argument.h"
 #include "boolean.h"
-#include "command.h"
+#include "coru_argument.h"
+#include "coru_command.h"
+#include "coru_help.h"
+#include "coru_metadata.h"
+#include "coru_stats.h"
 #include "hash_table.h"
-#include "help.h"
 #include "language.h"
-#include "metadata.h"
-#include "stats.h"
 #include "utils.h"
 
 static BOOL coru_run_load(coru_argument_t * arg, char **out);
 
 BOOL coru_run(coru_argument_t * arg, char **out)
 {
-    if (is_command_equal(coru_argument_command(arg), COMMAND_VERSION)) {
+    if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_VERSION)) {
         help_version();
         return TRUE;
     }
-    else if (is_command_equal(coru_argument_command(arg), COMMAND_LICENSE)) {
+    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LICENSE)) {
         help_license();
         return TRUE;
     }
-    else if (is_command_equal(coru_argument_command(arg), COMMAND_HELP)) {
+    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_HELP)) {
         help_help(stdout);
         return TRUE;
     }
-    else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_FEW)) {
+    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         return FALSE;
     }
-    else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
+    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LOAD)) {
         if (!coru_run_load(arg, out)) {
             PUTERR("Failed to load target file");
             return FALSE;
@@ -49,7 +49,7 @@ BOOL coru_run(coru_argument_t * arg, char **out)
 
         return TRUE;
     }
-    else if (is_command_equal(coru_argument_command(arg), COMMAND_TOO_MANY)) {
+    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", CORU_PROGRAM);
         return FALSE;
     }
@@ -124,7 +124,7 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     }
 #endif
 
-    size_t line_size = 150;	 /* Sensible line size */
+    size_t line_size = 150;  /* Sensible line size */
     line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");

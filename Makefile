@@ -16,10 +16,13 @@ else
 endif
 
 ifeq ($(CC),cl)
-	OBJS=argument.obj help.obj language.obj utils.obj stats.obj hash_table.obj \
-		run.obj coru.obj
+	OBJS=utils.obj language.obj hash_table.obj coru_argument.obj \
+		coru_command.obj coru_help.obj coru_stats.obj coru_run.obj coru.obj
+
 else
-	OBJS=argument.o help.o language.o utils.o stats.o hash_table.o run.o coru.o
+	OBJS=utils.o language.o hash_table.o coru_argument.o \
+		coru_command.o coru_help.o coru_stats.o coru_run.o coru.o
+
 endif
 
 ifeq ($(CC),cc)

@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "argument.h"
+#include "coru_argument.h"
 #include "boolean.h"
 #include "utils.h"
 
@@ -9,7 +9,7 @@ struct coru_argument_t {
     int argc;
     char **argv;
     int index;
-    COMMAND cmd;
+    CORU_COMMAND cmd;
     char *path;
 };
 
@@ -25,40 +25,40 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
     arg->argc = argc;
     arg->argv = argv;
     arg->index = 1;
-    arg->cmd = COMMAND_UNKNOWN;
+    arg->cmd = CORU_COMMAND_UNKNOWN;
     arg->path = NULL;
 
     if (argc < 2) {
-        arg->cmd = COMMAND_TOO_FEW;
+        arg->cmd = CORU_COMMAND_TOO_FEW;
         return arg;
     }
 
     while (arg->index < arg->argc) {
         if (0 == strcmp(arg->argv[arg->index], "-v")
             || 0 == strcmp(arg->argv[arg->index], "--version")) {
-            arg->cmd = COMMAND_VERSION;
+            arg->cmd = CORU_COMMAND_VERSION;
             break;
         }
         else if (0 == strcmp(arg->argv[arg->index], "--license")) {
-            arg->cmd = COMMAND_LICENSE;
+            arg->cmd = CORU_COMMAND_LICENSE;
             break;
         }
         else if (0 == strcmp(arg->argv[arg->index], "-h")
             || 0 == strcmp(arg->argv[arg->index], "--help")) {
-            arg->cmd = COMMAND_HELP;
+            arg->cmd = CORU_COMMAND_HELP;
             break;
         }
         else if ('-' == arg->argv[arg->index][0]) {
-            arg->cmd = COMMAND_UNKNOWN;
+            arg->cmd = CORU_COMMAND_UNKNOWN;
             break;
         }
         else {
-            if (COMMAND_LOAD == arg->cmd) {
-                arg->cmd = COMMAND_TOO_MANY;
+            if (CORU_COMMAND_LOAD == arg->cmd) {
+                arg->cmd = CORU_COMMAND_TOO_MANY;
                 break;
             }
             else {
-                arg->cmd = COMMAND_LOAD;
+                arg->cmd = CORU_COMMAND_LOAD;
                 arg->path = arg->argv[arg->index];
                 arg->index += 1;
             }
@@ -75,7 +75,7 @@ void coru_argument_delete(void *self)
     free(self);
 }
 
-COMMAND coru_argument_command(coru_argument_t *self)
+CORU_COMMAND coru_argument_command(coru_argument_t *self)
 {
     assert(self);
 
