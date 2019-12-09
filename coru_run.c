@@ -105,10 +105,18 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
 
     /* Set target language according to specific command-line argument. */
 
-    /* detect_target_language() may detect target language by
-       opening target source. Hence, we put the statement before
-       fopen() statement. */
-    language_t lang = detect_target_language(coru_argument_path(arg));
+
+    language_t lang = LANGUAGE_UNKNOWN;
+
+    if (LANGUAGE_UNKNOWN != coru_argument_language(arg)) {
+        lang =  coru_argument_language(arg);
+    }
+    else {
+        /* detect_target_language() may detect target language by
+           opening target source. Hence, we put the statement before
+           fopen() statement. */
+        lang = detect_target_language(coru_argument_path(arg));
+    }
 
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
