@@ -170,6 +170,9 @@ LOAD_LINE:
     free(line);
     fclose(fp);
 
+    line = NULL;
+    fp = NULL;
+
 #if DEBUG
     PUTS("Source width: %lu", coru_stats_width(stats));
     PUTS("Source height: %lu", coru_stats_height(stats));
