@@ -1,5 +1,5 @@
-#ifndef CORU_RUN_H
-#define CORU_RUN_H
+#ifndef CORU_H
+#define CORU_H
 
 #ifdef __cplusplus
     #include <cstdio>
