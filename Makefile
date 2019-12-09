@@ -9,48 +9,37 @@ ifeq ($(detected_OS),Windows)
 	RM=del
 endif
 
+TARGET=coru
+
 ifeq ($(detected_OS),Windows)
-	TARGET=coru.exe
+	TARGET_EXEC=$(TARGET).exe
 else
-	TARGET=coru
+	TARGET_EXEC=$(TARGET)
 endif
 
 ifeq ($(CC),cl)
 	OBJS=utils.obj language.obj hash_table.obj coru_argument.obj \
 		coru_command.obj coru_help.obj coru_stats.obj coru.obj coru_cli.obj
-
 else
 	OBJS=utils.o language.o hash_table.o coru_argument.o \
 		coru_command.o coru_help.o coru_stats.o coru.o coru_cli.o
 
 endif
 
-ifeq ($(CC),cc)
+COMPILER_GCC := cc gcc clang 
+
+ifneq (,$(filter $(COMPILER_GCC),$(CC)))
 	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
 	OPTIMIZE=-O2
 	SRC_TO_OBJ=-c $<
-	OBJ_TO_TARGET=-o $(TARGET)
-	DEBUG=-DDEBUG
-	DEBUG_INFO=-g
-else ifeq ($(CC),gcc)
-	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
-	OPTIMIZE=-O2
-	SRC_TO_OBJ=-c $<
-	OBJ_TO_TARGET=-o $(TARGET)
-	DEBUG=-DDEBUG
-	DEBUG_INFO=-g
-else ifeq ($(CC),clang)
-	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
-	OPTIMIZE=-O2
-	SRC_TO_OBJ=-c $<
-	OBJ_TO_TARGET=-o $(TARGET)
+	OBJ_TO_EXEC=-o $(TARGET_EXEC)
 	DEBUG=-DDEBUG
 	DEBUG_INFO=-g
 else ifeq ($(CC),cl)
 	CFLAGS_INTERNAL=/W4
 	OPTIMIZE=/O2
 	SRC_TO_OBJ=/c $<
-	OBJ_TO_TARGET=/Fe:$(TARGET)
+	OBJ_TO_EXEC=/Fe:$(TARGET_EXEC)
 	DEBUG=/D DEBUG
 endif
 
@@ -61,7 +50,7 @@ GOAL_DEBUG := test debug
 
 all: release
 
-test: debug $(TARGET)
+test: debug $(TARGET_EXEC)
 ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
@@ -72,16 +61,16 @@ else
 endif
 endif
 
-debug: $(TARGET)
+debug: $(TARGET_EXEC)
 
-release: $(TARGET)
+release: $(TARGET_EXEC)
 
-$(TARGET): $(OBJS)
+$(TARGET_EXEC): $(OBJS)
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(OBJ_TO_TARGET) $(OBJS) \
+	$(CC) $(DEBUG) $(OBJ_TO_EXEC) $(OBJS) \
 		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
 else
-	$(CC) $(OBJ_TO_TARGET) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) $(OBJ_TO_EXEC) $(OBJS) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 %.obj: %.c
@@ -101,4 +90,4 @@ else
 endif
 
 clean:
-	$(RM) $(OBJS) $(TARGET)
+	$(RM) $(OBJS) $(TARGET_EXEC)
