@@ -73,7 +73,6 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
-    char *line = NULL;
 
 #if _WIN32
     if (!PathFileExists(coru_argument_path(arg))) {
@@ -193,6 +192,7 @@ static hash_table_t * _init_comment_multiple_end(void);
 
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
+    char *line = NULL;
     char *lang_string = language_to_string(lang);
 
     hash_table_t *comment_single_start = NULL;
@@ -269,7 +269,7 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
     (*out)[0] = '\0';  /* Strip down the string to zero. */
 
     size_t line_size = 150;  /* Sensible line width. */
-    char *line = (char *) malloc(line_size * sizeof(char));
+    line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");
         goto ERROR;
