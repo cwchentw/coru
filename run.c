@@ -21,9 +21,9 @@
 #include "stats.h"
 #include "utils.h"
 
-static BOOL coru_run_load(coru_argument_t * arg);
+static BOOL coru_run_load(coru_argument_t * arg, char *out);
 
-BOOL coru_run(coru_argument_t * arg)
+BOOL coru_run(coru_argument_t * arg, char *out)
 {
     if (is_command_equal(coru_argument_command(arg), COMMAND_VERSION)) {
         help_version();
@@ -42,7 +42,7 @@ BOOL coru_run(coru_argument_t * arg)
         return FALSE;
     }
     else if (is_command_equal(coru_argument_command(arg), COMMAND_LOAD)) {
-        if (!coru_run_load(arg)) {
+        if (!coru_run_load(arg, out)) {
             PUTERR("Failed to load target file");
             return FALSE;
         }
@@ -65,12 +65,11 @@ static hash_table_t * _init_comment_single_end(void);
 static hash_table_t * _init_comment_multiple_start(void);
 static hash_table_t * _init_comment_multiple_end(void);
 
-static BOOL coru_run_load(coru_argument_t * arg)
+static BOOL coru_run_load(coru_argument_t * arg, char *out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
     char *line = NULL;
-    char *out = NULL;
     hash_table_t *comment_single_start = NULL;
     hash_table_t *comment_single_end = NULL;
     hash_table_t *comment_multiple_start = NULL;
@@ -388,7 +387,6 @@ RELOAD_LINE:
     PRINT("%s", out);
 
     /* Free system resources. */
-    free(out);
     free(line);
     fclose(fp);
     hash_table_delete(comment_multiple_end);
@@ -400,9 +398,6 @@ RELOAD_LINE:
     return TRUE;
 
 ERROR_LOAD:
-    if (out)
-        free(out);
-
     if (comment_multiple_end)
         hash_table_delete(comment_multiple_end);
 

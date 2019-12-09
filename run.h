@@ -4,6 +4,6 @@
 #include "argument.h"
 #include "boolean.h"
 
-BOOL coru_run(coru_argument_t *arg);
+BOOL coru_run(coru_argument_t *arg, char *out);
 
 #endif  /* CORU_RUN_H */
