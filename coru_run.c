@@ -75,14 +75,6 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     hash_table_t *comment_multiple_start = NULL;
     hash_table_t *comment_multiple_end = NULL;
 
-    stats = coru_stats_new();
-    if (!stats) {
-    #if DEBUG
-        PUTERR("Failed to load stats");
-    #endif
-        goto ERROR_LOAD;
-    }
-
 #if _WIN32
     if (!PathFileExists(coru_argument_path(arg))) {
     #if DEBUG
@@ -118,13 +110,6 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
         lang = detect_target_language(coru_argument_path(arg));
     }
 
-    fp = fopen(coru_argument_path(arg), "r");
-    if (!fp) {
-    #if DEBUG
-        PUTERR("Failed to open file at %s", coru_argument_path(arg));
-    #endif
-        goto ERROR_LOAD;
-    }
 #if DEBUG
     if (is_language_equal(lang, LANGUAGE_UNKNOWN)) {
         PUTERR("Unsupported language");
@@ -133,52 +118,20 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     }
 #endif
 
-    size_t line_size = 150;  /* Sensible line size */
-    line = (char *) malloc(line_size * sizeof(char));
-    if (!line) {
-        PUTERR("Failed to allocate line object");
+    fp = fopen(coru_argument_path(arg), "r");
+    if (!fp) {
+    #if DEBUG
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
         goto ERROR_LOAD;
     }
 
-    size_t sz_line;
-    while (fgets(line, line_size, fp)) {
-        if (line_size == strlen(line)) {
-            if ('\n' != line[line_size - 1]) {
-                line_size <<= 1;
-                if (!realloc(line, line_size)) {
-                    PUTERR("Failed to realloc line buffer object");
-                    PUTERR("Check available system memory");
-                    goto ERROR_LOAD;
-                }
-            }
-            else {
-                goto LOAD_LINE;
-            }
-        }
-        else {
-LOAD_LINE:
-            /* Fix TAB issue */
-            sz_line = strlen(line);
-            {
-                size_t i;
-                for (i = 0; i < strlen(line); i++) {
-                    if ('\t' == line[i])
-                        sz_line += 7;
-                }
-            }
+    stats = coru_stats_load(fp);
+    if (!stats)
+        goto ERROR_LOAD;
 
-            if (strlen(line) > coru_stats_width(stats)) {
-                coru_stats_set_width(stats, sz_line);
-            }
-
-            coru_stats_set_height(stats, coru_stats_height(stats) + 1);
-        }
-    }
-
-    free(line);
     fclose(fp);
 
-    line = NULL;
     fp = NULL;
 
 #if DEBUG
@@ -265,6 +218,7 @@ LOAD_LINE:
         goto ERROR_LOAD;
     }
 
+    size_t line_size = 150;  /* Sensible line width. */
     line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");

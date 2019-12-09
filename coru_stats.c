@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "coru_stats.h"
 #include "utils.h"
 
@@ -22,6 +23,69 @@ coru_stats_t * coru_stats_new()
     stats->height = 0;
 
     return stats;
+}
+
+coru_stats_t * coru_stats_load(FILE *stream)
+{
+    size_t line_size = 150;  /* Sensible line width */
+    char *line = (char *) malloc(line_size * sizeof(char));
+    if (!line) {
+        PUTERR("Failed to allocate line object");
+        PUTERR("Check available system memory");
+        return NULL;
+    }
+
+    coru_stats_t *stats = coru_stats_new();
+    if (!stats)
+        goto ERROR;
+
+size_t sz_line;
+    while (fgets(line, line_size, stream)) {
+        if (line_size == strlen(line)) {
+            if ('\n' != line[line_size - 1]) {
+                line_size <<= 1;
+                if (!realloc(line, line_size)) {
+                    PUTERR("Failed to realloc line buffer object");
+                    PUTERR("Check available system memory");
+                    goto ERROR;
+                }
+            }
+            else {
+                goto LOAD_LINE;
+            }
+        }
+        else {
+LOAD_LINE:
+            /* Fix TAB issue */
+            sz_line = strlen(line);
+            {
+                size_t i;
+                for (i = 0; i < strlen(line); i++) {
+                    if ('\t' == line[i])
+                        sz_line += 7;
+                }
+            }
+
+            if (strlen(line) > coru_stats_width(stats)) {
+                coru_stats_set_width(stats, sz_line);
+            }
+
+            coru_stats_set_height(stats, coru_stats_height(stats) + 1);
+        }
+    }
+
+    free(line);
+
+    return stats;
+
+ERROR:
+    if (line)
+        free(line);
+
+    if (stats)
+        coru_stats_delete(stats);
+
+    return NULL;
 }
 
 void coru_stats_delete(void *self)
