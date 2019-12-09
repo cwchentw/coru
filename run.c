@@ -261,7 +261,6 @@ LOAD_LINE:
     char *multi_start = hash_table_get(comment_multiple_start, lang_string);
     char *multi_end = hash_table_get(comment_multiple_end, lang_string);
     while (fgets(line, line_size, fp)) {
-        size_t sz_in;
         size_t sz_space;
         size_t sz_start;
         size_t sz_end;
@@ -297,10 +296,10 @@ RELOAD_LINE:
             }
 
             /* Copy original text. */
-            strncat(*out, line, strlen(line));
+            strncat(*out, line, strlen(line) + 1);
 
             if (multi > 0 || (mstart ^ mend)) {
-                strncat(*out, END_OF_LINE, strlen(END_OF_LINE));
+                strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
                 continue;
             }
 
@@ -322,12 +321,12 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < sz_space; i++) {
-                    strncat(*out, " ", 1);
+                    strncat(*out, " ", 1 + 1);
                 }
             }
 
             /* Insert indent. */
-            strncat(*out, "  ", 2);
+            strncat(*out, "  ", 2 + 1);
 
             /* Insert the start word of comment. */
             sz_start = strlen(
@@ -335,7 +334,7 @@ RELOAD_LINE:
             strncat(*out, hash_table_get(comment_single_start, lang_string), sz_start);
 
             /* Insert a space. */
-            strncat(*out, " ", 1);
+            strncat(*out, " ", 1 + 1);
 
             temp = line_number;
             digit_line_number = 1;
@@ -348,7 +347,7 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < digit - digit_line_number; i++) {
-                    strncat(*out, " ", 1);
+                    strncat(*out, " ", 1 + 1);
                 }
             }
 
@@ -364,23 +363,24 @@ RELOAD_LINE:
                 goto ERROR_LOAD;
             }
 
-            strncat(*out, num_s, strlen(num_s));
+            strncat(*out, num_s, strlen(num_s) + 1);
 
             free(num_s);
 
             if (0 != strcmp("",
                 hash_table_get(comment_single_end, lang_string))) {
                 /* Insert a space. */
-                strncat(*out, " ", 1);
+                strncat(*out, " ", 1 + 1);
 
                 /* Insert the end word of single line comment. */
                 sz_end = strlen(
                     hash_table_get(comment_single_end, lang_string));
-                strncat(*out, hash_table_get(comment_single_end, lang_string), sz_start);
+                strncat(*out, hash_table_get(comment_single_end, lang_string),
+                    sz_end + 1);
             }
 
             /* Insert EOL. */
-            strncat(*out, END_OF_LINE, strlen(END_OF_LINE));
+            strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
         }
     }
 
