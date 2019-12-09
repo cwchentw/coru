@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "boolean.h"
+#include "coru.h"
 #include "coru_help.h"
 #include "coru_metadata.h"
 #include "platform.h"

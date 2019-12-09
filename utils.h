@@ -2,7 +2,7 @@
 #define CORU_UTILS_H
 
 #include <stdio.h>
-#include "boolean.h"
+#include "coru.h"
 #include "platform.h"
 
 

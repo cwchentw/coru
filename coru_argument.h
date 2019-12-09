@@ -1,7 +1,7 @@
 #ifndef CORU_ARGUMENT_H
 #define CORU_ARGUMENT_H
 
-#include "boolean.h"
+#include "coru.h"
 #include "coru_command.h"
 #include "language.h"
 

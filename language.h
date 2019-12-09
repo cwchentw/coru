@@ -1,7 +1,6 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#include "boolean.h"
 #include "coru.h"
 
 #define STRING_C       "C"

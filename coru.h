@@ -1,7 +1,11 @@
 #ifndef CORU_RUN_H
 #define CORU_RUN_H
 
-#include <stdio.h>
+#ifdef __cplusplus
+    #include <cstdio>
+#else
+    #include <stdio.h>
+#endif
 
 /* Custom boolean type */
 #ifdef __cplusplus

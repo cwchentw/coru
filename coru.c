@@ -11,7 +11,6 @@
     #error "Unsupported platform"
 #endif
 
-#include "boolean.h"
 #include "coru.h"
 #include "coru_argument.h"
 #include "coru_command.h"

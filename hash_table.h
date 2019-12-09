@@ -1,7 +1,7 @@
 #ifndef CORU_HASH_TABLE_H
 #define CORU_HASH_TABLE_H
 
-#include "boolean.h"
+#include "coru.h"
 
 #ifdef __cplusplus
 extern "C" {

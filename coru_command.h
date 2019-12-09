@@ -1,7 +1,7 @@
 #ifndef CORU_COMMAND_H
 #define CORU_COMMAND_H
 
-#include "boolean.h"
+#include "coru.h"
 
 typedef char CORU_COMMAND;
 

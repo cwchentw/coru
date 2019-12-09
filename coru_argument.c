@@ -1,8 +1,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "coru.h"
 #include "coru_argument.h"
-#include "boolean.h"
 #include "language.h"
 #include "utils.h"
 
