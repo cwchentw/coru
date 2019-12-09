@@ -59,9 +59,14 @@ endif
 GOAL_DEBUG := test debug
 
 
-.PHONY: all test debug release static clean
+.PHONY: default all test debug release static dynamic clean_objs clean
 
-all: release
+default: release
+
+all:
+	$(MAKE) dynamic
+	$(MAKE) clean_objs
+	$(MAKE)
 
 test: debug $(TARGET_EXEC)
 ifeq ($(detected_OS),Windows)
@@ -100,6 +105,21 @@ else
 endif
 endif
 
+dynamic: $(TARGET_LIB_DYNAMIC)
+
+$(TARGET_LIB_DYNAMIC): $(OBJS)
+ifeq ($(CC),cl)
+	echo "Not supported yet"
+else
+ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
+	$(GCC) -shared -o $(TARGET_LIB_DYNAMIC) $(OBJS) $(DEBUG) \
+		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
+else
+	$(CC) -shared -o $(TARGET_LIB_DYNAMIC) $(OBJS) \
+		$(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
+endif
+
 %.obj: %.c
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
 	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
@@ -109,12 +129,27 @@ else
 endif
 
 %.o: %.c
+ifeq (dynamic,$(MAKECMDGOALS))
+ifeq ($(CC),cl)
+	echo "Not supported yet"
+else
+	$(CC) -fPIC $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
+endif  # CC
+else
+ifeq ($(CC),cl)
+	echo "Not supported yet"
+else
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
 	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
 		$(LDFLAGS)
 else
 	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
-endif
+endif  # DEBUG
+endif  # CC
+endif  # dynamic
+
+clean_objs:
+	$(RM) $(OBJS)
 
 clean:
-	$(RM) $(OBJS) $(TARGET_EXEC) $(TARGET_LIB_STATIC)
+	$(RM) $(OBJS) $(TARGET_EXEC) $(TARGET_LIB_STATIC) $(TARGET_LIB_DYNAMIC)
