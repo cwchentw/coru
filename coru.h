@@ -4,28 +4,23 @@
 #include <stdio.h>
 
 /* Custom boolean type */
-#if __STDC_VERSION__ < 199901L
-    #ifndef __cplusplus
+#ifdef __cplusplus
+    typedef bool BOOL;
+    #define FALSE  false
+    #define TRUE   true
+#else
+    #if __STDC_VERSION__ < 199901L
         #ifndef BOOL
             typedef char BOOL;
             #define FALSE  0
             #define TRUE   1
         #endif
     #else
+        #include <stdbool.h>
         typedef bool BOOL;
         #define FALSE  false
         #define TRUE   true
     #endif
-#else
-    #ifndef __cplusplus
-        #include <stdbool.h>
-    #else
-        #include <cstdbool>
-    #endif
-
-    typedef bool   BOOL;
-    #define FALSE  false
-    #define TRUE   true
 #endif
 
 /* Valid target language. */
@@ -49,42 +44,18 @@ typedef char language_t;
 #define LANGUAGE_CSH      15
 #define LANGUAGE_SH       16
 
-#define STRING_C       "C"
-#define STRING_CPP     "C++"
-#define STRING_JAVA    "Java"
-#define STRING_CSHARP  "C sharp"
-#define STRING_PERL    "Perl"
-#define STRING_PYTHON  "Python"
-#define STRING_RUBY    "Ruby"
-#define STRING_PHP     "PHP"
-#define STRING_JS      "JavaScript"
-#define STRING_GO      "Golang"
-#define STRING_RUST    "Rust"
-#define STRING_OBJC    "Objective-C"
-#define STRING_OBJCPP  "Objective-C++"
-#define STRING_SWIFT   "Swift"
-#define STRING_CSH     "C Shell"
-#define STRING_SH      "Bourne Shell"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct coru_argument_t coru_argument_t;
-
-coru_argument_t * coru_argument_parse(int argc, char **argv);
-void coru_argument_delete(void *self);
-
 
 typedef struct coru_stats_t coru_stats_t;
 
 coru_stats_t * coru_stats_load(FILE *stream);
 void coru_stats_delete(void *self);
 
-
-BOOL coru_run(coru_argument_t *arg, char **out);
-BOOL coru_load_all(FILE *stream, char **out, coru_stats_t *stats, language_t lang);
-BOOL coru_load_non_empty(FILE *stream, char **out, coru_stats_t *stats, language_t lang);
+BOOL coru_run(int argc, char **argv, char **out);
+BOOL coru_load_all(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
+BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
 
 #ifdef __cplusplus
 }

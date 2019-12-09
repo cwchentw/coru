@@ -24,41 +24,50 @@
 
 static BOOL coru_run_load(coru_argument_t * arg, char **out);
 
-BOOL coru_run(coru_argument_t * arg, char **out)
+BOOL coru_run(int argc, char **argv, char **out)
 {
+    coru_argument_t *arg = coru_argument_parse(argc, argv);
+    if (!arg)
+        goto ERROR;
+
     if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_VERSION)) {
         coru_help_version();
-        return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LICENSE)) {
         coru_help_license();
-        return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_HELP)) {
         coru_help_help(stdout);
-        return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
-        return FALSE;
+        goto ERROR;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LOAD)) {
         if (!coru_run_load(arg, out)) {
             PUTERR("Failed to load target file");
-            return FALSE;
+            goto ERROR;
         }
-
-        return TRUE;
     }
     else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", CORU_PROGRAM);
-        return FALSE;
+        goto ERROR;
     }
     else {
         PUTERR("Unknown option");
         coru_help_help(stderr);
-        return FALSE;
+        goto ERROR;
     }
+
+    coru_argument_delete(arg);
+
+    return TRUE;
+
+ERROR:
+    if (arg)
+        coru_argument_delete(arg);
+
+    return FALSE;
 }
 
 static BOOL coru_run_load(coru_argument_t * arg, char **out)
@@ -140,12 +149,12 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     BOOL is_all = coru_argument_is_all(arg);
 
     if (is_all) {
-        if (!coru_load_all(fp, out, stats, lang)) {
+        if (!coru_load_all(fp, stats, lang, out)) {
             goto ERROR_LOAD;
         }
     }
     else {
-        if (!coru_load_non_empty(fp, out, stats, lang)) {
+        if (!coru_load_non_empty(fp, stats, lang, out)) {
             goto ERROR_LOAD;
         }
     }
@@ -166,16 +175,16 @@ ERROR_LOAD:
     return FALSE;
 }
 
-static BOOL _coru_load(FILE *stream, char **out, coru_stats_t *stats, language_t lang, BOOL is_all);
+static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out);
 
-BOOL coru_load_all(FILE *stream, char **out, coru_stats_t *stats, language_t lang)
+BOOL coru_load_all(FILE *stream, coru_stats_t *stats, language_t lang, char **out)
 {
-    return _coru_load(stream, out, stats, lang, TRUE);
+    return _coru_load(stream, stats, lang, TRUE, out);
 }
 
-BOOL coru_load_non_empty(FILE *stream, char **out, coru_stats_t *stats, language_t lang)
+BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, char **out)
 {
-    return _coru_load(stream, out, stats, lang, FALSE);
+    return _coru_load(stream, stats, lang, FALSE, out);
 }
 
 static hash_table_t * _init_comment_single_start(void);
@@ -183,7 +192,7 @@ static hash_table_t * _init_comment_single_end(void);
 static hash_table_t * _init_comment_multiple_start(void);
 static hash_table_t * _init_comment_multiple_end(void);
 
-static BOOL _coru_load(FILE *stream, char **out, coru_stats_t *stats, language_t lang, BOOL is_all)
+static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
     char *lang_string = language_to_string(lang);
 
