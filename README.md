@@ -17,6 +17,7 @@ We tested `coru` against several Unix or Unix-like systems:
 
 * Ubuntu 18.04 LTS
 * CentOS 8
+* openSUSE Leap 15.1
 * TrueOS, FreeBSD compatible
 * Solaris 11
 
