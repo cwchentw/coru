@@ -239,6 +239,8 @@ LOAD_LINE:
         goto ERROR_LOAD;
     }
 
+    out[0] = '\0';  /* Strip down the string to zero. */
+
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
     #if DEBUG
