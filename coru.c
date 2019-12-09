@@ -18,12 +18,12 @@ int main(int argc, char *argv[])
         goto ERROR;
     }
 
-    if (!coru_run(arg, out)) {
+    if (!coru_run(arg, &out)) {
         goto ERROR;
     }
 
     if (out)
-        PUTS("%s", out);
+        PRINT("%s", out);
 
     free(out);
     coru_argument_delete((void *) arg);

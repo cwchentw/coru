@@ -21,9 +21,9 @@
 #include "stats.h"
 #include "utils.h"
 
-static BOOL coru_run_load(coru_argument_t * arg, char *out);
+static BOOL coru_run_load(coru_argument_t * arg, char **out);
 
-BOOL coru_run(coru_argument_t * arg, char *out)
+BOOL coru_run(coru_argument_t * arg, char **out)
 {
     if (is_command_equal(coru_argument_command(arg), COMMAND_VERSION)) {
         help_version();
@@ -65,7 +65,7 @@ static hash_table_t * _init_comment_single_end(void);
 static hash_table_t * _init_comment_multiple_start(void);
 static hash_table_t * _init_comment_multiple_end(void);
 
-static BOOL coru_run_load(coru_argument_t * arg, char *out)
+static BOOL coru_run_load(coru_argument_t * arg, char **out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
@@ -231,14 +231,14 @@ LOAD_LINE:
     PUTS("Destination width: %lu", width_new);
 #endif
 
-    out = (char *) malloc(coru_stats_height(stats) * width_new * sizeof(char));
+    *out = (char *) malloc(coru_stats_height(stats) * width_new * sizeof(char));
     if (!out) {
         PUTERR("Failed to allocate memory for output");
         PUTERR("Check available system memory");
         goto ERROR_LOAD;
     }
 
-    out[0] = '\0';  /* Strip down the string to zero. */
+    (*out)[0] = '\0';  /* Strip down the string to zero. */
 
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
@@ -297,10 +297,10 @@ RELOAD_LINE:
             }
 
             /* Copy original text. */
-            strncat(out, line, strlen(line));
+            strncat(*out, line, strlen(line));
 
             if (multi > 0 || (mstart ^ mend)) {
-                strncat(out, END_OF_LINE, strlen(END_OF_LINE));
+                strncat(*out, END_OF_LINE, strlen(END_OF_LINE));
                 continue;
             }
 
@@ -322,20 +322,20 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < sz_space; i++) {
-                    strncat(out, " ", 1);
+                    strncat(*out, " ", 1);
                 }
             }
 
             /* Insert indent. */
-            strncat(out, "  ", 2);
+            strncat(*out, "  ", 2);
 
             /* Insert the start word of comment. */
             sz_start = strlen(
                 hash_table_get(comment_single_start, lang_string));
-            strncat(out, hash_table_get(comment_single_start, lang_string), sz_start);
+            strncat(*out, hash_table_get(comment_single_start, lang_string), sz_start);
 
             /* Insert a space. */
-            strncat(out, " ", 1);
+            strncat(*out, " ", 1);
 
             temp = line_number;
             digit_line_number = 1;
@@ -348,7 +348,7 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < digit - digit_line_number; i++) {
-                    strncat(out, " ", 1);
+                    strncat(*out, " ", 1);
                 }
             }
 
@@ -364,27 +364,25 @@ RELOAD_LINE:
                 goto ERROR_LOAD;
             }
 
-            strncat(out, num_s, strlen(num_s));
+            strncat(*out, num_s, strlen(num_s));
 
             free(num_s);
 
             if (0 != strcmp("",
                 hash_table_get(comment_single_end, lang_string))) {
                 /* Insert a space. */
-                strncat(out, " ", 1);
+                strncat(*out, " ", 1);
 
                 /* Insert the end word of single line comment. */
                 sz_end = strlen(
                     hash_table_get(comment_single_end, lang_string));
-                strncat(out, hash_table_get(comment_single_end, lang_string), sz_start);
+                strncat(*out, hash_table_get(comment_single_end, lang_string), sz_start);
             }
 
             /* Insert EOL. */
-            strncat(out, END_OF_LINE, strlen(END_OF_LINE));
+            strncat(*out, END_OF_LINE, strlen(END_OF_LINE));
         }
     }
-
-    PRINT("%s", out);
 
     /* Free system resources. */
     free(line);
