@@ -101,11 +101,11 @@ else
 ifeq ($(detected_OS),Darwin)
 	libtool -static -o $(TARGET_LIB_STATIC) $(OBJS)
 else
-ifeq ($(detected_OS),FreeBSD)
+ifneq ($(detected_OS),Linux)
 	$(AR) rcs $(TARGET_LIB_STATIC) $(OBJS)
 else
 	$(AR) rcs -o $(TARGET_LIB_STATIC) $(OBJS)
-endif  # FreeBSD
+endif  # Linux
 endif  # Darwin
 endif  # CC
 
