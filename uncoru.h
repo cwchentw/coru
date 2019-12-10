@@ -3,23 +3,27 @@
 
 /* Custom boolean type */
 #ifdef __cplusplus
-    typedef bool BOOL;
-    #define FALSE  false
-    #define TRUE   true
+    #ifndef BOOL
+        typedef bool BOOL;
+        #define FALSE  false
+        #define TRUE   true
+    #endif  /* BOOL */
 #else
     #if __STDC_VERSION__ < 199901L
         #ifndef BOOL
             typedef char BOOL;
             #define FALSE  0
             #define TRUE   1
-        #endif
+        #endif  /* BOOL */
     #else
-        #include <stdbool.h>
-        typedef bool BOOL;
-        #define FALSE  false
-        #define TRUE   true
-    #endif
-#endif
+        #ifndef BOOL
+            #include <stdbool.h>
+            typedef bool BOOL;
+            #define FALSE  false
+            #define TRUE   true
+        #endif  /* BOOL */
+    #endif  /* C89 */
+#endif  /* __cplusplus */
 
 BOOL uncoru_run(int argc, char **argv, char **out);
 
