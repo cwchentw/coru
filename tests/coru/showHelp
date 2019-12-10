@@ -1,0 +1,112 @@
+#!/bin/sh
+
+. ./tests/common.sh
+
+VERSION=0.1.0
+LICENSE=MIT
+
+coru=./coru
+test_show_version_short ()
+{
+    local result="$($coru -v)";
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    if [ "$result" != "$VERSION" ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_show_version_long ()
+{
+    local result="$($coru --version)";
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    if [ "$result" != "$VERSION" ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_show_license ()
+{
+    local result="$($coru --license)";
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    if [ "$result" != "$LICENSE" ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_show_help_short ()
+{
+    $coru -h >/dev/null;
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_show_help_long ()
+{
+    $coru --help >/dev/null;
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_unknown_option ()
+{
+    $coru --unknown 2>/dev/null;
+
+    if [ $? -eq 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+assert $(test_show_version_short) "Wrong version";
+assert $(test_show_version_long) "Wrong version";
+assert $(test_show_license) "Wrong license";
+assert $(test_show_help_short) "It should not fail";
+assert $(test_show_help_long) "It should not fail";
+assert $(test_unknown_option) "It should fail";
+
+assertAll;

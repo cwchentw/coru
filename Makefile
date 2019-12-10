@@ -88,12 +88,12 @@ ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
 ifeq ($(detected_OS),SunOS)
-	#bash tests/coru/showHelp
+	bash tests/coru/showHelp
 	bash tests/coru/detectFiles
 	#bash tests/coru/runProgram
 	#bash tests/uncoru/showHelp
 else
-	#tests/coru/showHelp
+	tests/coru/showHelp
 	tests/coru/detectFiles
 	#tests/coru/runProgram
 	#tests/uncoru/showHelp
