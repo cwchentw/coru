@@ -5,7 +5,7 @@ TARGET_EXEC=hello
 
 if [ -e "$TARGET_EXEC" ];
 then
-    echo "$TARGET_EXEC exists on your directory" >&2;
+    echo "$TARGET_EXEC exists on $(pwd)" >&2;
     exit 1;
 fi
 
