@@ -29,7 +29,7 @@ language_t detect_target_language(char *path)
         return LANGUAGE_UNKNOWN;
     }
 
-    snprintf(ext, sz, "%s", sp + index);
+    sprintf(ext, "%s", sp + index);
 
     if (is_string_equal(".c", ext)) {
         lang = LANGUAGE_C;
