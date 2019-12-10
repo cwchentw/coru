@@ -1,0 +1,63 @@
+#!/bin/sh
+
+. ./tests/common.sh
+
+coru=./coru
+test_no_input_file ()
+{
+    $coru 2>/dev/null;
+
+    if [ $? -eq 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_non_existing_file ()
+{
+    $coru path/to/non/existing/file.ext 2>/dev/null;
+
+    if [ $? -eq 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_one_input_file ()
+{
+    $coru demo/hello.py >/dev/null;
+
+    if [ $? -ne 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+test_two_input_files ()
+{
+    $coru demo/hello.py demo/hello.rb 2>/dev/null;
+
+    if [ $? -eq 0 ];
+    then
+        echo 1;
+        return 1;
+    fi
+
+    echo 0;
+}
+
+assert $(test_no_input_file) "It should fail";
+assert $(test_non_existing_file) "It should fail";
+assert $(test_one_input_file) "It should not fail";
+assert $(test_two_input_files) "It should fail";
+
+assertAll;
