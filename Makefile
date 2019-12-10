@@ -59,14 +59,12 @@ endif
 GOAL_DEBUG := test debug
 
 
-.PHONY: default all test debug release static dynamic clean_objs clean
-
-default: release
+.PHONY: all test debug release static dynamic clean_objs clean
 
 all:
 	$(MAKE) dynamic
 	$(MAKE) clean_objs
-	$(MAKE)
+	$(MAKE) release
 
 test: debug $(TARGET_EXEC)
 ifeq ($(detected_OS),Windows)
