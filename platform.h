@@ -10,9 +10,9 @@
 #endif
 
 #ifdef _WIN32
-    #define PATH_SEPARATOR "\\"
+    #define DIRECTORY_SEPARATOR "\\"
 #elif __unix__ || __APPLE__
-    #define PATH_SEPARATOR "/"
+    #define DIRECTORY_SEPARATOR "/"
 #else
     #error "Unsupported platform"
 #endif
