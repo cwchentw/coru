@@ -101,9 +101,13 @@ else
 ifeq ($(detected_OS),Darwin)
 	libtool -static -o $(TARGET_LIB_STATIC) $(OBJS)
 else
+ifeq ($(detected_OS),FreeBSD)
+	$(AR) rcs $(TARGET_LIB_STATIC) $(OBJS)
+else
 	$(AR) rcs -o $(TARGET_LIB_STATIC) $(OBJS)
-endif
-endif
+endif  # FreeBSD
+endif  # Darwin
+endif  # CC
 
 dynamic: $(TARGET_LIB_DYNAMIC)
 
