@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include "print_function.h"
 #include "uncoru.h"
 #include "uncoru_argument.h"
 #include "uncoru_command.h"
 #include "uncoru_help.h"
 #include "uncoru_metadata.h"
-#include "utils.h"
 
 
 BOOL uncoru_run(int argc, char **argv, char **out)

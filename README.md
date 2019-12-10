@@ -111,6 +111,10 @@ The width of a ruler is set by the maximal width of target source code. Neverthe
 
 Either option default to an empty string `""`.
 
+## Note
+
+We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clibs).
+
 ## Copyright
 
 Copyright (c) 2019 Michael Chen. Licensed under MIT.

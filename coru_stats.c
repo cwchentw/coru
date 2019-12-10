@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "coru_stats.h"
-#include "utils.h"
+#include "print_function.h"
 
 struct coru_stats_t
 {

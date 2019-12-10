@@ -19,7 +19,8 @@
 #include "coru_stats.h"
 #include "hash_table.h"
 #include "language.h"
-#include "utils.h"
+#include "print_function.h"
+#include "string.h"
 
 static BOOL coru_run_load(coru_argument_t * arg, char **out);
 

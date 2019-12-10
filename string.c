@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include <string.h>
-#include "language.h"
-#include "utils.h"
+#include "string.h"
 
-
-BOOL is_string_equal(char *a, char *b)
+BOOL string_is_equal(char *a, char *b)
 {
     if (0 == strcmp(a, b))
         return TRUE;

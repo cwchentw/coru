@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "coru.h"
-#include "utils.h"
+#include "print_function.h"
 
 int main(int argc, char *argv[])
 {

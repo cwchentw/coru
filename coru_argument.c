@@ -4,7 +4,7 @@
 #include "coru.h"
 #include "coru_argument.h"
 #include "language.h"
-#include "utils.h"
+#include "print_function.h"
 
 struct coru_argument_t {
     int argc;

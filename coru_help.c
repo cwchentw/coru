@@ -3,7 +3,7 @@
 #include "coru_help.h"
 #include "coru_metadata.h"
 #include "platform.h"
-#include "utils.h"
+#include "print_function.h"
 
 void coru_help_version(void)
 {

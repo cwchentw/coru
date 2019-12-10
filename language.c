@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "language.h"
-#include "utils.h"
+#include "print_function.h"
+#include "string.h"
+
 
 language_t detect_target_language(char *path)
 {
@@ -31,64 +34,64 @@ language_t detect_target_language(char *path)
 
     sprintf(ext, "%s", sp + index);
 
-    if (is_string_equal(".c", ext)) {
+    if (string_is_equal(".c", ext)) {
         lang = LANGUAGE_C;
     }
-    else if (is_string_equal(".h", ext)) {
+    else if (string_is_equal(".h", ext)) {
         lang = LANGUAGE_C;
     }
-    else if (is_string_equal(".cpp", ext)) {
+    else if (string_is_equal(".cpp", ext)) {
         lang = LANGUAGE_CPP;
     }
-    else if (is_string_equal(".cxx", ext)) {
+    else if (string_is_equal(".cxx", ext)) {
         lang = LANGUAGE_CPP;
     }
-    else if (is_string_equal(".cc", ext)) {
+    else if (string_is_equal(".cc", ext)) {
         lang = LANGUAGE_CPP;
     }
-    else if (is_string_equal(".hpp", ext)) {
+    else if (string_is_equal(".hpp", ext)) {
         lang = LANGUAGE_CPP;
     }
-    else if (is_string_equal(".java", ext)) {
+    else if (string_is_equal(".java", ext)) {
         lang = LANGUAGE_JAVA;
     }
-    else if (is_string_equal(".cs", ext)) {
+    else if (string_is_equal(".cs", ext)) {
         lang = LANGUAGE_CSHARP;
     }
-    else if (is_string_equal(".pl", ext)) {
+    else if (string_is_equal(".pl", ext)) {
         lang = LANGUAGE_PERL;
     }
-    else if (is_string_equal(".py", ext)) {
+    else if (string_is_equal(".py", ext)) {
         lang = LANGUAGE_PYTHON;
     }
-    else if (is_string_equal(".rb", ext)) {
+    else if (string_is_equal(".rb", ext)) {
         lang = LANGUAGE_RUBY;
     }
-    else if (is_string_equal(".php", ext)) {
+    else if (string_is_equal(".php", ext)) {
         lang = LANGUAGE_PHP;
     }
-    else if (is_string_equal(".js", ext)) {
+    else if (string_is_equal(".js", ext)) {
         lang = LANGUAGE_JS;
     }
-    else if (is_string_equal(".go", ext)) {
+    else if (string_is_equal(".go", ext)) {
         lang = LANGUAGE_GO;
     }
-    else if (is_string_equal(".rs", ext)) {
+    else if (string_is_equal(".rs", ext)) {
         lang = LANGUAGE_RUST;
     }
-    else if (is_string_equal(".m", ext)) {
+    else if (string_is_equal(".m", ext)) {
         lang = LANGUAGE_OBJC;
     }
-    else if (is_string_equal(".mm", ext)) {
+    else if (string_is_equal(".mm", ext)) {
         lang = LANGUAGE_OBJCPP;
     }
-    else if (is_string_equal(".swift", ext)) {
+    else if (string_is_equal(".swift", ext)) {
         lang = LANGUAGE_SWIFT;
     }
-    else if (is_string_equal(".csh", ext)) {
+    else if (string_is_equal(".csh", ext)) {
         lang = LANGUAGE_CSH;
     }
-    else if (is_string_equal(".sh", ext)) {
+    else if (string_is_equal(".sh", ext)) {
         lang = LANGUAGE_SH;
     }
 
