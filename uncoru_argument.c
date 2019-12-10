@@ -46,6 +46,10 @@ uncoru_argument_t * uncoru_argument_parse(int argc, char *argv[])
             arg->cmd = UNCORU_COMMAND_LICENSE;
             break;
         }
+        else if (0 == strcmp("-h", opt) || 0 == strcmp("--help", opt)) {
+            arg->cmd = UNCORU_COMMAND_HELP;
+            break;
+        }
         else {
             if (is_uncoru_command_equal(arg->cmd, UNCORU_COMMAND_LOAD)) {
                 arg->cmd = UNCORU_COMMAND_TOO_MANY;

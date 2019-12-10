@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "uncoru.h"
 #include "uncoru_argument.h"
 #include "uncoru_command.h"
@@ -20,6 +21,9 @@ BOOL uncoru_run(int argc, char **argv, char **out)
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_LICENSE)) {
         uncoru_help_license();
     }
+    else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_HELP)) {
+        uncoru_help_help(stdout);
+    }
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         goto ERROR;
@@ -33,16 +37,17 @@ BOOL uncoru_run(int argc, char **argv, char **out)
     }
     else {
         PUTERR("Unknown option");
+        uncoru_help_help(stderr);
         goto ERROR;
     }
 
     uncoru_argument_delete(arg);
 
-    return 0;
+    return TRUE;
 
 ERROR:
     if (arg)
         uncoru_argument_delete(arg);
 
-    return 1;
+    return FALSE;
 }
