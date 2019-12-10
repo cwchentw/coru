@@ -23,7 +23,8 @@ static BOOL _is_csharp(char *opt);
 
 coru_argument_t * coru_argument_parse(int argc, char **argv)
 {
-    coru_argument_t *arg = (coru_argument_t *) malloc(sizeof(coru_argument_t));
+    coru_argument_t *arg = \
+        (coru_argument_t *) malloc(sizeof(coru_argument_t));
     if (!arg) {
         PUTERR("Failed to allocate memory for argument object");
         PUTERR("Check available system memory");
