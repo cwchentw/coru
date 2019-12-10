@@ -6,3 +6,8 @@ void uncoru_help_version(void)
 {
     PUTS("%s", UNCORU_VERSION);
 }
+
+void uncoru_help_license(void)
+{
+    PUTS("%s", UNCORU_LICENSE);
+}

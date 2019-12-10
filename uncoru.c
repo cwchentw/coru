@@ -17,6 +17,9 @@ BOOL uncoru_run(int argc, char **argv, char **out)
     if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_VERSION)) {
         uncoru_help_version();
     }
+    else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_LICENSE)) {
+        uncoru_help_license();
+    }
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         goto ERROR;
