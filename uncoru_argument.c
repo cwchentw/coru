@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "uncoru_argument.h"
 #include "uncoru_command.h"
 #include "utils.h"
@@ -36,14 +37,20 @@ uncoru_argument_t * uncoru_argument_parse(int argc, char *argv[])
     while (arg->index < arg->argc) {
         char *opt = arg->argv[arg->index];
 
-        if (is_uncoru_command_equal(arg->cmd, UNCORU_COMMAND_LOAD)) {
-            arg->cmd = UNCORU_COMMAND_TOO_MANY;
+        if (0 == strcmp("-v", opt) || 0 == strcmp("--version", opt)) {
+            arg->cmd = UNCORU_COMMAND_VERSION;
             break;
         }
         else {
-            arg->cmd = UNCORU_COMMAND_LOAD;
-            arg->path = opt;
-            arg->index += 1;
+            if (is_uncoru_command_equal(arg->cmd, UNCORU_COMMAND_LOAD)) {
+                arg->cmd = UNCORU_COMMAND_TOO_MANY;
+                break;
+            }
+            else {
+                arg->cmd = UNCORU_COMMAND_LOAD;
+                arg->path = opt;
+                arg->index += 1;
+            }
         }
     }
 

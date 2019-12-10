@@ -43,11 +43,11 @@ endif
 ifeq ($(CC),cl)
 	OBJS=utils.obj language.obj hash_table.obj coru_argument.obj \
 		coru_command.obj coru_help.obj coru_stats.obj coru.obj
-	UNOBJS=uncoru_command.obj uncoru_argument.obj uncoru.obj
+	UNOBJS=uncoru_command.obj uncoru_helo.obj uncoru_argument.obj uncoru.obj
 else
 	OBJS=utils.o language.o hash_table.o coru_argument.o \
 		coru_command.o coru_help.o coru_stats.o coru.o
-	UNOBJS=uncoru_command.o uncoru_argument.o uncoru.o
+	UNOBJS=uncoru_command.o uncoru_help.o uncoru_argument.o uncoru.o
 endif
 
 COMPILER_GCC := cc gcc clang
