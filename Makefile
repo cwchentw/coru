@@ -43,11 +43,11 @@ endif
 ifeq ($(CC),cl)
 	OBJS=utils.obj language.obj hash_table.obj coru_argument.obj \
 		coru_command.obj coru_help.obj coru_stats.obj coru.obj
-	UNOBJ=
+	UNOBJS=uncoru_argument.obj uncoru.obj
 else
 	OBJS=utils.o language.o hash_table.o coru_argument.o \
 		coru_command.o coru_help.o coru_stats.o coru.o
-	UNOBJ=
+	UNOBJS=uncoru_argument.o uncoru.o
 endif
 
 COMPILER_GCC := cc gcc clang
@@ -107,16 +107,16 @@ else
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
-$(UNTARGET_EXEC): $(SRC_UNTARGET)
+$(UNTARGET_EXEC): $(SRC_UNTARGET) static
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) \
+	$(CC) $(DEBUG) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(UNTARGET_LIB_STATIC) \
 		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
 else
-	$(CC) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(OPTIMIZE) \
+	$(CC) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(UNTARGET_LIB_STATIC) $(OPTIMIZE) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
-static: $(TARGET_LIB_STATIC)
+static: $(TARGET_LIB_STATIC) $(UNTARGET_LIB_STATIC)
 
 $(TARGET_LIB_STATIC): $(OBJS)
 ifeq ($(CC),cl)
@@ -129,6 +129,21 @@ ifneq ($(detected_OS),Linux)
 	$(AR) rcs $(TARGET_LIB_STATIC) $(OBJS)
 else
 	$(AR) rcs -o $(TARGET_LIB_STATIC) $(OBJS)
+endif  # Linux
+endif  # Darwin
+endif  # CC
+
+$(UNTARGET_LIB_STATIC): $(UNOBJS)
+ifeq ($(CC),cl)
+	echo "Not supported yet"
+else
+ifeq ($(detected_OS),Darwin)
+	libtool -static -o $(UNTARGET_LIB_STATIC) $(UNOBJS)
+else
+ifneq ($(detected_OS),Linux)
+	$(AR) rcs $(UNTARGET_LIB_STATIC) $(UNOBJS)
+else
+	$(AR) rcs -o $(UNTARGET_LIB_STATIC) $(UNOBJS)
 endif  # Linux
 endif  # Darwin
 endif  # CC
@@ -181,4 +196,4 @@ clean_objs:
 
 clean:
 	$(RM) $(OBJS) $(TARGET_EXEC) $(TARGET_LIB_STATIC) $(TARGET_LIB_DYNAMIC) \
-		$(UNTARGET_EXEC)
+		$(UNOBJS) $(UNTARGET_EXEC) $(UNTARGET_LIB_STATIC)
