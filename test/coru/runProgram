@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ./tests/common.sh
+. ./test/common.sh
 
 coru=./coru
 test_no_input_file ()

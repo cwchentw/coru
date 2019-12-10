@@ -74,6 +74,8 @@ else
 endif
 endif
 
+TEST_DIR=test
+
 GOAL_DEBUG := test debug
 
 
@@ -89,15 +91,15 @@ ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
 ifeq ($(detected_OS),SunOS)
-	bash tests/coru/showHelp
-	bash tests/coru/detectFiles
-	bash tests/coru/runProgram
-	bash tests/uncoru/showHelp
+	bash $(TEST_DIR)/coru/showHelp
+	bash $(TEST_DIR)/coru/detectFiles
+	bash $(TEST_DIR)/coru/runProgram
+	bash $(TEST_DIR)/uncoru/showHelp
 else
-	tests/coru/showHelp
-	tests/coru/detectFiles
-	tests/coru/runProgram
-	tests/uncoru/showHelp
+	$(TEST_DIR)/coru/showHelp
+	$(TEST_DIR)/coru/detectFiles
+	$(TEST_DIR)/coru/runProgram
+	$(TEST_DIR)/uncoru/showHelp
 endif
 endif
 

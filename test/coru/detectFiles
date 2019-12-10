@@ -1,7 +1,7 @@
 #!/bin/sh
 # Test with the debug build of `coru`.
 
-. ./tests/common.sh
+. ./test/common.sh
 
 check_tool_exists ()
 {

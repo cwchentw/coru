@@ -1,14 +1,14 @@
 #!/bin/sh
 
-. ./tests/common.sh
+. ./test/common.sh
 
 VERSION=0.1.0
 LICENSE=MIT
 
-coru=./coru
+uncoru=./uncoru
 test_show_version_short ()
 {
-    local result="$($coru -v)";
+    local result="$($uncoru -v)";
 
     if [ $? -ne 0 ];
     then
@@ -27,7 +27,7 @@ test_show_version_short ()
 
 test_show_version_long ()
 {
-    local result="$($coru --version)";
+    local result="$($uncoru --version)";
 
     if [ $? -ne 0 ];
     then
@@ -46,7 +46,7 @@ test_show_version_long ()
 
 test_show_license ()
 {
-    local result="$($coru --license)";
+    local result="$($uncoru --license)";
 
     if [ $? -ne 0 ];
     then
@@ -65,7 +65,7 @@ test_show_license ()
 
 test_show_help_short ()
 {
-    $coru -h >/dev/null;
+    $uncoru -h >/dev/null;
 
     if [ $? -ne 0 ];
     then
@@ -78,7 +78,7 @@ test_show_help_short ()
 
 test_show_help_long ()
 {
-    $coru --help >/dev/null;
+    $uncoru --help >/dev/null;
 
     if [ $? -ne 0 ];
     then
@@ -91,7 +91,7 @@ test_show_help_long ()
 
 test_unknown_option ()
 {
-    $coru --unknown 2>/dev/null;
+    $uncoru --unknown 2>/dev/null;
 
     if [ $? -eq 0 ];
     then
