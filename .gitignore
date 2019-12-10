@@ -57,6 +57,3 @@ dkms.conf
 # Backup files
 *~
 
-# Target file(s)
-coru
-uncoru
