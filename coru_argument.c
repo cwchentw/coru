@@ -33,7 +33,7 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
     arg->argc = argc;
     arg->argv = argv;
     arg->index = 1;
-    arg->is_all = TRUE;
+    arg->is_all = FALSE;
     arg->lang = LANGUAGE_UNKNOWN;
     arg->cmd = CORU_COMMAND_UNKNOWN;
     arg->path = NULL;
