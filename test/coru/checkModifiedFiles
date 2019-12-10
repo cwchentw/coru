@@ -109,4 +109,18 @@ else
     clean;
 fi
 
+# Test modified Java code
+if ! command -v javac 2>/dev/null 1>&2;
+then
+    echo "No JDK installed on your system" >&2;
+else
+    $coru "${SOURCE_DIR}/HelloWorld.java" > HelloWorld.java
+    javac HelloWorld.java
+    java HelloWorld >/dev/null || {
+        rm -f HelloWorld.java HelloWorld.class;
+        exit 1;
+    }
+    rm -f HelloWorld.java HelloWorld.class
+fi
+
 exit 0;
