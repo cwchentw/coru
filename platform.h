@@ -1,5 +1,5 @@
-#ifndef CORU_PLATFORM_H
-#define CORU_PLATFORM_H
+#ifndef CLIBS_PLATFORM_H
+#define CLIBS_PLATFORM_H
 
 #ifdef _WIN32
     #define END_OF_LINE "\r\n"
@@ -17,4 +17,4 @@
     #error "Unsupported platform"
 #endif
 
-#endif  /* CORU_PLATFORM_H */
+#endif  /* CLIBS_PLATFORM_H */
