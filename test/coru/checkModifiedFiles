@@ -1,0 +1,112 @@
+#!/bin/sh
+
+SOURCE_DIR=demo
+TARGET_EXEC=hello
+
+if [ -e "$TARGET_EXEC" ];
+then
+    echo "$TARGET_EXEC exists on your directory" >&2;
+    exit 1;
+fi
+
+clean ()
+{
+    rm -f $TARGET_EXEC
+}
+
+coru=./coru
+
+# Test modified C code.
+cc=gcc
+if ! command -v $cc 2>/dev/null 1>&2;
+then
+    echo "No GCC installed on your system" >&2;
+else
+    temp_src=$(mktemp).c
+    $coru "${SOURCE_DIR}/hello.c" > $temp_src;
+    $cc -o "$TARGET_EXEC" $temp_src || exit 1;
+    ./$TARGET_EXEC >/dev/null || {
+        clean;
+        exit 1;
+    }
+    clean;
+fi
+
+# Test modified C++ code
+cxx=g++
+if ! command -v $cxx 2>/dev/null 1>&2;
+then
+    echo "No G++ installed on your system" >&2;
+else
+    temp_src=$(mktemp).cpp
+    $coru "${SOURCE_DIR}/hello.cpp" > $temp_src;
+    $cxx -o $TARGET_EXEC $temp_src || exit 1;
+    ./$TARGET_EXEC >/dev/null || {
+        clean;
+        exit 1;
+    }
+    clean;
+fi
+
+# Test modified C shell code
+if ! command -v csh 2>/dev/null 1>&2;
+then
+    echo "No C shell installed on your system" >&2;
+else
+    $coru "${SOURCE_DIR}/hello.csh" > $TARGET_EXEC
+    chmod +x $TARGET_EXEC;
+    ./$TARGET_EXEC >/dev/null || {
+        clean;
+        exit 1;
+    }
+    clean;
+fi
+
+# Test modified Golang code
+if ! command -v go 2>/dev/null 1>&2;
+then
+    echo "No Golang installed on your system" >&2;
+else
+    temp_src=$(mktemp).go
+    $coru "${SOURCE_DIR}/hello.go" > $temp_src;
+    go build -o $TARGET_EXEC $temp_src || exit 1;
+    ./$TARGET_EXEC >/dev/null || {
+        clean;
+        exit 1;
+    }
+    clean;
+fi
+
+# Test modifiled JavaScript code
+if ! command -v node 2>/dev/null 1>&2;
+then
+    echo "No Node.js installed on your system" >&2;
+else
+    $coru "${SOURCE_DIR}/hello.js" > $TARGET_EXEC;
+    chmod +x $TARGET_EXEC;
+    # Skip it now because it incurs a shebang related error.
+    echo "Skip modified Node.js code" >&2;
+    # ./$TARGET_EXEC >/dev/null || {
+    #     clean;
+    #     exit 1;
+    # }
+    clean;
+fi
+
+# Test modified PHP code
+if ! command -v php 2>/dev/null 1>&2;
+then
+    echo "No PHP installed on your system" >&2;
+else
+    $coru "${SOURCE_DIR}/hello.php" > $TARGET_EXEC;
+    chmod +x $TARGET_EXEC;
+    # Skip it now because it incurs a shebang related error.
+    echo "Skip modified PHP code" >&2;
+    # ./$TARGET_EXEC >/dev/null || {
+    #     clean;
+    #     exit 1;
+    # }
+    clean;
+fi
+
+exit 0;

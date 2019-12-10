@@ -40,7 +40,7 @@ check_tool_exists swift "Swift";
 coru=./coru
 detect_c_by_extension ()
 {
-    local result="$($coru demo/hello.c | head -n1)";
+    local result="$($coru demo/hello.c | head -n 1)";
 
     if ! echo "$result" | fgrep "C" >/dev/null;
     then

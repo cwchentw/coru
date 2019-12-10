@@ -86,20 +86,32 @@ all:
 	$(MAKE) clean_objs
 	$(MAKE) release
 
-test: debug $(TARGET_EXEC)
+test:
 ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
 ifeq ($(detected_OS),SunOS)
+	$(MAKE) debug
 	bash $(TEST_DIR)/coru/showHelp
 	bash $(TEST_DIR)/coru/detectFiles
 	bash $(TEST_DIR)/coru/runProgram
 	bash $(TEST_DIR)/uncoru/showHelp
+	$(MAKE) clean
+
+	$(MAKE)
+	bash $(TEST_DIR)/coru/checkModifiedFiles
+	$(MAKE) clean
 else
+	$(MAKE) debug
 	$(TEST_DIR)/coru/showHelp
 	$(TEST_DIR)/coru/detectFiles
 	$(TEST_DIR)/coru/runProgram
 	$(TEST_DIR)/uncoru/showHelp
+	$(MAKE) clean
+
+	$(MAKE)
+	$(TEST_DIR)/coru/checkModifiedFiles
+	$(MAKE) clean
 endif
 endif
 
