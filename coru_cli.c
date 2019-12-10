@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
     if (out)
         PRINT("%s", out);
 
-    free(out);
+    if (out)
+        free(out);
 
     return 0;
 
