@@ -29,19 +29,19 @@ hash_table_t * init_comment_single_start(void)
 
     char *values[] = {
         "/*",  /* C */
-        "//",  /* C++ */
-        "//",  /* Java */
-        "//",  /* C# */
+        "/*",  /* C++ */
+        "/*",  /* Java */
+        "/*",  /* C# */
         "#",   /* Perl */
         "#",   /* Python */
         "#",   /* Ruby */
-        "#",   /* PHP */
-        "//",  /* JavaScript */
-        "//",  /* Golang */
-        "//",  /* Rust */
+        "/*",  /* PHP */
+        "/*",  /* JavaScript */
+        "/*",  /* Golang */
+        "/*",  /* Rust */
         "/*",  /* ObjC */
         "/*",  /* ObjC++ */
-        "//",  /* Swift */
+        "/*",  /* Swift */
         "#",   /* C shell */
         "#"    /* Bourne shell */
     };
@@ -94,19 +94,19 @@ hash_table_t * init_comment_single_end(void)
 
     char *values[] = {
         "*/",  /* C */
-        "",    /* C++ */
-        "",    /* Java */
-        "",    /* C# */
+        "*/",  /* C++ */
+        "*/",  /* Java */
+        "*/",  /* C# */
         "",    /* Perl */
         "",    /* Python */
         "",    /* Ruby */
-        "",    /* PHP */
-        "",    /* JavaScript */
-        "",    /* Golang */
-        "",    /* Rust */
+        "*/",  /* PHP */
+        "*/",  /* JavaScript */
+        "*/",  /* Golang */
+        "*/",  /* Rust */
         "*/",  /* ObjC */
         "*/",  /* ObjC++ */
-        "",    /* Swift */
+        "*/",  /* Swift */
         "",    /* C shell */
         ""     /* Bourne shell */
     };
