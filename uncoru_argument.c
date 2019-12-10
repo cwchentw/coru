@@ -50,6 +50,10 @@ uncoru_argument_t * uncoru_argument_parse(int argc, char *argv[])
             arg->cmd = UNCORU_COMMAND_HELP;
             break;
         }
+        else if ('-' == opt[0]) {
+            arg->cmd = UNCORU_COMMAND_UNKNOWN;
+            break;
+        }
         else {
             if (is_uncoru_command_equal(arg->cmd, UNCORU_COMMAND_LOAD)) {
                 arg->cmd = UNCORU_COMMAND_TOO_MANY;
