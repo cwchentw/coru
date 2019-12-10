@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "syntax_data.h"
 
 #if _WIN32
     #include "Shlwapi.h"
@@ -188,10 +189,7 @@ BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, cha
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
-static hash_table_t * _init_comment_single_start(void);
-static hash_table_t * _init_comment_single_end(void);
-static hash_table_t * _init_comment_multiple_start(void);
-static hash_table_t * _init_comment_multiple_end(void);
+
 
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
@@ -203,19 +201,19 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
     hash_table_t *comment_multiple_start = NULL;
     hash_table_t *comment_multiple_end = NULL;
 
-    comment_single_start = _init_comment_single_start();
+    comment_single_start = init_comment_single_start();
     if (!comment_single_start)
         goto ERROR;
 
-    comment_single_end = _init_comment_single_end();
+    comment_single_end = init_comment_single_end();
     if (!comment_single_end)
         goto ERROR;
 
-    comment_multiple_start = _init_comment_multiple_start();
+    comment_multiple_start = init_comment_multiple_start();
     if (!comment_multiple_start)
         goto ERROR;
 
-    comment_multiple_end = _init_comment_multiple_end();
+    comment_multiple_end = init_comment_multiple_end();
     if (!comment_multiple_end)
         goto ERROR;
 
@@ -428,264 +426,4 @@ ERROR:
         hash_table_delete(comment_single_start);
 
     return FALSE;
-}
-
-static hash_table_t * _init_comment_single_start(void)
-{
-    hash_table_t *table = hash_table_new();
-    if (!table)
-        return table;
-
-    char *keys[] = {
-        STRING_C,
-        STRING_CPP,
-        STRING_JAVA,
-        STRING_CSHARP,
-        STRING_PERL,
-        STRING_PYTHON,
-        STRING_RUBY,
-        STRING_PHP,
-        STRING_JS,
-        STRING_GO,
-        STRING_RUST,
-        STRING_OBJC,
-        STRING_OBJCPP,
-        STRING_SWIFT,
-        STRING_CSH,
-        STRING_SH
-    };
-
-    char *values[] = {
-        "/*",  /* C */
-        "//",  /* C++ */
-        "//",  /* Java */
-        "//",  /* C# */
-        "#",   /* Perl */
-        "#",   /* Python */
-        "#",   /* Ruby */
-        "#",   /* PHP */
-        "//",  /* JavaScript */
-        "//",  /* Golang */
-        "//",  /* Rust */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
-        "//",  /* Swift */
-        "#",   /* C shell */
-        "#"    /* Bourne shell */
-    };
-
-    {
-        size_t i;
-        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
-            if (!hash_table_add(table, keys[i], values[i])) {
-            #if DEBUG
-                PUTERR("Failed to add key-value to the hash table");
-            #endif
-                goto ERROR;
-            }
-        }
-    }
-
-    return table;
-
-ERROR:
-    if (table)
-        hash_table_delete(table);
-
-    return NULL;
-}
-
-static hash_table_t * _init_comment_single_end(void)
-{
-    hash_table_t *table = hash_table_new();
-    if (!table)
-        return table;
-
-    char *keys[] = {
-        STRING_C,
-        STRING_CPP,
-        STRING_JAVA,
-        STRING_CSHARP,
-        STRING_PERL,
-        STRING_PYTHON,
-        STRING_RUBY,
-        STRING_PHP,
-        STRING_JS,
-        STRING_GO,
-        STRING_RUST,
-        STRING_OBJC,
-        STRING_OBJCPP,
-        STRING_SWIFT,
-        STRING_CSH,
-        STRING_SH
-    };
-
-    char *values[] = {
-        "*/",  /* C */
-        "",    /* C++ */
-        "",    /* Java */
-        "",    /* C# */
-        "",    /* Perl */
-        "",    /* Python */
-        "",    /* Ruby */
-        "",    /* PHP */
-        "",    /* JavaScript */
-        "",    /* Golang */
-        "",    /* Rust */
-        "*/",  /* ObjC */
-        "*/",  /* ObjC++ */
-        "",    /* Swift */
-        "",    /* C shell */
-        ""     /* Bourne shell */
-    };
-
-    {
-        size_t i;
-        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
-            if (!hash_table_add(table, keys[i], values[i])) {
-            #if DEBUG
-                PUTERR("Failed to add key-value to the hash table");
-            #endif
-                goto ERROR;
-            }
-        }
-    }
-
-    return table;
-
-ERROR:
-    if (table)
-        hash_table_delete(table);
-
-    return NULL;
-}
-
-static hash_table_t * _init_comment_multiple_start(void)
-{
-    hash_table_t *table = hash_table_new();
-    if (!table)
-        return table;
-
-    char *keys[] = {
-        STRING_C,
-        STRING_CPP,
-        STRING_JAVA,
-        STRING_CSHARP,
-        STRING_PERL,
-        STRING_PYTHON,
-        STRING_RUBY,
-        STRING_PHP,
-        STRING_JS,
-        STRING_GO,
-        STRING_RUST,
-        STRING_OBJC,
-        STRING_OBJCPP,
-        STRING_SWIFT,
-        STRING_CSH,
-        STRING_SH
-    };
-
-    char *values[] = {
-        "/*",  /* C */
-        "/*",  /* C++ */
-        "/*",  /* Java */
-        "/*",  /* C# */
-        "",    /* Perl */
-        "",    /* Python */
-        "",    /* Ruby */
-        "/*",  /* PHP */
-	    "/*",  /* JavaScript */
-        "/*",  /* Golang */
-        "/*",  /* Rust */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
-        "/*",  /* Swift */
-        "",    /* C shell */
-        ""     /* Bourne shell */
-    };
-
-    {
-        size_t i;
-        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
-            if (!hash_table_add(table, keys[i], values[i])) {
-            #if DEBUG
-                PUTERR("Failed to add key-value to the hash table");
-            #endif
-                goto ERROR;
-            }
-        }
-    }
-
-    return table;
-
-ERROR:
-    if (table)
-        hash_table_delete(table);
-
-    return NULL;
-}
-
-static hash_table_t * _init_comment_multiple_end(void)
-{
-    hash_table_t *table = hash_table_new();
-    if (!table)
-        return table;
-
-    char *keys[] = {
-        STRING_C,
-        STRING_CPP,
-        STRING_JAVA,
-        STRING_CSHARP,
-        STRING_PERL,
-        STRING_PYTHON,
-        STRING_RUBY,
-        STRING_PHP,
-        STRING_JS,
-        STRING_GO,
-        STRING_RUST,
-        STRING_OBJC,
-        STRING_OBJCPP,
-        STRING_SWIFT,
-        STRING_CSH,
-        STRING_SH
-    };
-
-    char *values[] = {
-        "*/",  /* C */
-        "*/",  /* C++ */
-        "*/",  /* Java */
-        "*/",  /* C# */
-        "",    /* Perl */
-        "",    /* Python */
-        "",    /* Ruby */
-        "*/",  /* PHP */
-        "*/",  /* JavaScript */
-        "*/",  /* Golang */
-        "*/",  /* Rust */
-        "*/",  /* ObjC */
-        "*/",  /* ObjC++ */
-        "*/",  /* Swift */
-        "",    /* C shell */
-        ""     /* Bourne shell */
-    };
-
-    {
-        size_t i;
-        for (i = 0; i < sizeof(keys) / sizeof(char *); i++) {
-            if (!hash_table_add(table, keys[i], values[i])) {
-            #if DEBUG
-                PUTERR("Failed to add key-value to the hash table");
-            #endif
-                goto ERROR;
-            }
-        }
-    }
-
-    return table;
-
-ERROR:
-    if (table)
-        hash_table_delete(table);
-
-    return NULL;
 }
