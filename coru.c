@@ -29,26 +29,28 @@ BOOL coru_run(int argc, char **argv, char **out)
     if (!arg)
         goto ERROR;
 
-    if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_VERSION)) {
+    CORU_COMMAND cmd = coru_argument_command(arg);
+
+    if (is_coru_command_equal(cmd, CORU_COMMAND_VERSION)) {
         coru_help_version();
     }
-    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LICENSE)) {
+    else if (is_coru_command_equal(cmd, CORU_COMMAND_LICENSE)) {
         coru_help_license();
     }
-    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_HELP)) {
+    else if (is_coru_command_equal(cmd, CORU_COMMAND_HELP)) {
         coru_help_help(stdout);
     }
-    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_FEW)) {
+    else if (is_coru_command_equal(cmd, CORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
         goto ERROR;
     }
-    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_LOAD)) {
+    else if (is_coru_command_equal(cmd, CORU_COMMAND_LOAD)) {
         if (!coru_run_load(arg, out)) {
             PUTERR("Failed to load target file");
             goto ERROR;
         }
     }
-    else if (is_coru_command_equal(coru_argument_command(arg), CORU_COMMAND_TOO_MANY)) {
+    else if (is_coru_command_equal(cmd, CORU_COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", CORU_PROGRAM);
         goto ERROR;
     }

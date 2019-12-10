@@ -88,9 +88,13 @@ ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
 ifeq ($(detected_OS),SunOS)
-	bash tests/detectFiles
+	bash tests/coru/showHelp
+	bash tests/coru/detectFiles
+	bash tests/uncoru/showHelp
 else
-	tests/detectFiles
+	tests/coru/showHelp
+	tests/coru/detectFiles
+	tests/uncoru/showHelp
 endif
 endif
 
