@@ -2,16 +2,24 @@
 
 `coru`, aka code ruler, add line numbers and, optionally, width numbers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
-## Sister Programs of `coru`
+## Warning
+
+`coru` and her sister programs are still experimental. Back up your code before using either.
+
+## Why `coru`?
+
+When we write programming tutorials, demonstrative code snippets are essential. Nevertheless, it is not easy for beginners to trace the code if no helpful information are provided. Line numbers are common means to guide learners to trace code.
+
+Some online tutorials add line numbers in the form of HTML elements on web pages, which is common practices among programming teaching sites. However, these metadata are limited to web pages only. If we want to reuse the demo code in another material, the metadata on web pages are lost.
+
+In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as it comments. The commented code still works as that without any line number. Furthermore, the commented code can be used multiple times, in any format of teaching materials.
+
+## `coru` and her Sister Programs
 
 * `coru` adds line numbers and, optionally, width numbers to source code
 * `corucb` does the same code conversion as `coru` but for clipboard data
 * `uncoru` removes line numbers and width numbers left by `coru`
 * `uncorucb` does the same code conversion as `uncoru` but for clipboard data
-
-## Warning
-
-`coru` and `uncoru` are still experimental. Back up your code before using either.
 
 ## System Requirements
 
