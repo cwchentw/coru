@@ -1,0 +1,28 @@
+#!/bin/sh
+# coruclip - Convert code from system clipboard.
+# Copyright (c) 2019 Michael Chen. Licensed under MIT.
+
+ext=$1;
+if [ -z "$ext" ];
+then
+    echo "No valid file extension" >&2;
+    exit 1;
+fi
+
+coru=coru
+if ! command -v $coru 2>/dev/null 1>&2;
+then
+    coru=./coru
+
+    if [ ! -f $coru ];
+    then
+        echo "No coru found on your system" >&2;
+        exit 1;
+    fi
+fi
+
+temp_src=$(mktemp)$ext;
+# Currently it only works on macOS.
+pbpaste > $temp_src;
+$coru $temp_src | pbcopy;
+
