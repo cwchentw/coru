@@ -18,10 +18,10 @@
 #include "coru_help.h"
 #include "coru_metadata.h"
 #include "coru_stats.h"
+#include "cstring.h"
 #include "hash_table.h"
 #include "language.h"
 #include "print_function.h"
-#include "string.h"
 
 static BOOL coru_run_load(coru_argument_t * arg, char **out);
 

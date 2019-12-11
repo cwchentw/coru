@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cstring.h"
 #include "language.h"
 #include "print_function.h"
-#include "string.h"
 
 
 language_t detect_target_language(char *path)
