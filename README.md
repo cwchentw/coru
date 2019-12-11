@@ -8,11 +8,11 @@
 
 ## Why `coru`?
 
-When we write programming tutorials, demonstrative code snippets are essential. Nevertheless, it is not easy for beginners to trace the code if no helpful information are provided. Line numbers are common means to guide learners to trace code.
+When we write programming tutorials, demonstrative code snippets are essential. Nevertheless, it is uneasy for beginners to trace the code if no helpful information are provided. Line numbers represent conventional means to guide learners to trace code.
 
 Some online tutorials add line numbers in the form of HTML elements on web pages, which is common practices among programming teaching sites. However, these metadata are limited to web pages only. If we want to reuse the demo code in another material, the metadata of the code on web pages are lost.
 
-In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as it comments. The commented code still works as that without any line number. Furthermore, the commented code can be used multiple times, in any format of teaching materials.
+In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as it comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
 
 By the way, `uncoru`, the sister program of `coru`, removes line numbers and width numbers in case that you no longer need such metadata of code.
 
