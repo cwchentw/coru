@@ -14,7 +14,7 @@ Some online tutorials add line numbers in the form of HTML elements on web pages
 
 In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as it comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
 
-By the way, `uncoru`, the sister program of `coru`, removes line numbers and width numbers left by `coru` in case that you no longer need such metadata on code.
+By the way, `uncoru`, the sister program of `coru`, removes the line numbers and the width numbers left by `coru` in case that you no longer need such metadata on code.
 
 ## `coru` and her Sister Programs
 
@@ -102,8 +102,8 @@ Pending.
 
 ### Options related to Line Numbers
 
-* `--all` to add line numbers to all lines of source (default)
-* `--non-empty` to add line numbers to only non-empty lines of source
+* `--non-empty` to add line numbers to only non-empty lines of target source (default)
+* `--all` to add line numbers to all lines of target source
 
 `coru` will always skip block comments because some language, like C, cannot parse nested block comments.
 
