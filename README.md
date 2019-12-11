@@ -1,10 +1,10 @@
 # coru
 
-`coru`, aka code ruler, add line numbers and, optionally, width rulers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
+`coru`, aka code ruler, add line numbers and, optionally, width numbers to source code in the form of its comment. Commented source code are mainly used as demonstrative code snippets.
 
 ## Sister Programs of `coru`
 
-* `coru` adds line numbers and, optionally, width numbers for source code
+* `coru` adds line numbers and, optionally, width numbers to source code
 * `corucb` does the same code conversion as `coru` but for clipboard data
 * `uncoru` removes line numbers and width numbers left by `coru`
 * `uncorucb` does the same code conversion as `uncoru` but for clipboard data
