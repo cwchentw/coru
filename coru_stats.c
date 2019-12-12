@@ -1,7 +1,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "coru_lexer.h"
 #include "coru_stats.h"
+#include "coru_token.h"
 #include "print_function.h"
 
 struct coru_stats_t
@@ -27,6 +29,7 @@ coru_stats_t * coru_stats_new()
 
 coru_stats_t * coru_stats_load(FILE *stream)
 {
+    coru_lexer_t *lexer = NULL;
     size_t line_size = 150;  /* Sensible line width */
     char *line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
@@ -39,7 +42,7 @@ coru_stats_t * coru_stats_load(FILE *stream)
     if (!stats)
         goto ERROR;
 
-size_t sz_line;
+    size_t sz_line;
     while (fgets(line, line_size, stream)) {
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
@@ -56,6 +59,16 @@ size_t sz_line;
         }
         else {
 LOAD_LINE:
+            lexer = coru_lexer_new();
+            if (!lexer)
+                goto ERROR;
+
+            if (!coru_lexer_lex(lexer, line)) {
+                PUTERR("Failed to lex input");
+                coru_lexer_delete(lexer);
+                goto ERROR;
+            }
+
             /* Fix TAB issue */
             sz_line = strlen(line);
             {
@@ -71,6 +84,9 @@ LOAD_LINE:
             }
 
             coru_stats_set_height(stats, coru_stats_height(stats) + 1);
+
+            coru_lexer_delete(lexer);
+            lexer = NULL;
         }
     }
 

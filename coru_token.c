@@ -1,5 +1,7 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "coru_token.h"
+#include "cstring.h"
 #include "print_function.h"
 
 struct coru_token_t {
@@ -20,6 +22,23 @@ coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text)
     tn->text = text;
 
     return tn;
+}
+
+coru_token_t * coru_token_copy(coru_token_t *self)
+{
+    assert(self);
+
+    char *s = string_allocate(self->text);
+    if (!s)
+        return NULL;
+
+    coru_token_t *token = coru_token_new(self->token_t, s);
+    if (!token) {
+        free(s);
+        return NULL;
+    }
+
+    return token;
 }
 
 void coru_token_delete(void *self)

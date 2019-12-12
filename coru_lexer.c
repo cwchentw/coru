@@ -53,7 +53,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
             if (' ' == input[i]) {
                 size_t j = i;
 
-                while (' ' == input[j])
+                while (input[j] && ' ' == input[j])
                     j++;
 
                 char *spaces = string_allocate_substring(input, i, j);
@@ -78,8 +78,10 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                     return FALSE;
 
                 coru_token_t *token = coru_token_new(CORU_TOKEN_TAB, tab);
-                if (!token)
+                if (!token) {
+                    free(tab);
                     return FALSE;
+                }
 
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
@@ -91,8 +93,10 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_BACKSLASH, backslash);
-                if (!token)
+                if (!token) {
+                    free(backslash);
                     return FALSE;
+                }
 
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
@@ -100,7 +104,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
             else {
                 size_t j = i;
 
-                while (_is_common_code(input[j]))
+                while (input[j] && _is_common_code(input[j]))
                     j++;
 
                 char *code = string_allocate_substring(input, i, j);
@@ -180,18 +184,49 @@ static BOOL _is_common_code(char c)
         && '\\' != c;  /* Backslash */
 }
 
+coru_token_t * coru_lexer_next(coru_lexer_t *self)
+{
+    assert(self);
+
+    if (self->index >= self->size)
+        return NULL;
+
+    coru_token_t *token = coru_token_copy(self->tokens[self->index]);
+    if (!token)
+        return NULL;
+
+    self->index += 1;
+
+    return token;
+}
+
+coru_token_t * coru_lexer_peek(coru_lexer_t *self, size_t n)
+{
+    assert(self);
+
+    if (self->index + n >= self->size)
+        return NULL;
+
+    coru_token_t *token = coru_token_copy(self->tokens[self->index]);
+    if (!token)
+        return NULL;
+
+    return token;
+}
+
 void coru_lexer_delete(void *self)
 {
-    if (self)
+    if (!self)
         return;
 
     coru_token_t **tokens = ((coru_lexer_t *) self)->tokens;
 
     {
-        size_t size = ((coru_lexer_t *) self)->size;
+        size_t size = ((coru_lexer_t *) self)->capacity;
         size_t i;
         for (i = 0; i < size; i++) {
-            coru_token_delete(tokens[i]);
+            if (tokens[i])
+                coru_token_delete(tokens[i]);
         }
     }
 
