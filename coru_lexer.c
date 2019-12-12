@@ -92,6 +92,36 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
+            else if ('\'' == input[i]) {
+                char *quote = string_allocate("'");
+                if (!quote)
+                    return FALSE;
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_SINGLE_QUOTE, quote);
+                if (!token) {
+                    free(quote);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if ('"' == input[i]) {
+                char *quote = string_allocate("\"");
+                if (!quote)
+                    return FALSE;
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_DOUBLE_QUOTE, quote);
+                if (!token) {
+                    free(quote);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
             else if ('\\' == input[i]) {
                 char *backslash = string_allocate("\\");
                 if (!backslash)
@@ -193,7 +223,9 @@ static BOOL _is_common_code(char c)
 {
     return ' ' != c   /* Space */
         && '\t' != c  /* TAB */
-        && '\\' != c;  /* Backslash */
+        && '\\' != c  /* Backslash */
+        && '\'' != c  /* Single quote */
+        && '"' != c;  /* Double quote */
 }
 
 coru_token_t * coru_lexer_next(coru_lexer_t *self)
