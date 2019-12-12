@@ -222,11 +222,10 @@ void coru_lexer_delete(void *self)
     coru_token_t **tokens = ((coru_lexer_t *) self)->tokens;
 
     {
-        size_t size = ((coru_lexer_t *) self)->capacity;
+        size_t size = ((coru_lexer_t *) self)->size;
         size_t i;
         for (i = 0; i < size; i++) {
-            if (tokens[i])
-                coru_token_delete(tokens[i]);
+            coru_token_delete(tokens[i]);
         }
     }
 
