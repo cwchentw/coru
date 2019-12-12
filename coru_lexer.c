@@ -37,6 +37,12 @@ coru_lexer_t * coru_lexer_new(void)
         return lexer;
     }
 
+    {
+        size_t i;
+        for (i = 0; i < lexer->capacity; i++)
+            lexer->tokens[i] = NULL;
+    }
+
     return lexer;
 }
 
@@ -171,6 +177,12 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
         i++;
     }
 
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_tokens[i] = NULL;
+    }
+
     self->tokens = new_tokens;
     free(old_tokens);
 
@@ -222,10 +234,11 @@ void coru_lexer_delete(void *self)
     coru_token_t **tokens = ((coru_lexer_t *) self)->tokens;
 
     {
-        size_t size = ((coru_lexer_t *) self)->size;
+        size_t size = ((coru_lexer_t *) self)->capacity;
         size_t i;
         for (i = 0; i < size; i++) {
-            coru_token_delete(tokens[i]);
+            if (tokens[i])
+                coru_token_delete(tokens[i]);
         }
     }
 
