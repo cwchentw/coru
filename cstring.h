@@ -45,6 +45,13 @@ BOOL string_contains(char *a, char *b);
 
 /* string_is_space_only will skip end of line. */
 BOOL string_is_space_only(char *a);
+
+/* Allocate a new C string from input. */
+char * string_allocate(char *s);
+
+/* Allocate a new C substring from input. */
+char * string_allocate_substring(char *s, size_t from, size_t to);
+
 FILE * string_to_stream(char *s);
 
 #ifdef __cplusplus

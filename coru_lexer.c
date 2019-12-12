@@ -1,6 +1,10 @@
+#include <assert.h>
 #include <stdlib.h>
+#include <string.h>
+#include "coru.h"
 #include "coru_lexer.h"
 #include "coru_token.h"
+#include "cstring.h"
 #include "print_function.h"
 
 struct coru_lexer_t {
@@ -10,7 +14,7 @@ struct coru_lexer_t {
     coru_token_t **tokens;
 };
 
-coru_lexer_t * coru_lexer_new(char *input)
+coru_lexer_t * coru_lexer_new(void)
 {
     coru_lexer_t *lexer = (coru_lexer_t *) malloc(sizeof(coru_lexer_t));
     if (!lexer) {
@@ -34,6 +38,146 @@ coru_lexer_t * coru_lexer_new(char *input)
     }
 
     return lexer;
+}
+
+static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
+static BOOL _is_common_code(char c);
+
+BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
+{
+    assert(self);
+
+    {
+        size_t i;
+        for (i = 0; i < strlen(input); i++) {
+            if (' ' == input[i]) {
+                size_t j = i;
+
+                while (' ' == input[j])
+                    j++;
+
+                char *spaces = string_allocate_substring(input, i, j);
+                if (!spaces)
+                    return FALSE;
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_SPACE, spaces);
+                if (!token) {
+                    free(spaces);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j;  /* Update i */
+            }
+            else if ('\t' == input[i]) {
+                char *tab = string_allocate("\t");
+                if (!tab)
+                    return FALSE;
+
+                coru_token_t *token = coru_token_new(CORU_TOKEN_TAB, tab);
+                if (!token)
+                    return FALSE;
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if ('\\' == input[i]) {
+                char *backslash = string_allocate("\\");
+                if (!backslash)
+                    return FALSE;
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_BACKSLASH, backslash);
+                if (!token)
+                    return FALSE;
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else {
+                size_t j = i;
+
+                while (_is_common_code(input[j]))
+                    j++;
+
+                char *code = string_allocate_substring(input, i, j);
+                if (!code)
+                    return FALSE;
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_CODE, code);
+                if (!token) {
+                    free(code);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j;  /* Update i */
+            }
+        }
+    }
+
+    return TRUE;
+}
+
+static BOOL _coru_lexer_expand(coru_lexer_t *self);
+
+static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token)
+{
+    assert(self);
+
+    if (!_coru_lexer_expand(self))
+        return FALSE;
+
+    if (0 == self->size) {
+        self->tokens[self->size] = token;
+        self->size += 1;
+    }
+    else {
+        self->size += 1;
+        self->tokens[self->size] = token;
+    }
+
+    return TRUE;
+}
+
+static BOOL _coru_lexer_expand(coru_lexer_t *self)
+{
+    if (self->size < self->capacity)
+        return TRUE;
+
+    self->capacity <<= 1;
+    coru_token_t **old_tokens = self->tokens;
+    coru_token_t **new_tokens = \
+        (coru_token_t **) malloc(self->capacity * sizeof(coru_token_t *));
+    if (!(new_tokens)) {
+        PUTERR("Failed to allocate memory for coru tokens");
+        PUTERR("Check available system memory");
+        return FALSE;
+    }
+
+    size_t i = 0;
+    while (i < self->size) {
+        new_tokens[i] = old_tokens[i];
+        i++;
+    }
+
+    self->tokens = new_tokens;
+    free(old_tokens);
+
+    return TRUE;
+}
+
+static BOOL _is_common_code(char c)
+{
+    return ' ' != c   /* Space */
+        && '\t' != c  /* TAB */
+        && '\\' != c;  /* Backslash */
 }
 
 void coru_lexer_delete(void *self)
