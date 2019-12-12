@@ -99,7 +99,7 @@ ifeq ($(detected_OS),SunOS)
 	bash $(TEST_DIR)/uncoru/showHelp
 	$(MAKE) clean
 
-	$(MAKE)
+	$(MAKE) release
 	bash $(TEST_DIR)/coru/checkModifiedFiles
 	$(MAKE) clean
 else
@@ -110,7 +110,7 @@ else
 	$(TEST_DIR)/uncoru/showHelp
 	$(MAKE) clean
 
-	$(MAKE)
+	$(MAKE) release
 	$(TEST_DIR)/coru/checkModifiedFiles
 	$(MAKE) clean
 endif
