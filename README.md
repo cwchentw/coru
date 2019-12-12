@@ -128,6 +128,8 @@ Either option default to an empty string `""`.
 
 ## Note
 
+`coru` and her sister programs are never language linters. They assume their inputs are always correct, performing code conversion accordingly.
+
 We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clibs).
 
 ## Copyright
