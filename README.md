@@ -135,6 +135,7 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 ## Known Issues or Bugs
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
+* `coru` fails to manage TAB in code
 * `coru` cannot detect line wrapping words like backslash (`\`)
 * `coru` cannot detect heredoc
 * Though usable, Valgrind still reports errors on the codebase of `coru`, related to string concatenation issues
