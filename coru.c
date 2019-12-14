@@ -254,13 +254,15 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
         width_number += space + strlen(single_end);
 
     size_t width_new = coru_stats_width(stats) + width_number \
-        + 1;  /* Trailing zero. */
+        + strlen(END_OF_LINE);
 
 #if DEBUG
     PUTS("Destination width: %lu", width_new);
 #endif
 
-    *out = (char *) malloc(coru_stats_height(stats) * width_new * sizeof(char));
+    *out = \
+        (char *) malloc(
+            (coru_stats_height(stats) * width_new + 1) * sizeof(char));
     if (!out) {
         PUTERR("Failed to allocate memory for output");
         PUTERR("Check available system memory");

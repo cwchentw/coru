@@ -79,7 +79,7 @@ LOAD_LINE:
                 }
             }
 
-            if (strlen(line) > coru_stats_width(stats)) {
+            if (sz_line > coru_stats_width(stats)) {
                 coru_stats_set_width(stats, sz_line);
             }
 
