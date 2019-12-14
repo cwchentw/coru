@@ -75,7 +75,7 @@ LOAD_LINE:
                 size_t i;
                 for (i = 0; i < strlen(line); i++) {
                     if ('\t' == line[i])
-                        sz_line += 7;
+                        sz_line += 8;
                 }
             }
 
