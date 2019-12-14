@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "print_function.h"
+#include "print.h"
 #include "uncoru.h"
 #include "uncoru_argument.h"
 #include "uncoru_command.h"

@@ -2,7 +2,7 @@
 #include "platform.h"
 #include "uncoru_help.h"
 #include "uncoru_metadata.h"
-#include "print_function.h"
+#include "print.h"
 
 void uncoru_help_version(void)
 {

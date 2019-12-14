@@ -4,7 +4,7 @@
 
 #include "cstring.h"
 #include "language.h"
-#include "print_function.h"
+#include "print.h"
 
 
 language_t detect_target_language(char *path)

@@ -5,7 +5,7 @@
 #include "coru_lexer.h"
 #include "coru_token.h"
 #include "cstring.h"
-#include "print_function.h"
+#include "print.h"
 
 struct coru_lexer_t {
     size_t size;

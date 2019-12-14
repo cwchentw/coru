@@ -1,5 +1,7 @@
-#ifndef CLIBS_PRINT_FUNCTION_H
-#define CLIBS_PRINT_FUNCTION_H
+/* print.h - console printing utilities.
+   Copyright (c) 2019 Michael Chen. Licensed under MIT. */
+#ifndef CLIBS_PRINT_H
+#define CLIBS_PRINT_H
 
 #ifdef __cplusplus
     #include <cstdio>
@@ -48,4 +50,4 @@
     }
 #endif
 
-#endif  /* CLIBS_PRINT_FUNCTION_H */
+#endif  /* CLIBS_PRINT_H */

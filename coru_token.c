@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "coru_token.h"
 #include "cstring.h"
-#include "print_function.h"
+#include "print.h"
 
 struct coru_token_t {
     CORU_TOKEN_TYPE token_t;

@@ -1,5 +1,5 @@
 #include "language.h"
-#include "print_function.h"
+#include "print.h"
 #include "syntax_data.h"
 
 hash_table_t * init_comment_single_start(void)

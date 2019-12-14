@@ -4,7 +4,7 @@
 #include "coru_lexer.h"
 #include "coru_stats.h"
 #include "coru_token.h"
-#include "print_function.h"
+#include "print.h"
 
 struct coru_stats_t
 {
