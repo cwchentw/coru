@@ -201,10 +201,12 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
         return FALSE;
     }
 
-    size_t i = 0;
-    while (i < self->size) {
-        new_tokens[i] = old_tokens[i];
-        i++;
+    {
+        size_t i = 0;
+        while (i < self->size) {
+            new_tokens[i] = old_tokens[i];
+            i++;
+        }
     }
 
     {
@@ -259,7 +261,7 @@ void coru_lexer_delete(void *self)
         size_t size = ((coru_lexer_t *) self)->capacity;
         size_t i;
         for (i = 0; i < size; i++) {
-            if (tokens[i])
+            if (tokens && tokens[i])
                 coru_token_delete(tokens[i]);
         }
     }

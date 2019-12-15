@@ -36,6 +36,12 @@ coru_parser_t * coru_parser_new(void)
         return NULL;
     }
 
+    {
+        size_t i;
+        for (i = 0; i < parser->capacity; i++)
+            parser->asts[i] = NULL;
+    }
+
     return parser;
 }
 
@@ -125,7 +131,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             }
         }
         else {
-            token = coru_lexer_next(lexer);
+            assert("Not a valid token" && 0);
         }
 
         if (ast) {
@@ -157,9 +163,17 @@ static BOOL _coru_parser_expand(coru_parser_t *self)
         return FALSE;
 
     {
-        size_t i;
-        for (i = 0; i < self->size; i++)
+        size_t i = 0;
+        while (i < self->size) {
             new_asts[i] = old_asts[i];
+            i++;
+        }
+    }
+
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_asts[i] = NULL;
     }
 
     self->asts = new_asts;
@@ -184,6 +198,9 @@ coru_ast_t * coru_parser_next(coru_parser_t *self)
         return NULL;
 
     coru_ast_t *ast = self->asts[self->index];
+    if (!ast)
+        return NULL;
+
     self->index += 1;
 
     return ast;
@@ -194,13 +211,13 @@ void coru_parser_delete(void *self)
     if (!self)
         return;
 
-    size_t size = ((coru_parser_t *) self)->capacity;
     coru_ast_t **asts = ((coru_parser_t *) self)->asts;
 
     {
+        size_t size = ((coru_parser_t *) self)->capacity;
         size_t i;
         for (i = 0; i < size; i++) {
-            if (asts[i])
+            if (asts && asts[i])
                 coru_ast_delete(asts[i]);
         }
     }
