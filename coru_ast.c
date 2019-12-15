@@ -10,6 +10,7 @@ typedef struct coru_ast_backslash_t coru_ast_backslash_t;
 typedef struct coru_ast_string_t coru_ast_string_t;
 
 static coru_ast_code_t * _coru_ast_code_new(void);
+static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token);
 static void _coru_ast_code_delete(void *self);
 static coru_ast_tab_t * _coru_ast_tab_new(void);
 static void _coru_ast_tab_delete(void *self);
@@ -150,6 +151,53 @@ static coru_ast_code_t * _coru_ast_code_new(void)
     }
 
     return ast;
+}
+
+static BOOL _coru_ast_code_expand(coru_ast_code_t *self);
+
+static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token)
+{
+    if (!_coru_ast_code_expand(self))
+        return FALSE;
+
+    if (0 == self->size) {
+        self->tokens[self->size] = token;
+        self->size += 1;
+    }
+    else {
+        self->size += 1;
+        self->tokens[self->size] = token;
+    }
+
+    return TRUE;
+}
+
+static BOOL _coru_ast_code_expand(coru_ast_code_t *self)
+{
+    if (self->size < self->capacity)
+        return TRUE;
+
+    self->capacity <<= 1;
+    coru_token_t **old_tokens = self->tokens;
+    coru_token_t **new_tokens = \
+        (coru_token_t **) \
+        malloc(self->capacity * sizeof(coru_token_t *));
+    if (!new_tokens) {
+        PUTERR("Failed to allocate memory for tokens in coru ast");
+        PUTERR("Check available system memory");
+        return FALSE;
+    }
+
+    {
+        size_t i;
+        for (i = 0; i < self->size; i++)
+            new_tokens[i] = old_tokens[i];
+    }
+
+    self->tokens = new_tokens;
+    free(old_tokens);
+
+    return TRUE;
 }
 
 static void _coru_ast_code_delete(void *self)
