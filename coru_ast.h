@@ -10,4 +10,7 @@ typedef char CORU_AST_TYPE;
 #define CORU_AST_BACKSLASH  2
 #define CORU_AST_STRING     3
 
+coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t);
+void coru_ast_delete(void *self);
+
 #endif  /* CORU_AST_H */
