@@ -190,8 +190,6 @@ BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, cha
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
-
-
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
     char *line = NULL;
