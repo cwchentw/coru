@@ -21,7 +21,18 @@ coru_parser_t * coru_parser_new(void)
         return parser;
     }
 
-    /* Init `parser` later */
+    parser->size = 0;
+    parser->capacity = 16;
+
+    parser->asts = \
+        (coru_ast_t **) \
+        malloc(parser->capacity * sizeof(coru_ast_t *));
+    if (!(parser->asts)) {
+        PUTERR("Failed to allocate memory for internal ast array of Coru Parser");
+        PUTERR("Check available system memory");
+        free(parser);
+        return NULL;
+    }
 
     return parser;
 }
@@ -114,6 +125,9 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
                 token = coru_lexer_next(lexer);
             }
+        }
+        else {
+            token = coru_lexer_next(lexer);
         }
     }
 

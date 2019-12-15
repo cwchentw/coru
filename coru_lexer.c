@@ -235,11 +235,15 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
     if (self->index >= self->size)
         return NULL;
 
-    coru_token_t *token = coru_token_copy(self->tokens[self->index]);
+    coru_token_t *token = self->tokens[self->index];
     if (!token)
         return NULL;
-
+    
     self->index += 1;
+
+    coru_token_t *copied = coru_token_copy(token);
+    if (!copied)
+        return NULL;
 
     return token;
 }
@@ -251,8 +255,12 @@ coru_token_t * coru_lexer_peek(coru_lexer_t *self, size_t n)
     if (self->index + n >= self->size)
         return NULL;
 
-    coru_token_t *token = coru_token_copy(self->tokens[self->index]);
+    coru_token_t *token = self->tokens[self->index];
     if (!token)
+        return NULL;
+
+    coru_token_t *copied = coru_token_copy(token);
+    if (!copied)
         return NULL;
 
     return token;

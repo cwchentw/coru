@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "coru_lexer.h"
+#include "coru_parser.h"
 #include "coru_stats.h"
 #include "coru_token.h"
 #include "print.h"
@@ -30,6 +31,8 @@ coru_stats_t * coru_stats_new()
 coru_stats_t * coru_stats_load(FILE *stream)
 {
     coru_lexer_t *lexer = NULL;
+    coru_parser_t *parser = NULL;
+
     size_t line_size = 150;  /* Sensible line width */
     char *line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
@@ -69,6 +72,17 @@ LOAD_LINE:
                 goto ERROR_CORU_STATS;
             }
 
+            parser = coru_parser_new();
+            if (!parser)
+                goto ERROR_CORU_STATS;
+            
+            if (!coru_parser_parse(parser, lexer)) {
+                PUTERR("Failed to parse input");
+                coru_parser_delete(parser);
+                coru_lexer_delete(lexer);
+                goto ERROR_CORU_STATS;
+            }
+
             /* Fix TAB issue */
             sz_line = strlen(line);
             {
@@ -84,6 +98,9 @@ LOAD_LINE:
             }
 
             coru_stats_set_height(stats, coru_stats_height(stats) + 1);
+
+            coru_parser_delete(parser);
+            parser = NULL;
 
             coru_lexer_delete(lexer);
             lexer = NULL;
