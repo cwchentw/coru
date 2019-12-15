@@ -1,9 +1,14 @@
+#include <assert.h>
 #include <stdlib.h>
+#include "coru_ast.h"
 #include "coru_parser.h"
+#include "coru_token.h"
 #include "print.h"
 
 struct coru_parser_t {
-    /* Declare it later. */
+    size_t size;
+    size_t capacity;
+    coru_ast_t **asts;
 };
 
 coru_parser_t * coru_parser_new(void)
@@ -21,10 +26,149 @@ coru_parser_t * coru_parser_new(void)
     return parser;
 }
 
+static BOOL _coru_parser_expand(coru_parser_t *self);
+static BOOL _is_code_token(CORU_TOKEN_TYPE token_t);
+
+BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
+{
+    assert(self);
+    assert(lexer);
+
+    coru_token_t *token = coru_lexer_next(lexer);
+    while (token) {
+        if (!_coru_parser_expand(self))
+            return FALSE;
+
+        if (CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
+            coru_ast_t *ast = \
+                coru_ast_new(CORU_AST_STRING);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+            while (token
+                   && CORU_TOKEN_SINGLE_QUOTE != coru_token_type(token)) {
+                if (!coru_ast_add(ast, token))
+                    return FALSE;
+
+                token = coru_lexer_next(lexer);
+            }
+        }
+        else if (CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
+            coru_ast_t *ast = \
+                coru_ast_new(CORU_AST_STRING);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+            while (token
+                  && CORU_TOKEN_DOUBLE_QUOTE != coru_token_type(token)) {
+                if (!coru_ast_add(ast, token))
+                    return FALSE;
+
+                token = coru_lexer_next(lexer);
+            }
+        }
+        else if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+            coru_ast_t *ast = \
+                coru_ast_new(CORU_AST_BACKSLASH);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+        }
+        else if (CORU_TOKEN_TAB == coru_token_type(token)) {
+            coru_ast_t *ast = \
+                coru_ast_new(CORU_AST_TAB);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+        }
+        else if (_is_code_token(coru_token_type(token))) {
+            coru_ast_t *ast = \
+                coru_ast_new(CORU_AST_CODE);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+            while (token
+                   && _is_code_token(coru_token_type(token))) {
+                if (!coru_ast_add(ast, token))
+                    return FALSE;
+
+                token = coru_lexer_next(lexer);
+            }
+        }
+    }
+
+    return TRUE;
+}
+
+static BOOL _coru_parser_expand(coru_parser_t *self)
+{
+    if (self->size < self->capacity)
+        return TRUE;
+
+    self->capacity <<= 1;
+    coru_ast_t **old_asts = self->asts;
+    coru_ast_t **new_asts = \
+        (coru_ast_t **) \
+        malloc(self->capacity * sizeof(coru_ast_t *));
+    if (!new_asts)
+        return FALSE;
+
+    {
+        size_t i;
+        for (i = 0; i < self->size; i++)
+            new_asts[i] = old_asts[i];
+    }
+
+    self->asts = new_asts;
+    free(old_asts);
+
+    return TRUE;
+}
+
+static BOOL _is_code_token(CORU_TOKEN_TYPE token_t)
+{
+    return CORU_TOKEN_SINGLE_QUOTE != token_t
+        && CORU_TOKEN_DOUBLE_QUOTE != token_t
+        && CORU_TOKEN_TAB != token_t
+        && CORU_TOKEN_BACKSLASH != token_t;
+}
+
 void coru_parser_delete(void *self)
 {
     if (!self)
         return;
 
+    size_t size = ((coru_parser_t *) self)->size;
+    coru_ast_t **asts = ((coru_parser_t *) self)->asts;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++) {
+            if (asts[i])
+                coru_ast_delete(asts[i]);
+        }
+    }
+
+    free(asts);
     free(self);
 }

@@ -24,6 +24,13 @@ coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text)
     return tn;
 }
 
+CORU_TOKEN_TYPE coru_token_type(coru_token_t *self)
+{
+    assert(self);
+
+    return self->token_t;
+}
+
 coru_token_t * coru_token_copy(coru_token_t *self)
 {
     assert(self);
