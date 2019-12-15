@@ -59,7 +59,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
             if (' ' == input[i]) {
                 size_t j = i;
 
-                while (input[j] && ' ' == input[j])
+                while (input[j] && (' ' == input[j]))
                     j++;
 
                 char *spaces = string_allocate_substring(input, i, j);

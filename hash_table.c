@@ -239,7 +239,6 @@ char * hash_table_get(hash_table_t *self, char *key)
     unsigned long code = _hash(key);
     size_t index = code % self->capacity;
 
-    key_value_pair_t *p;
     key_value_pair_t *q = self->pairs[index];
 
     if (!q) {
@@ -247,7 +246,7 @@ char * hash_table_get(hash_table_t *self, char *key)
     }
 
     while (q) {
-        p = q;
+        key_value_pair_t *p = q;
         q = q->next;
 
         if (0 == strcmp(p->key, key)) {
