@@ -32,6 +32,8 @@ language_t detect_target_language(char *path)
         return LANGUAGE_UNKNOWN;
     }
 
+    ext[0] = '\0';
+
     sprintf(ext, "%s", sp + index);
 
     if (string_is_equal(".c", ext)) {
@@ -121,6 +123,8 @@ language_t detect_target_language(char *path)
     #endif
         goto ERROR_LANGUAGE;
     }
+
+    line[0] = '\0';
 
     while(fgets(line, size, fp)) {
         if (size == strlen(line)) {

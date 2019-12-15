@@ -277,6 +277,8 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
         goto ERROR_CORU_LOAD;
     }
 
+    line[0] = '\0';
+
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
@@ -396,6 +398,8 @@ RELOAD_LINE:
                 PUTERR("Check available system memory");
                 goto ERROR_CORU_LOAD;
             }
+
+            num_s[0] = '\0';
 
             if (sprintf(num_s, "%lu", line_number) < 0) {
                 PUTERR("Failed to insert a number");
