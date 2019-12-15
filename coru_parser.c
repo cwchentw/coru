@@ -70,8 +70,22 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
             while (token
                    && CORU_TOKEN_SINGLE_QUOTE != coru_token_type(token)) {
-                if (!coru_ast_add(ast, token))
+                if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+                    /* Consume '\\' */
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    /* Consume one extra token. */
+                    token = coru_lexer_next(lexer);
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+                else {
+                    if (!coru_ast_add(ast, token))
                     return FALSE;
+                }
 
                 token = coru_lexer_next(lexer);
             }
@@ -87,8 +101,22 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
             while (token
                   && CORU_TOKEN_DOUBLE_QUOTE != coru_token_type(token)) {
-                if (!coru_ast_add(ast, token))
+                if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+                    /* Consume '\\' */
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    /* Consume one extra token. */
+                    token = coru_lexer_next(lexer);
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+                else {
+                    if (!coru_ast_add(ast, token))
                     return FALSE;
+                }
 
                 token = coru_lexer_next(lexer);
             }
