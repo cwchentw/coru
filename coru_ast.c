@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "coru.h"
 #include "coru_ast.h"
@@ -92,6 +93,25 @@ static BOOL _is_valid_ast_type(CORU_AST_TYPE ast_t)
         || CORU_AST_TAB == ast_t
         || CORU_AST_BACKSLASH == ast_t
         || CORU_AST_STRING == ast_t;
+}
+
+BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
+{
+    assert(self);
+    assert(token);
+
+    BOOL added = FALSE;
+
+    if (CORU_AST_CODE == self->ast_t)
+        added = _coru_ast_code_add(self->ast.code_t, token);
+    else if (CORU_AST_TAB == self->ast_t)
+        added = _coru_ast_tab_add(self->ast.tab_t, token);
+    else if (CORU_AST_BACKSLASH == self->ast_t)
+        added = _coru_ast_backslash_add(self->ast.backslash_t, token);
+    else if (CORU_AST_STRING == self->ast_t)
+        added = _coru_ast_string_add(self->ast.string_t, token);
+
+    return added;
 }
 
 void coru_ast_delete(void *self)
