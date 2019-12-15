@@ -17,7 +17,9 @@
 #include "coru_argument.h"
 #include "coru_command.h"
 #include "coru_help.h"
+#include "coru_lexer.h"
 #include "coru_metadata.h"
+#include "coru_parser.h"
 #include "coru_stats.h"
 #include "cstring.h"
 #include "hash_table.h"
@@ -279,6 +281,9 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
 
     line[0] = '\0';
 
+    coru_lexer_t *lexer = NULL;
+    coru_parser_t *parser = NULL;
+
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
@@ -317,6 +322,27 @@ RELOAD_LINE:
                 }
 
                 first_line = FALSE;
+            }
+
+            lexer = coru_lexer_new();
+            if (!lexer)
+                goto ERROR_CORU_LOAD;
+
+            if (!coru_lexer_lex(lexer, line)) {
+                PUTERR("Failed to lex input");
+                coru_lexer_delete(lexer);
+                goto ERROR_CORU_LOAD;
+            }
+
+            parser = coru_parser_new();
+            if (!parser)
+                goto ERROR_CORU_LOAD;
+
+            if (!coru_parser_parse(parser, lexer)) {
+                PUTERR("Failed to parse input");
+                coru_parser_delete(parser);
+                coru_lexer_delete(lexer);
+                goto ERROR_CORU_LOAD;
             }
 
             BOOL mstart = FALSE;
@@ -421,6 +447,12 @@ RELOAD_LINE:
 
             /* Insert EOL. */
             strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+
+            coru_parser_delete(parser);
+            parser = NULL;
+
+            coru_lexer_delete(lexer);
+            lexer = NULL;
         }
     }
 
