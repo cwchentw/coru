@@ -194,7 +194,7 @@ void coru_parser_delete(void *self)
     if (!self)
         return;
 
-    size_t size = ((coru_parser_t *) self)->size;
+    size_t size = ((coru_parser_t *) self)->capacity;
     coru_ast_t **asts = ((coru_parser_t *) self)->asts;
 
     {
