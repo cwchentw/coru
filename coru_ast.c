@@ -114,6 +114,13 @@ BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
     return added;
 }
 
+CORU_AST_TYPE coru_ast_type(coru_ast_t *self)
+{
+    assert(self);
+
+    return self->ast_t;
+}
+
 void coru_ast_delete(void *self)
 {
     if (!self)
@@ -234,9 +241,10 @@ static void _coru_ast_code_delete(void *self)
 
     {
         size_t i;
-        for (i = 0; i < size; i++)
+        for (i = 0; i < size; i++) {
             if (tokens[i])
                 coru_token_delete(tokens[i]);
+        }
     }
 
     free(tokens);
@@ -268,6 +276,8 @@ static coru_ast_tab_t * _coru_ast_tab_new(void)
 
 static BOOL _coru_ast_tab_add(coru_ast_tab_t *self, coru_token_t *token)
 {
+    assert(self);
+
     if (self->size >= self->capacity)
         return FALSE;
 
@@ -284,7 +294,7 @@ static void _coru_ast_tab_delete(void *self)
 
     coru_token_t *token = ((coru_ast_tab_t *) self)->token;
 
-    free(token);
+    coru_token_delete(token);
     free(self);
 }
 
@@ -330,7 +340,7 @@ static void _coru_ast_backslash_delete(void *self)
 
     coru_token_t *token = ((coru_ast_tab_t *) self)->token;
 
-    free(token);
+    coru_token_delete(token);
     free(self);
 }
 

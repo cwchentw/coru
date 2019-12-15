@@ -245,25 +245,7 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
     if (!copied)
         return NULL;
 
-    return token;
-}
-
-coru_token_t * coru_lexer_peek(coru_lexer_t *self, size_t n)
-{
-    assert(self);
-
-    if (self->index + n >= self->size)
-        return NULL;
-
-    coru_token_t *token = self->tokens[self->index];
-    if (!token)
-        return NULL;
-
-    coru_token_t *copied = coru_token_copy(token);
-    if (!copied)
-        return NULL;
-
-    return token;
+    return copied;
 }
 
 void coru_lexer_delete(void *self)
@@ -274,7 +256,7 @@ void coru_lexer_delete(void *self)
     coru_token_t **tokens = ((coru_lexer_t *) self)->tokens;
 
     {
-        size_t size = ((coru_lexer_t *) self)->capacity;
+        size_t size = ((coru_lexer_t *) self)->size;
         size_t i;
         for (i = 0; i < size; i++) {
             if (tokens[i])

@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "coru_ast.h"
 #include "coru_lexer.h"
 #include "coru_parser.h"
 #include "coru_stats.h"
@@ -75,7 +76,7 @@ LOAD_LINE:
             parser = coru_parser_new();
             if (!parser)
                 goto ERROR_CORU_STATS;
-            
+
             if (!coru_parser_parse(parser, lexer)) {
                 PUTERR("Failed to parse input");
                 coru_parser_delete(parser);
@@ -83,14 +84,14 @@ LOAD_LINE:
                 goto ERROR_CORU_STATS;
             }
 
-            /* Fix TAB issue */
             sz_line = strlen(line);
-            {
-                size_t i;
-                for (i = 0; i < strlen(line); i++) {
-                    if ('\t' == line[i])
-                        sz_line += 8;
-                }
+
+            coru_ast_t *ast = coru_parser_next(parser);
+            while (ast) {
+                if (CORU_AST_TAB == coru_ast_type(ast))
+                    sz_line += 8;
+                
+                ast = coru_parser_next(parser);
             }
 
             if (sz_line > coru_stats_width(stats)) {

@@ -8,6 +8,7 @@
 struct coru_parser_t {
     size_t size;
     size_t capacity;
+    size_t index;
     coru_ast_t **asts;
 };
 
@@ -23,6 +24,7 @@ coru_parser_t * coru_parser_new(void)
 
     parser->size = 0;
     parser->capacity = 16;
+    parser->index = 0;
 
     parser->asts = \
         (coru_ast_t **) \
@@ -50,9 +52,9 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
         if (!_coru_parser_expand(self))
             return FALSE;
 
+        coru_ast_t *ast = NULL;
         if (CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
-            coru_ast_t *ast = \
-                coru_ast_new(CORU_AST_STRING);
+            ast = coru_ast_new(CORU_AST_STRING);
             if (!ast)
                 return FALSE;
 
@@ -69,8 +71,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             }
         }
         else if (CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
-            coru_ast_t *ast = \
-                coru_ast_new(CORU_AST_STRING);
+            ast = coru_ast_new(CORU_AST_STRING);
             if (!ast)
                 return FALSE;
 
@@ -87,8 +88,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             }
         }
         else if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
-            coru_ast_t *ast = \
-                coru_ast_new(CORU_AST_BACKSLASH);
+            ast = coru_ast_new(CORU_AST_BACKSLASH);
             if (!ast)
                 return FALSE;
 
@@ -98,8 +98,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (CORU_TOKEN_TAB == coru_token_type(token)) {
-            coru_ast_t *ast = \
-                coru_ast_new(CORU_AST_TAB);
+            ast = coru_ast_new(CORU_AST_TAB);
             if (!ast)
                 return FALSE;
 
@@ -109,8 +108,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (_is_code_token(coru_token_type(token))) {
-            coru_ast_t *ast = \
-                coru_ast_new(CORU_AST_CODE);
+            ast = coru_ast_new(CORU_AST_CODE);
             if (!ast)
                 return FALSE;
 
@@ -128,6 +126,17 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
         }
         else {
             token = coru_lexer_next(lexer);
+        }
+
+        if (ast) {
+            if (0 == self->size) {
+                self->asts[self->size] = ast;
+                self->size += 1;
+            }
+            else {
+                self->size += 1;
+                self->asts[self->size] = ast;
+            }
         }
     }
 
@@ -165,6 +174,19 @@ static BOOL _is_code_token(CORU_TOKEN_TYPE token_t)
         && CORU_TOKEN_DOUBLE_QUOTE != token_t
         && CORU_TOKEN_TAB != token_t
         && CORU_TOKEN_BACKSLASH != token_t;
+}
+
+coru_ast_t * coru_parser_next(coru_parser_t *self)
+{
+    assert(self);
+
+    if (self->index >= self->size)
+        return NULL;
+
+    coru_ast_t *ast = self->asts[self->index];
+    self->index += 1;
+
+    return ast;
 }
 
 void coru_parser_delete(void *self)
