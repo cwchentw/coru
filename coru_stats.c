@@ -42,6 +42,8 @@ coru_stats_t * coru_stats_load(FILE *stream)
         return NULL;
     }
 
+    line[0] = '\0';
+
     coru_stats_t *stats = coru_stats_new();
     if (!stats)
         goto ERROR_CORU_STATS;
@@ -90,7 +92,7 @@ LOAD_LINE:
             while (ast) {
                 if (CORU_AST_TAB == coru_ast_type(ast))
                     sz_line += 8;
-                
+
                 ast = coru_parser_next(parser);
             }
 

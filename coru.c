@@ -190,8 +190,6 @@ BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, cha
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
-
-
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
     char *line = NULL;
@@ -278,6 +276,8 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
         PUTERR("Failed to allocate line object");
         goto ERROR_CORU_LOAD;
     }
+
+    line[0] = '\0';  /* Strip down the string to zero. */
 
     size_t line_number = 0;
     size_t digit_line_number;
@@ -398,6 +398,8 @@ RELOAD_LINE:
                 PUTERR("Check available system memory");
                 goto ERROR_CORU_LOAD;
             }
+
+            num_s[0] = '\0';  /* Strip down the string to zero. */
 
             if (sprintf(num_s, "%lu", line_number) < 0) {
                 PUTERR("Failed to insert a number");
