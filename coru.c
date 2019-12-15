@@ -4,7 +4,8 @@
 #include "syntax_data.h"
 
 #if _WIN32
-    #include "Shlwapi.h"
+    #include <windows.h>
+    #include <shlwapi.h>
 #elif __unix__ || __APPLE__
     #include <unistd.h>
     #include <sys/stat.h>
@@ -29,7 +30,7 @@ BOOL coru_run(int argc, char **argv, char **out)
 {
     coru_argument_t *arg = coru_argument_parse(argc, argv);
     if (!arg)
-        goto ERROR;
+        goto ERROR_CORU;
 
     CORU_COMMAND cmd = coru_argument_command(arg);
 
@@ -44,29 +45,29 @@ BOOL coru_run(int argc, char **argv, char **out)
     }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_TOO_FEW)) {
         PUTERR("No input file");
-        goto ERROR;
+        goto ERROR_CORU;
     }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_LOAD)) {
         if (!coru_run_load(arg, out)) {
             PUTERR("Failed to load target file");
-            goto ERROR;
+            goto ERROR_CORU;
         }
     }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_TOO_MANY)) {
         PUTERR("%s only accepts single file", CORU_PROGRAM);
-        goto ERROR;
+        goto ERROR_CORU;
     }
     else {
         PUTERR("Unknown option");
         coru_help_help(stderr);
-        goto ERROR;
+        goto ERROR_CORU;
     }
 
     coru_argument_delete(arg);
 
     return TRUE;
 
-ERROR:
+ERROR_CORU:
     if (arg)
         coru_argument_delete(arg);
 
@@ -203,19 +204,19 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
 
     comment_single_start = init_comment_single_start();
     if (!comment_single_start)
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
 
     comment_single_end = init_comment_single_end();
     if (!comment_single_end)
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
 
     comment_multiple_start = init_comment_multiple_start();
     if (!comment_multiple_start)
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
 
     comment_multiple_end = init_comment_multiple_end();
     if (!comment_multiple_end)
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
 
     char *single_start = hash_table_get(comment_single_start, lang_string);
     char *single_end = hash_table_get(comment_single_end, lang_string);
@@ -266,7 +267,7 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
     if (!out) {
         PUTERR("Failed to allocate memory for output");
         PUTERR("Check available system memory");
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
     }
 
     (*out)[0] = '\0';  /* Strip down the string to zero. */
@@ -275,7 +276,7 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
     line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");
-        goto ERROR;
+        goto ERROR_CORU_LOAD;
     }
 
     size_t line_number = 0;
@@ -294,7 +295,7 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
                 if (!realloc(line, line_size)) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
-                    goto ERROR;
+                    goto ERROR_CORU_LOAD;
                 }
             }
             else {
@@ -395,12 +396,12 @@ RELOAD_LINE:
             if (!num_s) {
                 PUTERR("Failed to allocate memory for number string");
                 PUTERR("Check available system memory");
-                goto ERROR;
+                goto ERROR_CORU_LOAD;
             }
 
             if (sprintf(num_s, "%lu", line_number) < 0) {
                 PUTERR("Failed to insert a number");
-                goto ERROR;
+                goto ERROR_CORU_LOAD;
             }
 
             strncat(*out, num_s, strlen(num_s) + 1);
@@ -425,7 +426,7 @@ RELOAD_LINE:
 
     return TRUE;
 
-ERROR:
+ERROR_CORU_LOAD:
     if (line)
         free(line);
 

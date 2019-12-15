@@ -8,6 +8,10 @@
 #ifndef CLIBS_CSTRING_H
 #define CLIBS_CSTRING_H
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #ifdef __cplusplus
     #include <cstdio>
 #else
@@ -15,6 +19,7 @@
 #endif
 
 /* Custom boolean type. */
+#ifndef _WIN32
 #ifdef __cplusplus
     #ifndef BOOL
         typedef bool BOOL;
@@ -37,15 +42,7 @@
         #endif  /* BOOL */
     #endif  /* C89 */
 #endif  /* __cplusplus */
-
-/* Fix Windows-specific DLL issue */
-#ifdef _WIN32
-    #ifndef DLL_EXPORT
-        #define DLL_EXPORT __declspec(dllimport)
-    #endif  /* DLL_EXPORT */
-#else
-    #define DLL_EXPORT
-#endif  /* WIN32 */
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +54,7 @@ extern "C" {
  *  @param   b The second string.
  *  @return  BOOL
  */
-DLL_EXPORT BOOL string_is_equal(const char *a, const char *b);
+BOOL string_is_equal(const char *a, const char *b);
 
 /** @fn      string_starts_with(const char *a, const char *b)
  *  @brief   Check whether string \a a starts with string \a b
@@ -65,7 +62,7 @@ DLL_EXPORT BOOL string_is_equal(const char *a, const char *b);
  *  @param   b The target string.
  *  @return  BOOL
  */
-DLL_EXPORT BOOL string_starts_with(const char *a, const char *b);
+BOOL string_starts_with(const char *a, const char *b);
 
 /** @fn      string_contains(const char *a, const char *b)
  *  @brief   Check whether string \a a contains string \a b
@@ -73,7 +70,7 @@ DLL_EXPORT BOOL string_starts_with(const char *a, const char *b);
  *  @param   b The target string.
  *  @return  BOOL
  */
-DLL_EXPORT BOOL string_contains(const char *a, const char *b);
+BOOL string_contains(const char *a, const char *b);
 
 /** @fn      string_is_space_only(const char *s)
  *  @brief   Check whether string \a s composes of only spaces
@@ -82,7 +79,7 @@ DLL_EXPORT BOOL string_contains(const char *a, const char *b);
  *
  *  string_is_space_only will always skip end of line.
  */
-DLL_EXPORT BOOL string_is_space_only(const char *s);
+BOOL string_is_space_only(const char *s);
 
 /** @fn      string_allocate(const char *s)
  *  @brief   Allocate a new string out of string \a s
@@ -90,7 +87,7 @@ DLL_EXPORT BOOL string_is_space_only(const char *s);
  *  @return  char *
  *  @warning  Free the memory of the returning string by yourself.
  */
-DLL_EXPORT char * string_allocate(const char *s);
+char * string_allocate(const char *s);
 
 /** @fn       string_allocate_substring(const char *s, size_t from, size_t to)
  *  @brief    Allocate a new substring out of string \a s from \a from to \a to
@@ -100,7 +97,7 @@ DLL_EXPORT char * string_allocate(const char *s);
  *  @return   char *
  *  @warning  Free the memory of the returning string by yourself.
  */
-DLL_EXPORT char * string_allocate_substring(const char *s, size_t from, size_t to);
+char * string_allocate_substring(const char *s, size_t from, size_t to);
 
 /** @fn       string_to_stream(char *s)
  *  @brief    Convert a string to a file stream.
@@ -108,9 +105,9 @@ DLL_EXPORT char * string_allocate_substring(const char *s, size_t from, size_t t
  *  @return   FILE *
  *  @warning  Close the file stream by yourself.
  *
- *  Internally, the returning file stream is a temporary file.
+ *  Internally, the returning file stream is a temporary file. Due to the limitation imposed by the \a stdio.h on Windows, this function may fail.
  */
-DLL_EXPORT FILE * string_to_stream(char *s);
+FILE * string_to_stream(char *s);
 
 #ifdef __cplusplus
 }

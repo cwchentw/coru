@@ -110,7 +110,7 @@ language_t detect_target_language(char *path)
     #if DEBUG
         PUTERR("Unable to load file: %s", path);
     #endif
-        goto ERROR;
+        goto ERROR_LANGUAGE;
     }
 
     size_t size = 150;  /* A sensible default line width. */
@@ -119,7 +119,7 @@ language_t detect_target_language(char *path)
     #if DEBUG
         PUTERR("Failed to allocate line");
     #endif
-        goto ERROR;
+        goto ERROR_LANGUAGE;
     }
 
     while(fgets(line, size, fp)) {
@@ -132,7 +132,7 @@ language_t detect_target_language(char *path)
                 #if DEBUG
                     PUTERR("Failed to reallocate line");
                 #endif
-                    goto ERROR;
+                    goto ERROR_LANGUAGE;
                 }
             } else {
                 goto PARSE_LINE;
@@ -183,7 +183,7 @@ PARSE_LINE:
 
     return lang;
 
-ERROR:
+ERROR_LANGUAGE:
     if (line)
         free(line);
 

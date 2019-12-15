@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     char *out = NULL;
 
     if (!coru_run(argc, argv, &out)) {
-        goto ERROR;
+        goto ERROR_CORU_CLI;
     }
 
     if (out)
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     return 0;
 
-ERROR:
+ERROR_CORU_CLI:
     if (out)
         free(out);
 

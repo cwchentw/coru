@@ -40,7 +40,7 @@ coru_stats_t * coru_stats_load(FILE *stream)
 
     coru_stats_t *stats = coru_stats_new();
     if (!stats)
-        goto ERROR;
+        goto ERROR_CORU_STATS;
 
     size_t sz_line;
     while (fgets(line, line_size, stream)) {
@@ -50,7 +50,7 @@ coru_stats_t * coru_stats_load(FILE *stream)
                 if (!realloc(line, line_size)) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
-                    goto ERROR;
+                    goto ERROR_CORU_STATS;
                 }
             }
             else {
@@ -61,12 +61,12 @@ coru_stats_t * coru_stats_load(FILE *stream)
 LOAD_LINE:
             lexer = coru_lexer_new();
             if (!lexer)
-                goto ERROR;
+                goto ERROR_CORU_STATS;
 
             if (!coru_lexer_lex(lexer, line)) {
                 PUTERR("Failed to lex input");
                 coru_lexer_delete(lexer);
-                goto ERROR;
+                goto ERROR_CORU_STATS;
             }
 
             /* Fix TAB issue */
@@ -94,7 +94,7 @@ LOAD_LINE:
 
     return stats;
 
-ERROR:
+ERROR_CORU_STATS:
     if (line)
         free(line);
 

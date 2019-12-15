@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "coru_ast.h"
 
 typedef struct coru_ast_code_t coru_ast_code_t;
@@ -17,16 +18,20 @@ struct coru_ast_t {
 
 struct coru_ast_code_t {
     /* Declare it later. */
+    size_t size;
 };
 
 struct coru_ast_tab_t {
     /* Declare it later. */
+    size_t size;
 };
 
 struct coru_ast_backslash_t {
     /* Declare it later. */
+    size_t size;
 };
 
 struct coru_ast_string_t {
     /* Declare it later. */
+    size_t size;
 };

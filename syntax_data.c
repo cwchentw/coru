@@ -53,14 +53,14 @@ hash_table_t * init_comment_single_start(void)
             #if DEBUG
                 PUTERR("Failed to add key-value to the hash table");
             #endif
-                goto ERROR;
+                goto ERROR_HASH_TABLE;
             }
         }
     }
 
     return table;
 
-ERROR:
+ERROR_HASH_TABLE:
     if (table)
         hash_table_delete(table);
 
@@ -118,14 +118,14 @@ hash_table_t * init_comment_single_end(void)
             #if DEBUG
                 PUTERR("Failed to add key-value to the hash table");
             #endif
-                goto ERROR;
+                goto ERROR_HASH_TABLE;
             }
         }
     }
 
     return table;
 
-ERROR:
+ERROR_HASH_TABLE:
     if (table)
         hash_table_delete(table);
 
@@ -183,14 +183,14 @@ hash_table_t * init_comment_multiple_start(void)
             #if DEBUG
                 PUTERR("Failed to add key-value to the hash table");
             #endif
-                goto ERROR;
+                goto ERROR_HASH_TABLE;
             }
         }
     }
 
     return table;
 
-ERROR:
+ERROR_HASH_TABLE:
     if (table)
         hash_table_delete(table);
 
@@ -248,14 +248,14 @@ hash_table_t * init_comment_multiple_end(void)
             #if DEBUG
                 PUTERR("Failed to add key-value to the hash table");
             #endif
-                goto ERROR;
+                goto ERROR_HASH_TABLE;
             }
         }
     }
 
     return table;
 
-ERROR:
+ERROR_HASH_TABLE:
     if (table)
         hash_table_delete(table);
 

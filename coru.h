@@ -1,6 +1,10 @@
 #ifndef CORU_H
 #define CORU_H
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #ifdef __cplusplus
     #include <cstdio>
 #else
@@ -8,6 +12,7 @@
 #endif
 
 /* Custom boolean type */
+#ifndef _WIN32
 #ifdef __cplusplus
     #ifndef BOOL
         typedef bool BOOL;
@@ -30,6 +35,7 @@
         #endif  /* BOOL */
     #endif  /* C89 */
 #endif  /* __cplusplus */
+#endif  /* Non-Windows */
 
 /* Valid target language. */
 typedef char language_t;

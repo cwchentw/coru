@@ -45,7 +45,7 @@ hash_table_t * hash_table_new(void)
 
 static unsigned long _hash(char *string);
 static key_value_pair_t * _pair_new(char *key, char *value);
-static BOOL _expand(hash_table_t *self);
+static BOOL _hash_table_expand(hash_table_t *self);
 
 #define _PRMIE_SIZE  14
 static size_t primes[_PRMIE_SIZE] = {11, 23, 47, 97, 197, 397, 797, 1597, 3203,
@@ -56,7 +56,7 @@ BOOL hash_table_add(hash_table_t *self, char *key, char *value)
     assert(self);
     assert(key && 0 != strcmp("", key));
 
-    if (!_expand(self))
+    if (!_hash_table_expand(self))
         return FALSE;
 
     unsigned long code = _hash(key);
@@ -113,7 +113,7 @@ static key_value_pair_t * _pair_new(char *key, char *value)
 
 static BOOL _rehash(hash_table_t *self, size_t capacity);
 
-static BOOL _expand(hash_table_t *self)
+static BOOL _hash_table_expand(hash_table_t *self)
 {
     size_t threshold = self->capacity * 3 / 4;
 
@@ -146,7 +146,7 @@ static BOOL _rehash(hash_table_t *self, size_t capacity)
         (key_value_pair_t **) \
         malloc(capacity * sizeof(key_value_pair_t *));
     if (!new_pairs)
-        goto ERROR;
+        goto ERROR_REHASH;
 
     {
         size_t i;
@@ -169,7 +169,7 @@ static BOOL _rehash(hash_table_t *self, size_t capacity)
                 if (!y) {
                     new_pairs[index] = _pair_new(p->key, p->value);
                     if (!(new_pairs[index]))
-                        goto ERROR;
+                        goto ERROR_REHASH;
                 }
                 else {
                     while (y) {
@@ -179,7 +179,7 @@ static BOOL _rehash(hash_table_t *self, size_t capacity)
 
                     x->next = _pair_new(p->key, p->value);
                     if (!(x->next))
-                        goto ERROR;
+                        goto ERROR_REHASH;
                 }
 
                 p = p->next;
@@ -209,7 +209,7 @@ static BOOL _rehash(hash_table_t *self, size_t capacity)
 
     return TRUE;
 
-ERROR:
+ERROR_REHASH:
     if (new_pairs) {
         {
             size_t i;

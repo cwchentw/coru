@@ -44,7 +44,7 @@ ifeq ($(CC),cl)
 	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		coru_argument.obj coru_command.obj coru_help.obj coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru.obj
-	UNOBJS=uncoru_command.obj uncoru_helo.obj uncoru_argument.obj uncoru.obj
+	UNOBJS=uncoru_command.obj uncoru_help.obj uncoru_argument.obj uncoru.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
 		coru_argument.o coru_command.o coru_help.o coru_stats.o \
@@ -69,6 +69,7 @@ ifeq ($(CC),cl)
 	SRC_TO_OBJ=/c $<
 	OBJ_TO_EXEC=/Fe:$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=/Fe:$(UNTARGET_EXEC)
+	LIBS=/link shlwapi.lib
 	DEBUG=/D DEBUG
 else
 	echo "Not supported yet"
@@ -142,7 +143,7 @@ static: $(TARGET_LIB_STATIC) $(UNTARGET_LIB_STATIC)
 
 $(TARGET_LIB_STATIC): $(OBJS)
 ifeq ($(CC),cl)
-	echo "Not supported yet"
+	lib /out:$(TARGET_LIB_STATIC) $(OBJS)
 else
 ifeq ($(detected_OS),Darwin)
 	libtool -static -o $(TARGET_LIB_STATIC) $(OBJS)
@@ -157,7 +158,7 @@ endif  # CC
 
 $(UNTARGET_LIB_STATIC): $(UNOBJS)
 ifeq ($(CC),cl)
-	echo "Not supported yet"
+	lib /out:$(UNTARGET_LIB_STATIC) $(UNOBJS)
 else
 ifeq ($(detected_OS),Darwin)
 	libtool -static -o $(UNTARGET_LIB_STATIC) $(UNOBJS)
