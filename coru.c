@@ -310,8 +310,8 @@ RELOAD_LINE:
             /* Detect #! (shebang) on first line. */
             if (first_line) {
                 if (string_starts_with(line, "#!")) {
-                    strncat(*out, line, strlen(line) + 1);
-                    strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+                    strcat(*out, line);
+                    strcat(*out, END_OF_LINE);
                     first_line = FALSE;
                     continue;
                 }
@@ -333,15 +333,15 @@ RELOAD_LINE:
             }
 
             /* Copy original text. */
-            strncat(*out, line, strlen(line) + 1);
+            strcat(*out, line);
 
             if (multi > 0 || (mstart ^ mend)) {
-                strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+                strcat(*out, END_OF_LINE);
                 continue;
             }
 
             if (!is_all && string_is_space_only(line)) {
-                strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+                strcat(*out, END_OF_LINE);
                 continue;
             }
 
@@ -363,19 +363,19 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < sz_space; i++) {
-                    strncat(*out, " ", 1 + 1);
+                    strcat(*out, " ");
                 }
             }
 
             /* Insert indent. */
-            strncat(*out, "  ", 2 + 1);
+            strcat(*out, "  ");
 
             /* Insert the start word of comment. */
             sz_start = strlen(single_start);
-            strncat(*out, single_start, sz_start + 1);
+            strcat(*out, single_start);
 
             /* Insert a space. */
-            strncat(*out, " ", 1 + 1);
+            strcat(*out, " ");
 
             temp = line_number;
             digit_line_number = 1;
@@ -388,7 +388,7 @@ RELOAD_LINE:
             {
                 size_t i;
                 for (i = 0; i < digit - digit_line_number; i++) {
-                    strncat(*out, " ", 1 + 1);
+                    strcat(*out, " ");
                 }
             }
 
@@ -404,21 +404,21 @@ RELOAD_LINE:
                 goto ERROR_CORU_LOAD;
             }
 
-            strncat(*out, num_s, strlen(num_s) + 1);
+            strcat(*out, num_s);
 
             free(num_s);
 
             if (0 != strcmp("", single_end)) {
                 /* Insert a space. */
-                strncat(*out, " ", 1 + 1);
+                strcat(*out, " ");
 
                 /* Insert the end word of single line comment. */
                 sz_end = strlen(single_end);
-                strncat(*out, single_end, sz_end + 1);
+                strcat(*out, single_end);
             }
 
             /* Insert EOL. */
-            strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+            strcat(*out, END_OF_LINE);
         }
     }
 
