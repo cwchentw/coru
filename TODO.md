@@ -1,3 +1,4 @@
+* Fix a bug for unknown reason on non-Linux Unix systems
 * Update parser for coru
   * Detect line wrapping
   * Detect string
