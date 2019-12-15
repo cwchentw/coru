@@ -43,12 +43,12 @@ endif
 ifeq ($(CC),cl)
 	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		coru_argument.obj coru_command.obj coru_help.obj coru_stats.obj \
-		coru_token.obj coru_lexer.obj coru_ast.obj coru.obj
+		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj coru.obj
 	UNOBJS=uncoru_command.obj uncoru_help.obj uncoru_argument.obj uncoru.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
 		coru_argument.o coru_command.o coru_help.o coru_stats.o \
-		coru_token.o coru_lexer.o coru_ast.o coru.o
+		coru_token.o coru_lexer.o coru_ast.o coru_parser.o coru.o
 	UNOBJS=uncoru_command.o uncoru_help.o uncoru_argument.o uncoru.o
 endif
 
