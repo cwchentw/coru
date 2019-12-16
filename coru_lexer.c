@@ -240,8 +240,10 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
     coru_token_t *token = self->tokens[self->index];
     if (!token)
         return NULL;
-    
+
     self->index += 1;
+
+    /* Check why token type is lost here later. */
 
     coru_token_t *copied = coru_token_copy(token);
     if (!copied)

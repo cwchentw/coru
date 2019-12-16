@@ -15,6 +15,7 @@
 
 #include "coru.h"
 #include "coru_argument.h"
+#include "coru_ast.h"
 #include "coru_command.h"
 #include "coru_help.h"
 #include "coru_lexer.h"
@@ -324,27 +325,6 @@ RELOAD_LINE:
                 first_line = FALSE;
             }
 
-            lexer = coru_lexer_new();
-            if (!lexer)
-                goto ERROR_CORU_LOAD;
-
-            if (!coru_lexer_lex(lexer, line)) {
-                PUTERR("Failed to lex input");
-                coru_lexer_delete(lexer);
-                goto ERROR_CORU_LOAD;
-            }
-
-            parser = coru_parser_new();
-            if (!parser)
-                goto ERROR_CORU_LOAD;
-
-            if (!coru_parser_parse(parser, lexer)) {
-                PUTERR("Failed to parse input");
-                coru_parser_delete(parser);
-                coru_lexer_delete(lexer);
-                goto ERROR_CORU_LOAD;
-            }
-
             BOOL mstart = FALSE;
             BOOL mend= FALSE;
 
@@ -371,20 +351,45 @@ RELOAD_LINE:
                 continue;
             }
 
-            line_number += 1;
+            lexer = coru_lexer_new();
+            if (!lexer)
+                goto ERROR_CORU_LOAD;
+
+            if (!coru_lexer_lex(lexer, line)) {
+                PUTERR("Failed to lex input");
+                coru_lexer_delete(lexer);
+                goto ERROR_CORU_LOAD;
+            }
+
+            parser = coru_parser_new();
+            if (!parser)
+                goto ERROR_CORU_LOAD;
+
+            if (!coru_parser_parse(parser, lexer)) {
+                PUTERR("Failed to parse input");
+                coru_parser_delete(parser);
+                coru_lexer_delete(lexer);
+                goto ERROR_CORU_LOAD;
+            }
 
             /* Insert spaces. */
             sz_space = width_new - strlen(line) - width_number
                 - strlen(END_OF_LINE) - 1 /* Trailing zero */;
 
-            /* Fix TAB issue. */
-            {
-                size_t i;
-                for (i = 0; i < strlen(line); i++) {
-                    if ('\t' == line[i])
-                        sz_space -= 7;
+            coru_ast_t *ast = coru_parser_next(parser);
+            while (ast) {
+                if (CORU_AST_BACKSLASH == coru_ast_type(ast)) {
+                    strcat(*out, END_OF_LINE);
+                    goto END_CORU_LOAD_LINE;
                 }
+                else if (CORU_AST_TAB == coru_ast_type(ast)) {
+                    sz_space -= 7;
+                }
+
+                ast = coru_parser_next(parser);
             }
+
+            line_number += 1;
 
             {
                 size_t i;
@@ -448,6 +453,7 @@ RELOAD_LINE:
             /* Insert EOL. */
             strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
 
+END_CORU_LOAD_LINE:
             coru_parser_delete(parser);
             parser = NULL;
 
