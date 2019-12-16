@@ -14,6 +14,7 @@ typedef struct coru_token_t coru_token_t;
 
 coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text);
 CORU_TOKEN_TYPE coru_token_type(coru_token_t *self);
+char * coru_token_text(coru_token_t *self);
 coru_token_t * coru_token_copy(coru_token_t *self);
 void coru_token_delete(void *self);
 

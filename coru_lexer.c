@@ -24,7 +24,7 @@ coru_lexer_t * coru_lexer_new(void)
     }
 
     lexer->size = 0;
-    lexer->capacity = 16;
+    lexer->capacity = 2;
     lexer->index = 0;
 
     lexer->tokens = \
@@ -57,10 +57,16 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
         size_t i;
         for (i = 0; i < strlen(input); i++) {
             if (' ' == input[i]) {
-                size_t j = i;
+                size_t j;
+                for (j = i; j < strlen(input); j++) {
+                    if (' ' != input[j])
+                        break;
+                }
 
-                while (input[j] && (' ' == input[j]))
-                    j++;
+                size_t len = j - i;
+
+                if (len < 1)
+                    continue;
 
                 char *spaces = string_allocate_substring(input, i, j);
                 if (!spaces)
@@ -76,7 +82,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
 
-                i = j;  /* Update i */
+                i = j;
             }
             else if ('\t' == input[i]) {
                 char *tab = string_allocate("\t");
@@ -138,10 +144,16 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                     return FALSE;
             }
             else {
-                size_t j = i;
+                size_t j;
+                for (j = i; j < strlen(input); j++) {
+                    if (!_is_common_code(input[j]))
+                        break;
+                }
 
-                while (input[j] && _is_common_code(input[j]))
-                    j++;
+                size_t len = j - i;
+
+                if (len < 1)
+                    continue;
 
                 char *code = string_allocate_substring(input, i, j);
                 if (!code)
@@ -157,7 +169,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
 
-                i = j;  /* Update i */
+                i = j;
             }
         }
     }
@@ -170,25 +182,20 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self);
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token)
 {
     assert(self);
+    assert(token);
 
     if (!_coru_lexer_expand(self))
         return FALSE;
 
-    if (0 == self->size) {
-        self->tokens[self->size] = token;
-        self->size += 1;
-    }
-    else {
-        self->size += 1;
-        self->tokens[self->size] = token;
-    }
+    self->tokens[self->size] = token;
+    self->size += 1;
 
     return TRUE;
 }
 
 static BOOL _coru_lexer_expand(coru_lexer_t *self)
 {
-    if (self->size < self->capacity)
+    if (self->size + 1 <= self->capacity)
         return TRUE;
 
     self->capacity <<= 1;
@@ -223,11 +230,11 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
 
 static BOOL _is_common_code(char c)
 {
-    return ' ' != c   /* Space */
-        && '\t' != c  /* TAB */
-        && '\\' != c  /* Backslash */
-        && '\'' != c  /* Single quote */
-        && '"' != c;  /* Double quote */
+    return (' ' != c)   /* Space */
+        && ('\t' != c)  /* TAB */
+        && ('\\' != c)  /* Backslash */
+        && ('\'' != c)  /* Single quote */
+        && ('"' != c);  /* Double quote */
 }
 
 coru_token_t * coru_lexer_next(coru_lexer_t *self)
@@ -242,8 +249,6 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
         return NULL;
 
     self->index += 1;
-
-    /* Check why token type is lost here later. */
 
     coru_token_t *copied = coru_token_copy(token);
     if (!copied)

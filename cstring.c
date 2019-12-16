@@ -106,10 +106,14 @@ char * string_allocate(const char *s)
         return out;
     }
 
+    out[0] = '\0';
+
     {
         size_t i;
-        for (i = 0; i < sz - 1; i++)
+        for (i = 0; i < sz - 1; i++) {
             out[i] = s[i];
+        }
+
     }
     out[sz-1] = '\0';  /* Trailing zero. */
 
@@ -118,7 +122,7 @@ char * string_allocate(const char *s)
 
 char * string_allocate_substring(const char *s, size_t from, size_t to)
 {
-    assert(from < to);
+    assert(from <= to);
 
     size_t len = strlen(s);
     assert(to <= len);
