@@ -68,8 +68,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                 return FALSE;
 
             token = coru_lexer_next(lexer);
-            while (token
-                   && CORU_TOKEN_SINGLE_QUOTE != coru_token_type(token)) {
+            while (token) {
                 if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
                     /* Consume '\\' */
                     if (!coru_ast_add(ast, token))
@@ -82,6 +81,12 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                             return FALSE;
                     }
                 }
+                else if (CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    break;
+                }
                 else {
                     if (!coru_ast_add(ast, token))
                     return FALSE;
@@ -89,6 +94,8 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
                 token = coru_lexer_next(lexer);
             }
+
+            token = coru_lexer_next(lexer);
         }
         else if (CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
             ast = coru_ast_new(CORU_AST_STRING);
@@ -99,8 +106,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                 return FALSE;
 
             token = coru_lexer_next(lexer);
-            while (token
-                  && CORU_TOKEN_DOUBLE_QUOTE != coru_token_type(token)) {
+            while (token) {
                 if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
                     /* Consume '\\' */
                     if (!coru_ast_add(ast, token))
@@ -113,13 +119,21 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                             return FALSE;
                     }
                 }
+                else if (CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    break;
+                }
                 else {
                     if (!coru_ast_add(ast, token))
-                    return FALSE;
+                        return FALSE;
                 }
 
                 token = coru_lexer_next(lexer);
             }
+
+            token = coru_lexer_next(lexer);
         }
         else if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
             ast = coru_ast_new(CORU_AST_BACKSLASH);
