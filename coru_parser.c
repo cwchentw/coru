@@ -62,10 +62,12 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
         if (CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
             /* Refactor it later. */
+            coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         else if (CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
             /* Refactor it later. */
+            coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         if (CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
@@ -90,9 +92,11 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
         }
         else if (_is_code_token(coru_token_type(token))) {
             /* Refactor it later. */
+            coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         else {
+            coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
 
