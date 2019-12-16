@@ -1,5 +1,5 @@
-* Fix memory leaks in `coru`
-* Test whether modified code are still valid
 * Add parser for `uncoru`
+* Fix string parsing issue in `coru`
+* Test whether modified code are still valid
 * Add `corucb`, aka `coru` for clipboard
 * Add `uncorucb`, aka `uncoru` for clipboard
