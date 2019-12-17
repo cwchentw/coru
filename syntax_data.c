@@ -24,7 +24,8 @@ hash_table_t * init_comment_single_start(void)
         STRING_OBJCPP,
         STRING_SWIFT,
         STRING_CSH,
-        STRING_SH
+        STRING_SH,
+        STRING_CMAKE
     };
 
     char *values[] = {
@@ -43,7 +44,8 @@ hash_table_t * init_comment_single_start(void)
         "/*",  /* ObjC++ */
         "/*",  /* Swift */
         "#",   /* C shell */
-        "#"    /* Bourne shell */
+        "#",   /* Bourne shell */
+        "#[["  /* CMake */
     };
 
     {
@@ -89,7 +91,8 @@ hash_table_t * init_comment_single_end(void)
         STRING_OBJCPP,
         STRING_SWIFT,
         STRING_CSH,
-        STRING_SH
+        STRING_SH,
+        STRING_CMAKE
     };
 
     char *values[] = {
@@ -108,7 +111,8 @@ hash_table_t * init_comment_single_end(void)
         "*/",  /* ObjC++ */
         "*/",  /* Swift */
         "",    /* C shell */
-        ""     /* Bourne shell */
+        "",    /* Bourne shell */
+        "]]"   /* CMake */
     };
 
     {
@@ -154,7 +158,8 @@ hash_table_t * init_comment_multiple_start(void)
         STRING_OBJCPP,
         STRING_SWIFT,
         STRING_CSH,
-        STRING_SH
+        STRING_SH,
+        STRING_CMAKE
     };
 
     char *values[] = {
@@ -173,7 +178,8 @@ hash_table_t * init_comment_multiple_start(void)
         "/*",  /* ObjC++ */
         "/*",  /* Swift */
         "",    /* C shell */
-        ""     /* Bourne shell */
+        "",    /* Bourne shell */
+        "#[["  /* CMake */
     };
 
     {
@@ -219,7 +225,8 @@ hash_table_t * init_comment_multiple_end(void)
         STRING_OBJCPP,
         STRING_SWIFT,
         STRING_CSH,
-        STRING_SH
+        STRING_SH,
+        STRING_CMAKE
     };
 
     char *values[] = {
@@ -238,7 +245,8 @@ hash_table_t * init_comment_multiple_end(void)
         "*/",  /* ObjC++ */
         "*/",  /* Swift */
         "",    /* C shell */
-        ""     /* Bourne shell */
+        "",    /* Bourne shell */
+        "]]"   /* CMake */
     };
 
     {

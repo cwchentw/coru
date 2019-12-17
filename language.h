@@ -23,6 +23,7 @@
 #define STRING_SWIFT   "Swift"
 #define STRING_CSH     "C Shell"
 #define STRING_SH      "Bourne Shell"
+#define STRING_CMAKE   "CMake"
 
 language_t detect_target_language(char *path);
 BOOL is_language_equal(language_t a, language_t b);

@@ -237,6 +237,8 @@ char * language_to_string(language_t lang)
         return STRING_CSH;
     case LANGUAGE_SH:
         return STRING_SH;
+    case LANGUAGE_CMAKE:
+        return STRING_CMAKE;
     default:
         return "";
     }

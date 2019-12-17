@@ -20,6 +20,7 @@ static BOOL _is_c(char *opt);
 static BOOL _is_cpp(char *opt);
 static BOOL _is_java(char *opt);
 static BOOL _is_csharp(char *opt);
+static BOOL _is_cmake(char *opt);
 
 coru_argument_t * coru_argument_parse(int argc, char **argv)
 {
@@ -83,6 +84,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
             arg->lang = LANGUAGE_CSHARP;
             arg->index += 1;
         }
+        else if (_is_cmake(opt)) {
+            arg->lang = LANGUAGE_CMAKE;
+            arg->index += 1;
+        }
         else if ('-' == opt[0]) {
             arg->cmd = CORU_COMMAND_UNKNOWN;
             break;
@@ -124,6 +129,11 @@ static BOOL _is_csharp(char *opt)
 {
     return 0 == strcmp(opt, "-c#") || 0 == strcmp(opt, "-csharp")
         || 0 == strcmp(opt, "--as-c#") || 0 == strcmp(opt, "--as-csharp");
+}
+
+static BOOL _is_cmake(char *opt)
+{
+    return 0 == strcmp(opt, "-cmake") || 0 == strcmp(opt, "--as-cmake");
 }
 
 void coru_argument_delete(void *self)

@@ -57,6 +57,7 @@ typedef char language_t;
 #define LANGUAGE_SWIFT    14
 #define LANGUAGE_CSH      15
 #define LANGUAGE_SH       16
+#define LANGUAGE_CMAKE    17
 
 #ifdef __cplusplus
 extern "C" {
