@@ -23,6 +23,15 @@ fi
 
 temp_src=$(mktemp)$ext;
 # Currently it only works on macOS.
-pbpaste > $temp_src;
-$coru $temp_src | pbcopy;
 
+if [ $(uname) = "Darwin" ];
+then
+    pbpaste=pbpaste
+    pbcopy=pbcopy
+else
+    pbpaste="xclip -in"
+    pbcopy="xclip -out"
+fi
+
+$pbpaste > $temp_src;
+$coru $temp_src | $pbcopy;
