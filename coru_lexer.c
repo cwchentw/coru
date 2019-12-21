@@ -58,6 +58,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
     #endif
     {
         size_t i;
+        /* Scan the input with a finite automata. */
         for (i = 0; i < strlen(input); i++) {
             if (' ' == input[i]) {
                 size_t j;
