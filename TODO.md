@@ -1,4 +1,6 @@
 * Fix string parsing issue in `coru`
+* Write to file
+* Modify in place
 * Detect *CMakeLists.txt* as CMake config file
 * Test whether modified code are still valid
 * Add parser for `uncoru`
