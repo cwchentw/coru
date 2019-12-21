@@ -61,12 +61,14 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
         for (i = 0; i < strlen(input); i++) {
             if (' ' == input[i]) {
                 size_t j;
+
+                /* Scan greedily. */
                 for (j = i; j < strlen(input); j++) {
                     if (' ' != input[j])
                         break;
                 }
 
-                size_t len = j - i;
+                size_t len = j - 1 - i + 1;
 
                 if (len < 1)
                     continue;
