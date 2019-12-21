@@ -257,6 +257,7 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
     {
         size_t i = 0;
         while (i < self->size) {
+            /* Copy the address of the token. */
             new_tokens[i] = old_tokens[i];
             i++;
         }
