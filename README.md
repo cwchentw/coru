@@ -18,9 +18,9 @@ By the way, `uncoru`, the sister program of `coru`, removes the line numbers and
 
 ## `coru` and her Sister Programs
 
-* `coru` adds line numbers and, optionally, width numbers to source code
+* `coru` adds line numbers and, optionally, width numbers to source
 * `corucb` does the same code conversion as `coru` but for clipboard data
-* `uncoru` removes line numbers and width numbers left by `coru`
+* `uncoru` removes line numbers and width numbers from source left by `coru`
 * `uncorucb` does the same code conversion as `uncoru` but for clipboard data
 
 ## System Requirements
