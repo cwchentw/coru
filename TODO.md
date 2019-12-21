@@ -1,5 +1,6 @@
-* Add parser for `uncoru`
+* Fix coru parser
 * Fix TAB issue in `coru`
+* Add parser for `uncoru`
 * Fix string parsing issue in `coru`
 * Test whether modified code are still valid
 * Add `corucb`, aka `coru` for clipboard
