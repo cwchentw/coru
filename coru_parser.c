@@ -54,7 +54,8 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
     assert(lexer);
 
     coru_token_t *token = coru_lexer_next(lexer);
-    while (NULL != token) {
+    /* Scan the tokens with a finite automata. */
+    while (token) {
         if (!_coru_parser_expand(self))
             return FALSE;
 
@@ -66,19 +67,69 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                     coru_token_type(token), coru_token_text(token));
             #endif
             /* Refactor it later. */
-            coru_token_delete(token);
-            token = coru_lexer_next(lexer);  /* Pass. */
+            coru_token_delete(token);  /* Pass. */
+            token = coru_lexer_next(lexer);
         }
         else if (token && CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
+            /* Check and fix it later. */
+            /*
+            #if DEBUG
+                PUTERR("Transform double quote token: (%d) -->%s<--",
+                    coru_token_type(token), coru_token_text(token));
+            #endif
+            */
+            /* Remove it later. */
             #if DEBUG
                 PUTERR("Pass double quote token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
-            /* Refactor it later. */
+            /* Check and fix it later. */
+            /*
+            ast = coru_ast_new(CORU_AST_STRING);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+
+            while (token) {
+                if (!token) {
+                    break;
+                }
+                else if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    token = coru_lexer_next(lexer);
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+                else if (token && CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    break;
+                }
+                else {
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+
+                token = coru_lexer_next(lexer);
+            }
+            */
+            /* Remove it later. */
             coru_token_delete(token);
-            token = coru_lexer_next(lexer);  /* Pass. */
+            token = coru_lexer_next(lexer);
         }
-        if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+        /* Check it later. */
+        else if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
             #if DEBUG
                 PUTERR("Transform backslash token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
@@ -121,8 +172,8 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                     PUTERR("Pass other token: (%d) -->%s<--",
                         coru_token_type(token), coru_token_text(token));
             #endif
-            coru_token_delete(token);
-            token = coru_lexer_next(lexer);  /* Pass. */
+            coru_token_delete(token);  /* Pass. */
+            token = coru_lexer_next(lexer);
         }
 
         if (ast) {
