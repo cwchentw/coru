@@ -188,9 +188,8 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                  */
                 size_t len = j - 1 - i + 1;
 
-                if (len < 1) {
+                if (len < 1)
                     continue;
-                }
 
                 char *code = string_allocate_substring(input, i, j - 1);
                 if (!code)
