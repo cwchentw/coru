@@ -61,16 +61,34 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
         coru_ast_t *ast = NULL;
 
         if (token && CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Pass single quote token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             /* Refactor it later. */
             coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         else if (token && CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Pass double quote token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             /* Refactor it later. */
             coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Transform backslash token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             ast = coru_ast_new(CORU_AST_BACKSLASH);
             if (!ast)
                 return FALSE;
@@ -81,6 +99,12 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && CORU_TOKEN_TAB == coru_token_type(token)) {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Transform TAB token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             ast = coru_ast_new(CORU_AST_TAB);
             if (!ast)
                 return FALSE;
@@ -91,11 +115,23 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && _is_code_token(coru_token_type(token))) {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Pass code token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             /* Refactor it later. */
             coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         else {
+            /* Add debug info later. */
+            /*
+            #if DEBUG
+                PUTERR("Pass other token: (%d) -->%s<--", curu_token_type(token), coru_token_text(token));
+            #endif
+            */
             coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
         }
