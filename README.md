@@ -59,8 +59,20 @@ Most major tier languages are supported. Here are currently supported ones:
 * Rust
 * C Shell
 * Bourne Shell
+* CMake config file (default to *CMakeLists.txt*)
 
 For unsupported language, you may set custom character for single line comment. It should work as well.
+
+## Usage of this Project
+
+Our default build task will generate
+
+* The executables of `coru` and `corucb`
+* The static library and the dynamic library of `coru`
+* The executables of `uncoru` and `uncorucb`
+* The static library and the dynamic library of `uncoru`
+
+If you only want the executables, use the build task `release` instead.
 
 ## Usage of `coru`
 
@@ -135,7 +147,6 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 ## Known Issues or Bugs
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
-* `coru` cannot detect line wrapping words like backslash (`\`)
 * `coru` cannot detect heredoc
 * Though usable, Valgrind still reports errors on the codebase of `coru`, related to string concatenation issues
 
