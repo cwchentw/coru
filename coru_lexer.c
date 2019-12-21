@@ -68,7 +68,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (len < 1)
                     continue;
 
-                char *spaces = string_allocate_substring(input, i, j);
+                char *spaces = string_allocate_substring(input, i, j - 1);
                 if (!spaces)
                     return FALSE;
 
@@ -82,7 +82,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
 
-                i = j;
+                i = j - 1;
             }
             else if ('\t' == input[i]) {
                 char *tab = string_allocate("\t");
@@ -143,7 +143,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
-            else {
+            else if (_is_common_code(input[i])) {
                 size_t j;
                 for (j = i; j < strlen(input); j++) {
                     if (!_is_common_code(input[j]))
@@ -152,10 +152,11 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 
                 size_t len = j - i;
 
-                if (len < 1)
+                if (len < 1) {
                     continue;
+                }
 
-                char *code = string_allocate_substring(input, i, j);
+                char *code = string_allocate_substring(input, i, j - 1);
                 if (!code)
                     return FALSE;
 
@@ -169,7 +170,10 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
 
-                i = j;
+                i = j - 1;
+            }
+            else {
+                /* Pass. */
             }
         }
     }

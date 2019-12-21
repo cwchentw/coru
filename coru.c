@@ -288,6 +288,7 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
     size_t line_number = 0;
     size_t digit_line_number;
     size_t multi = 0;
+    size_t sz_eol = strlen(END_OF_LINE);
 
     BOOL first_line = TRUE;
 
@@ -310,9 +311,6 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
         }
         else {
 RELOAD_LINE:
-            /* Strip EOL */
-            line[strcspn(line, "\r\n")] = 0;
-
             /* Detect #! (shebang) on first line. */
             if (first_line) {
                 if (string_starts_with(line, "#!")) {
@@ -323,6 +321,18 @@ RELOAD_LINE:
                 }
 
                 first_line = FALSE;
+            }
+
+            {
+                size_t len = strlen(line);
+
+            #if _WIN32
+                if (len >= strlen(END_OF_LINE) && line[len-2] == '\r')
+                    line[len-2] = '\0';
+            #else
+                if (len >= strlen(END_OF_LINE) && line[len-1] == '\n')
+                    line[len-1] = '\0';
+            #endif
             }
 
             BOOL mstart = FALSE;
