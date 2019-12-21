@@ -100,6 +100,13 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);  /* Pass. */
         }
 
+        /* Check and fix it later. */
+        /*
+        if (ast) {
+            self->asts[self->size] = ast;
+            self->size += 1;
+        }
+        */
         if (ast) {
             if (0 == self->size) {
                 self->asts[self->size] = ast;
