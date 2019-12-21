@@ -12,9 +12,9 @@ When we write programming tutorials, demonstrative code snippets are essential. 
 
 Some online tutorials add line numbers in the form of HTML elements on web pages, which is common practices among programming teaching sites. However, these metadata are limited to web pages only. If we want to reuse the demo code in another material, the metadata of the code on web pages are lost.
 
-In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as it comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
+In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as its comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
 
-By the way, `uncoru`, the sister program of `coru`, removes the line numbers and the width numbers left by `coru` in case that you no longer require such metadata on code.
+By the way, `uncoru`, the sister program of `coru`, removes the line numbers and the width numbers in source left by `coru` in case that you no longer require such metadata on code.
 
 ## `coru` and her Sister Programs
 
@@ -72,7 +72,7 @@ Our default build task will generate
 * The executables of `uncoru` and `uncorucb`
 * The static library and the dynamic library of `uncoru`
 
-If you only want the executables, use the build task `release` instead.
+Pending more information.
 
 ## Usage of `coru`
 
