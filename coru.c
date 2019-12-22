@@ -236,6 +236,7 @@ RELOAD_LINE:
         }
     }
 
+    coru_eval_delete(eval);
     free(line);
 
     if (comment_multiple_end)
@@ -253,6 +254,9 @@ RELOAD_LINE:
     return TRUE;
 
 ERROR_CORU_LOAD:
+    if (eval)
+        coru_eval_delete(eval);
+
     if (line)
         free(line);
 
