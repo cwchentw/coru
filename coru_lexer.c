@@ -7,6 +7,13 @@
 #include "cstring.h"
 #include "print.h"
 
+/* Predefined characters in coru lexer. */
+#define SPACE         ' '
+#define TAB           '\t'
+#define BACKSLASH     '\\'
+#define SINGLE_QUOTE  '\''
+#define DOUBLE_QUOTE  '"'
+
 struct coru_lexer_t {
     size_t size;
     size_t capacity;
@@ -60,13 +67,13 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
         size_t i;
         /* Scan the input with a finite automata. */
         for (i = 0; i < strlen(input); i++) {
-            if (' ' == input[i]) {
+            if (SPACE == input[i]) {
                 size_t j;
 
                 /* Scan greedily. */
                 for (j = i; j < strlen(input); j++) {
                     /* Go one step over last valid position. */
-                    if (' ' != input[j])
+                    if (SPACE != input[j])
                         break;
                 }
 
@@ -98,7 +105,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 
                 i = j - 1;
             }
-            else if ('\t' == input[i]) {
+            else if (TAB == input[i]) {
                 char *tab = string_allocate("\t");
                 if (!tab)
                     return FALSE;
@@ -116,7 +123,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
-            else if ('\'' == input[i]) {
+            else if (SINGLE_QUOTE == input[i]) {
                 char *quote = string_allocate("'");
                 if (!quote)
                     return FALSE;
@@ -135,7 +142,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
-            else if ('"' == input[i]) {
+            else if (DOUBLE_QUOTE == input[i]) {
                 char *quote = string_allocate("\"");
                 if (!quote)
                     return FALSE;
@@ -154,7 +161,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
-            else if ('\\' == input[i]) {
+            else if (BACKSLASH == input[i]) {
                 char *backslash = string_allocate("\\");
                 if (!backslash)
                     return FALSE;
@@ -277,11 +284,11 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
 
 static BOOL _is_common_code(char c)
 {
-    return (' ' != c)   /* Space */
-        && ('\t' != c)  /* TAB */
-        && ('\\' != c)  /* Backslash */
-        && ('\'' != c)  /* Single quote */
-        && ('"' != c);  /* Double quote */
+    return (SPACE != c)
+        && (TAB != c)
+        && (BACKSLASH != c)
+        && (SINGLE_QUOTE != c)
+        && (DOUBLE_QUOTE != c);
 }
 
 coru_token_t * coru_lexer_next(coru_lexer_t *self)
