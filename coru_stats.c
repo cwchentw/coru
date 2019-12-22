@@ -47,7 +47,6 @@ coru_stats_t * coru_stats_load(FILE *stream)
     if (!stats)
         goto ERROR_CORU_STATS;
 
-    size_t sz_line;
     while (fgets(line, line_size, stream)) {
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {

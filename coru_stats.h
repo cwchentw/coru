@@ -3,8 +3,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
-
-typedef struct coru_stats_t coru_stats_t;
+#include "coru.h"
 
 coru_stats_t * coru_stats_new();
 coru_stats_t * coru_stats_load(FILE *stream);

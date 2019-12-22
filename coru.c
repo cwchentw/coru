@@ -198,6 +198,7 @@ extern hash_table_t *comment_multiple_end;
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
     char *line = NULL;
+    coru_eval_t *eval = NULL;
 
     size_t line_size = 150;  /* Sensible line width. */
     line = (char *) malloc(line_size * sizeof(char));
@@ -208,14 +209,11 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
 
     line[0] = '\0';
 
-    coru_eval_t *eval = coru_eval_new();
+    eval = coru_eval_new();
     if (!eval)
         goto ERROR_CORU_LOAD;
 
     while (fgets(line, line_size, stream)) {
-        size_t sz_space;
-        size_t sz_start;
-        size_t sz_end;
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;
