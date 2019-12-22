@@ -15,14 +15,11 @@
 
 #include "coru.h"
 #include "coru_argument.h"
-#include "coru_ast.h"
 #include "coru_command.h"
 #include "coru_help.h"
-#include "coru_lexer.h"
 #include "coru_metadata.h"
-#include "coru_parser.h"
+#include "coru_eval.h"
 #include "coru_stats.h"
-#include "cstring.h"
 #include "hash_table.h"
 #include "language.h"
 #include "print.h"
@@ -193,85 +190,14 @@ BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, cha
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
+extern hash_table_t *comment_single_start;
+extern hash_table_t *comment_single_end;
+extern hash_table_t *comment_multiple_start;
+extern hash_table_t *comment_multiple_end;
+
 static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
 {
     char *line = NULL;
-    char *lang_string = language_to_string(lang);
-
-    hash_table_t *comment_single_start = NULL;
-    hash_table_t *comment_single_end = NULL;
-    hash_table_t *comment_multiple_start = NULL;
-    hash_table_t *comment_multiple_end = NULL;
-
-    comment_single_start = init_comment_single_start();
-    if (!comment_single_start)
-        goto ERROR_CORU_LOAD;
-
-    comment_single_end = init_comment_single_end();
-    if (!comment_single_end)
-        goto ERROR_CORU_LOAD;
-
-    comment_multiple_start = init_comment_multiple_start();
-    if (!comment_multiple_start)
-        goto ERROR_CORU_LOAD;
-
-    comment_multiple_end = init_comment_multiple_end();
-    if (!comment_multiple_end)
-        goto ERROR_CORU_LOAD;
-
-    char *single_start = hash_table_get(comment_single_start, lang_string);
-    char *single_end = hash_table_get(comment_single_end, lang_string);
-    char *multi_start = hash_table_get(comment_multiple_start, lang_string);
-    char *multi_end = hash_table_get(comment_multiple_end, lang_string);
-
-    hash_table_delete(comment_multiple_end);
-    hash_table_delete(comment_multiple_start);
-    hash_table_delete(comment_single_end);
-    hash_table_delete(comment_single_start);
-
-    /* The format of line number:
-       *start*    1 *end*
-     ^^ --> indent after original source code
-       ^^^^^^^ --> start word of comment
-              ^ --> one space
-               ^^^ --> indent for line number
-                  ^ --> line number
-                   ^ --> one space (optional)
-                    ^^^^^ --> end word of comment (optional)
-     */
-    /* Add line numbers to source later. */
-    size_t indent = 2;
-    size_t space = 1;
-
-    size_t digit = 1;
-    size_t temp = coru_stats_height(stats);
-    while (temp >= 10) {
-        temp /= 10;
-        digit += 1;
-    }
-
-    size_t width_number = indent + strlen(single_start) + space + digit;
-
-    if (0 != strcmp("", single_end))
-        width_number += space + strlen(single_end);
-
-    size_t width_new = coru_stats_width(stats) + width_number \
-        + strlen(END_OF_LINE);
-
-#if DEBUG
-    PUTS("Destination width: %lu", width_new);
-#endif
-
-    *out = \
-        (char *) malloc(
-            (coru_stats_height(stats) * width_new + 1) * sizeof(char));
-    if (!out) {
-        PUTERR("Failed to allocate memory for output");
-        PUTERR("Check available system memory");
-        goto ERROR_CORU_LOAD;
-    }
-
-    (*out)[0] = '\0';  /* Strip down the string to zero. */
 
     size_t line_size = 150;  /* Sensible line width. */
     line = (char *) malloc(line_size * sizeof(char));
@@ -282,15 +208,9 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
 
     line[0] = '\0';
 
-    coru_lexer_t *lexer = NULL;
-    coru_parser_t *parser = NULL;
-
-    size_t line_number = 0;
-    size_t digit_line_number;
-    size_t multi = 0;
-    size_t sz_eol = strlen(END_OF_LINE);
-
-    BOOL first_line = TRUE;
+    coru_eval_t *eval = coru_eval_new();
+    if (!eval)
+        goto ERROR_CORU_LOAD;
 
     while (fgets(line, line_size, stream)) {
         size_t sz_space;
@@ -311,167 +231,24 @@ static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL 
         }
         else {
 RELOAD_LINE:
-            /* Detect #! (shebang) on first line. */
-            if (first_line) {
-                if (string_starts_with(line, "#!")) {
-                    strcat(*out, line);
-                    first_line = FALSE;
-                    continue;
-                }
-
-                first_line = FALSE;
-            }
-
-            {
-                size_t len = strlen(line);
-
-            #if _WIN32
-                if (len >= strlen(END_OF_LINE) && line[len-2] == '\r')
-                    line[len-2] = '\0';
-            #else
-                if (len >= strlen(END_OF_LINE) && line[len-1] == '\n')
-                    line[len-1] = '\0';
-            #endif
-            }
-
-            BOOL mstart = FALSE;
-            BOOL mend= FALSE;
-
-            if (strcmp("", multi_start) && string_contains(line, multi_start)) {
-                multi += 1;
-                mstart = TRUE;
-            }
-
-            if (strcmp("", multi_end) && string_contains(line, multi_end)) {
-                multi -= 1;
-                mend = TRUE;
-            }
-
-            /* Copy original text. */
-            strcat(*out, line);
-
-            if (multi > 0 || (mstart ^ mend)) {
-                strcat(*out, END_OF_LINE);
-                continue;
-            }
-
-            if (!is_all && string_is_space_only(line)) {
-                strcat(*out, END_OF_LINE);
-                continue;
-            }
-
-            lexer = coru_lexer_new();
-            if (!lexer)
+            if (!coru_eval_eval(eval, stats, lang, is_all, line, out))
                 goto ERROR_CORU_LOAD;
-
-            if (!coru_lexer_lex(lexer, line)) {
-                PUTERR("Failed to lex input");
-                coru_lexer_delete(lexer);
-                goto ERROR_CORU_LOAD;
-            }
-
-            parser = coru_parser_new();
-            if (!parser)
-                goto ERROR_CORU_LOAD;
-
-            if (!coru_parser_parse(parser, lexer)) {
-                PUTERR("Failed to parse input");
-                coru_parser_delete(parser);
-                coru_lexer_delete(lexer);
-                goto ERROR_CORU_LOAD;
-            }
-
-            /* Insert spaces. */
-            sz_space = width_new - strlen(line) - width_number
-                - strlen(END_OF_LINE) - 1 /* Trailing zero */;
-
-            coru_ast_t *ast = coru_parser_next(parser);
-            while (ast) {
-                if (CORU_AST_BACKSLASH == coru_ast_type(ast)) {
-                    strcat(*out, END_OF_LINE);
-                    goto END_CORU_LOAD_LINE;
-                }
-                else if (CORU_AST_TAB == coru_ast_type(ast)) {
-                    sz_space -= 7;
-                }
-
-                ast = coru_parser_next(parser);
-            }
-
-            line_number += 1;
-
-            {
-                size_t i;
-                for (i = 0; i < sz_space; i++) {
-                    strcat(*out, " ");
-                }
-            }
-
-            /* Insert indent. */
-            strcat(*out, "  ");
-
-            /* Insert the start word of comment. */
-            sz_start = strlen(single_start);
-            strcat(*out, single_start);
-
-            /* Insert a space. */
-            strcat(*out, " ");
-
-            temp = line_number;
-            digit_line_number = 1;
-            while (temp >= 10) {
-                temp /= 10;
-                digit_line_number += 1;
-            }
-
-            /* Insert spaces before the line number. */
-            {
-                size_t i;
-                for (i = 0; i < digit - digit_line_number; i++) {
-                    strcat(*out, " ");
-                }
-            }
-
-            char *num_s = (char *) malloc(digit_line_number * sizeof(char));
-            if (!num_s) {
-                PUTERR("Failed to allocate memory for number string");
-                PUTERR("Check available system memory");
-                goto ERROR_CORU_LOAD;
-            }
-
-            num_s[0] = '\0';
-
-            if (sprintf(num_s, "%lu", line_number) < 0) {
-                PUTERR("Failed to insert a number");
-                goto ERROR_CORU_LOAD;
-            }
-
-            strcat(*out, num_s);
-
-            free(num_s);
-
-            if (0 != strcmp("", single_end)) {
-                /* Insert a space. */
-                strcat(*out, " ");
-
-                /* Insert the end word of single line comment. */
-                sz_end = strlen(single_end);
-                strcat(*out, single_end);
-            }
-
-            /* Insert EOL. */
-            strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
-
-END_CORU_LOAD_LINE:
-            coru_parser_delete(parser);
-            parser = NULL;
-
-            coru_lexer_delete(lexer);
-            lexer = NULL;
         }
     }
 
     free(line);
+
+    if (comment_multiple_end)
+        hash_table_delete(comment_multiple_end);
+
+    if (comment_multiple_start)
+        hash_table_delete(comment_multiple_start);
+
+    if (comment_single_end)
+        hash_table_delete(comment_single_end);
+
+    if (comment_single_start)
+        hash_table_delete(comment_single_start);
 
     return TRUE;
 

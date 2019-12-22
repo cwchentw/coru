@@ -2,6 +2,12 @@
 #include "print.h"
 #include "syntax_data.h"
 
+/* Comment data as singleton objects. */
+hash_table_t *comment_single_start = NULL;
+hash_table_t *comment_single_end = NULL;
+hash_table_t *comment_multiple_start = NULL;
+hash_table_t *comment_multiple_end = NULL;
+
 hash_table_t * init_comment_single_start(void)
 {
     hash_table_t *table = hash_table_new();
