@@ -197,14 +197,8 @@ static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token)
     if (!_coru_ast_code_expand(self))
         return FALSE;
 
-    if (0 == self->size) {
-        self->tokens[self->size] = token;
-        self->size += 1;
-    }
-    else {
-        self->size += 1;
-        self->tokens[self->size] = token;
-    }
+    self->tokens[self->size] = token;
+    self->size += 1;
 
     return TRUE;
 }
@@ -248,7 +242,7 @@ static void _coru_ast_code_delete(void *self)
     if (!self)
         return;
 
-    size_t size = ((coru_ast_code_t *) self)->size;
+    size_t size = ((coru_ast_code_t *) self)->capacity;
     coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
 
     {
@@ -401,14 +395,8 @@ static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token)
     if (!_coru_ast_string_expand(self))
         return FALSE;
 
-    if (0 == self->size) {
-        self->tokens[self->size] = token;
-        self->size += 1;
-    }
-    else {
-        self->size += 1;
-        self->tokens[self->size] = token;
-    }
+    self->tokens[self->size] = token;
+    self->size += 1;
 
     return TRUE;
 }
@@ -452,7 +440,7 @@ static void _coru_ast_string_delete(void *self)
     if (!self)
         return;
 
-    size_t size = ((coru_ast_code_t *) self)->size;
+    size_t size = ((coru_ast_code_t *) self)->capacity;
     coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
 
     {

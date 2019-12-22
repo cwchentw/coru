@@ -167,8 +167,8 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                     PUTERR("Pass other token: (%d) -->%s<--",
                         coru_token_type(token), coru_token_text(token));
             #endif
-            if (token)
-                coru_token_delete(token);  /* Pass. */
+
+            coru_token_delete(token);  /* Pass. */
             token = coru_lexer_next(lexer);
         }
 
