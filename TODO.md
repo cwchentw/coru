@@ -1,6 +1,5 @@
 Priority from high to low:
 
-* (internal) Update coru parser for single-quoted string
 * (feature) Write to file
 * (feature) Modify in place
 * (feature) Detect *CMakeLists.txt* as CMake config file
