@@ -63,12 +63,57 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
         if (token && CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
             #if DEBUG
-                PUTERR("Pass single quote token: (%d) -->%s<--",
+                PUTERR("Transform single quote token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
-            /* Refactor it later. */
-            coru_token_delete(token);  /* Pass. */
+
+            ast = coru_ast_new(CORU_AST_STRING);
+            if (!ast)
+                return FALSE;
+
+            /* Consume the starting single quote token. */
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
             token = coru_lexer_next(lexer);
+
+            /* Scan the tokens to parse the rest of a single-quoted string. */
+            while (token) {
+                if (!_coru_parser_expand(self))
+                    return FALSE;
+
+                if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
+                    /* Consume the backslash token. */
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    /* Consume one extra token. */
+                    token = coru_lexer_next(lexer);
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+                else if (token && CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
+                    /* Consume the ending single quote token. */
+                    if (!coru_ast_add(ast, token))
+                        return FALSE;
+
+                    token = coru_lexer_next(lexer);
+
+                    /* Stop the finite automata. */
+                    break;
+                }
+                else {
+                    /* Consume any text token within this string. */
+                    if (token) {
+                        if (!coru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+
+                token = coru_lexer_next(lexer);
+            }
         }
         else if (token && CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
             #if DEBUG
@@ -86,7 +131,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
             token = coru_lexer_next(lexer);
 
-            /* Scan to parse the rest of a double-quoted string. */
+            /* Scan the tokens to parse the rest of a double-quoted string. */
             while (token) {
                 if (!_coru_parser_expand(self))
                     return FALSE;
