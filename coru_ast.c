@@ -181,6 +181,12 @@ static coru_ast_code_t * _coru_ast_code_new(void)
         return NULL;
     }
 
+    {
+        size_t i;
+        for (i = 0; i < ast->capacity; i++)
+            ast->tokens[i] = NULL;
+    }
+
     return ast;
 }
 
@@ -223,6 +229,12 @@ static BOOL _coru_ast_code_expand(coru_ast_code_t *self)
         size_t i;
         for (i = 0; i < self->size; i++)
             new_tokens[i] = old_tokens[i];
+    }
+
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_tokens[i] = NULL;
     }
 
     self->tokens = new_tokens;
@@ -373,6 +385,12 @@ static coru_ast_string_t * _coru_ast_string_new(void)
         return NULL;
     }
 
+    {
+        size_t i;
+        for (i = 0; i < ast->capacity; i++)
+            ast->tokens[i] = NULL;
+    }
+
     return ast;
 }
 
@@ -415,6 +433,12 @@ static BOOL _coru_ast_string_expand(coru_ast_string_t *self)
         size_t i;
         for (i = 0; i < self->size; i++)
             new_tokens[i] = old_tokens[i];
+    }
+
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_tokens[i] = NULL;
     }
 
     self->tokens = new_tokens;

@@ -315,7 +315,6 @@ RELOAD_LINE:
             if (first_line) {
                 if (string_starts_with(line, "#!")) {
                     strcat(*out, line);
-                    strcat(*out, END_OF_LINE);
                     first_line = FALSE;
                     continue;
                 }
