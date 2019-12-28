@@ -8,8 +8,7 @@
 #include "coru_token.h"
 #include "print.h"
 
-struct coru_stats_t
-{
+struct coru_stats_t {
     size_t width;
     size_t height;
 };
