@@ -13,21 +13,7 @@ struct coru_stats_t {
     size_t height;
 };
 
-coru_stats_t * coru_stats_new()
-{
-    coru_stats_t *stats = (coru_stats_t *) malloc(sizeof(coru_stats_t));
-    if (!stats) {
-        PUTERR("Failed to allocate memory for stats object");
-        PUTERR("Check available system memory");
-        return stats;
-    }
-
-    stats->width = 0;
-    stats->height = 0;
-
-    return stats;
-}
-
+static coru_stats_t * coru_stats_new(void);
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line);
 
 coru_stats_t * coru_stats_load(FILE *stream)
@@ -79,6 +65,21 @@ ERROR_CORU_STATS:
         coru_stats_delete(stats);
 
     return NULL;
+}
+
+static coru_stats_t * coru_stats_new()
+{
+    coru_stats_t *stats = (coru_stats_t *) malloc(sizeof(coru_stats_t));
+    if (!stats) {
+        PUTERR("Failed to allocate memory for stats object");
+        PUTERR("Check available system memory");
+        return stats;
+    }
+
+    stats->width = 0;
+    stats->height = 0;
+
+    return stats;
 }
 
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line)

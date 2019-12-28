@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "coru.h"
 
-coru_stats_t * coru_stats_new();
 coru_stats_t * coru_stats_load(FILE *stream);
 void coru_stats_delete(void *self);
 size_t coru_stats_width(coru_stats_t *self);
