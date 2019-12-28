@@ -46,7 +46,7 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
     }
 
     coru_ast_t *ast = \
-        (coru_ast_t *) malloc(sizeof(coru_ast_t *));
+        (coru_ast_t *) malloc(sizeof(coru_ast_t));
     if (!ast) {
         PUTERR("Failed to allocate memory for coru ast");
         PUTERR("Check available system memory");
