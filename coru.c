@@ -2,17 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "syntax_data.h"
-
-#if _WIN32
-    #include <windows.h>
-    #include <shlwapi.h>
-#elif __unix__ || __APPLE__
-    #include <unistd.h>
-    #include <sys/stat.h>
-#else
-    #error "Unsupported platform"
-#endif
-
 #include "coru.h"
 #include "coru_argument.h"
 #include "coru_command.h"
@@ -79,25 +68,13 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
 
-#if _WIN32
-    if (!PathFileExists(coru_argument_path(arg))) {
-    #if DEBUG
-        PUTERR("Failed to open file at %s", coru_argument_path(arg));
-    #endif
+    fp = fopen(coru_argument_path(arg), "r");
+    if (!fp) {
         goto ERROR_LOAD;
     }
-#elif __unix__ || __APPLE__
-    struct stat st;
 
-    if (stat(coru_argument_path(arg), &st) & F_OK) {
-    #if DEBUG
-        PUTERR("Failed to open file at %s", coru_argument_path(arg));
-    #endif
-        goto ERROR_LOAD;
-    }
-#else
-    #error "Unsupported platform"
-#endif
+    fclose(fp);
+    fp = NULL;
 
     language_t lang = LANGUAGE_UNKNOWN;
 

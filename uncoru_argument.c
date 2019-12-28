@@ -84,3 +84,10 @@ UNCORU_COMMAND uncoru_argument_command(uncoru_argument_t *self)
 
     return self->cmd;
 }
+
+char * uncoru_argument_path(uncoru_argument_t *self)
+{
+    assert(self);
+
+    return self->path;
+}
