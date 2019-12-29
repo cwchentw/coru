@@ -70,6 +70,10 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
     stats = uncoru_stats_load(fp);
     if (!stats)
         goto ERROR_LOAD;
+#if DEBUG
+    PUTS("Source width: %lu", uncoru_stats_width(stats));
+    PUTS("Source height: %lu", uncoru_stats_height(stats));
+#endif
 
     uncoru_stats_delete(stats);
     fclose(fp);
