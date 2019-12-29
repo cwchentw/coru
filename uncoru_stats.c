@@ -1,0 +1,86 @@
+#include <stdlib.h>
+#include <string.h>
+#include "print.h"
+#include "uncoru_stats.h"
+
+struct uncoru_stats_t {
+    size_t width;
+    size_t height;
+};
+
+static uncoru_stats_t * uncoru_stats_new(void);
+
+uncoru_stats_t * uncoru_stats_load(FILE *stream)
+{
+    char *line = NULL;
+    uncoru_stats_t *stats = NULL;
+
+    size_t line_size = 150;  /* Sensible default line width. */
+    line = (char *) malloc(line_size * sizeof(char));
+    if (!line) {
+        PUTERR("Failed to allocate memory for C string");
+        PUTERR("Check available system memory");
+        goto ERROR_UNCORU_STATS;
+    }
+
+    stats = uncoru_stats_new();
+    if (!stats)
+        goto ERROR_UNCORU_STATS;
+
+    while (fgets(line, line_size, stream)) {
+        if (line_size == strlen(line)) {
+            if ('\n' != line[line_size-1]) {
+                line_size <<= 1;
+                if (!realloc(line, line_size)) {
+                    PUTERR("Failed to realloc line buffer object");
+                    PUTERR("Check available system memory");
+                    goto ERROR_UNCORU_STATS;
+                }
+            }
+            else {
+                goto LOAD_LINE;
+            }
+        }
+        else {
+        LOAD_LINE:
+            PRINT("");  /* Remove it later. */
+        }
+    }
+
+    free(line);
+
+    return stats;
+
+ERROR_UNCORU_STATS:
+    if (stats)
+        uncoru_stats_delete(stats);
+
+    if (line)
+        free(line);
+
+    return NULL;
+}
+
+static uncoru_stats_t * uncoru_stats_new(void)
+{
+    uncoru_stats_t *stats = \
+        (uncoru_stats_t *) malloc(sizeof(uncoru_stats_t));
+    if (!stats) {
+        PUTERR("Failed to allocate memory for uncoru stats object");
+        PUTERR("Check available system memory");
+        return stats;
+    }
+
+    stats->width = 0;
+    stats->height = 0;
+
+    return stats;
+}
+
+void uncoru_stats_delete(void *self)
+{
+    if (!self)
+        return;
+
+    free(self);
+}

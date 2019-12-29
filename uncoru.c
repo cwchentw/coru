@@ -5,6 +5,8 @@
 #include "uncoru_command.h"
 #include "uncoru_help.h"
 #include "uncoru_metadata.h"
+#include "uncoru_stats.h"
+
 
 static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out);
 
@@ -59,18 +61,25 @@ ERROR_UNCORU:
 static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
 {
     FILE *fp = NULL;
+    uncoru_stats_t *stats = NULL;
 
     fp = fopen(uncoru_argument_path(arg), "r");
-    if (!fp) {
+    if (!fp)
         goto ERROR_LOAD;
-    }
 
+    stats = uncoru_stats_load(fp);
+    if (!stats)
+        goto ERROR_LOAD;
+
+    uncoru_stats_delete(stats);
     fclose(fp);
-    fp = NULL;
 
     return TRUE;
 
 ERROR_LOAD:
+    if (stats)
+        uncoru_stats_delete(stats);
+
     if (fp)
         fclose(fp);
 

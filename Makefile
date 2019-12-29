@@ -46,14 +46,14 @@ ifeq ($(CC),cl)
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
 		coru_eval.obj coru.obj
 	UNOBJS=uncoru_command.obj uncoru_help.obj uncoru_argument.obj \
-		uncoru.obj uncoru_cli.obj
+		uncoru_stats.obj uncoru.obj uncoru_cli.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
 		coru_argument.o coru_command.o coru_help.o coru_stats.o \
 		coru_token.o coru_lexer.o coru_ast.o coru_parser.o \
 		coru_eval.o coru.o
 	UNOBJS=uncoru_command.o uncoru_help.o uncoru_argument.o \
-		uncoru.o uncoru_cli.o
+		uncoru_stats.o uncoru.o uncoru_cli.o
 endif
 
 COMPILER_GCC := cc gcc clang
