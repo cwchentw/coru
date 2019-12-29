@@ -6,6 +6,7 @@
 #include "print.h"
 #include "syntax_data.h"
 #include "uncoru_eval.h"
+#include "uncoru_lexer.h"
 #include "uncoru_stats.h"
 
 struct uncoru_eval_t {
@@ -43,6 +44,8 @@ BOOL uncoru_eval_eval(
 {
     assert(self);
 
+    uncoru_lexer_t *lexer = NULL;
+
     if (!comment_single_start) {
         comment_single_start = init_comment_single_start();
         if (!comment_single_start)
@@ -63,28 +66,48 @@ BOOL uncoru_eval_eval(
     char *comment_end = \
         hash_table_get(comment_single_end, lang_string);
 
-    size_t temp = uncoru_stats_height(stats);
-    size_t digit = 1;
-    while (temp >= 10) {
-        temp /= 10;
-        digit += 1;
+    if (!(*out)) {
+        size_t temp = uncoru_stats_height(stats);
+        size_t digit = 1;
+        while (temp >= 10) {
+            temp /= 10;
+            digit += 1;
+        }
+
+        size_t line_size = \
+            uncoru_stats_width(stats)
+            - 2  /* indent */
+            - strlen(comment_start)
+            - 1  /* space */
+            - digit
+            + strlen(END_OF_LINE);
+
+        if (0 != strcmp("", comment_end)) {
+            line_size -= 1; /* space */
+            line_size -= strlen(comment_end);
+        }
+
+        *out = \
+            (char *) malloc(
+                uncoru_stats_height(stats) * line_size * sizeof(char));
+        if (!(*out))
+            goto ERROR_UNCORU_EVAL;
     }
 
-    size_t line_size = \
-        uncoru_stats_width(stats)
-        - 2  /* indent */
-        - strlen(comment_start)
-        - 1  /* space */
-        - digit
-        + strlen(END_OF_LINE);
+    lexer = uncoru_lexer_new();
+    if (!lexer)
+        goto ERROR_UNCORU_EVAL;
 
-    if (0 != strcmp("", comment_end)) {
-        line_size -= 1; /* space */
-        line_size -= strlen(comment_end);
-    }
+    if (!uncoru_lexer_lex(lexer, line))
+        goto ERROR_UNCORU_EVAL;
+
+    uncoru_lexer_delete(lexer);
 
     return TRUE;
 
 ERROR_UNCORU_EVAL:
+    if (lexer)
+        uncoru_lexer_delete(lexer);
+
     return FALSE;
 }
