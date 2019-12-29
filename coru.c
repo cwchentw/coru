@@ -155,14 +155,30 @@ ERROR_LOAD:
     return FALSE;
 }
 
-static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out);
+static BOOL
+_coru_load(
+    FILE *stream,
+    coru_stats_t *stats,
+    language_t lang,
+    BOOL is_all,
+    char **out);
 
-BOOL coru_load_all(FILE *stream, coru_stats_t *stats, language_t lang, char **out)
+BOOL
+coru_load_all(
+    FILE *stream,
+    coru_stats_t *stats,
+    language_t lang,
+    char **out)
 {
     return _coru_load(stream, stats, lang, TRUE, out);
 }
 
-BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, char **out)
+BOOL
+coru_load_non_empty(
+    FILE *stream,
+    coru_stats_t *stats,
+    language_t lang,
+    char **out)
 {
     return _coru_load(stream, stats, lang, FALSE, out);
 }
@@ -172,7 +188,13 @@ extern hash_table_t *comment_single_end;
 extern hash_table_t *comment_multiple_start;
 extern hash_table_t *comment_multiple_end;
 
-static BOOL _coru_load(FILE *stream, coru_stats_t *stats, language_t lang, BOOL is_all, char **out)
+static BOOL
+_coru_load(
+    FILE *stream,
+    coru_stats_t *stats,
+    language_t lang,
+    BOOL is_all,
+    char **out)
 {
     char *line = NULL;
     coru_eval_t *eval = NULL;

@@ -2,8 +2,7 @@
 #define UNCORU_STATS_H
 
 #include <stdio.h>
-
-typedef struct uncoru_stats_t uncoru_stats_t;
+#include "uncoru.h"
 
 uncoru_stats_t * uncoru_stats_load(FILE *stream);
 void uncoru_stats_delete(void *self);

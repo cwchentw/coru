@@ -41,7 +41,10 @@
 #endif
 
 /* Valid target language. */
-typedef char language_t;
+#ifndef _LANGUAGE_TYPE_IS_DEFINED
+    typedef char language_t;
+    #define _LANGUAGE_TYPE_IS_DEFINED
+#endif
 
 #define LANGUAGE_UNKNOWN   0
 #define LANGUAGE_C         1
