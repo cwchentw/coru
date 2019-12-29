@@ -1,6 +1,8 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include "print.h"
+#include "uncoru.h"
 #include "uncoru_stats.h"
 
 struct uncoru_stats_t {
@@ -9,6 +11,7 @@ struct uncoru_stats_t {
 };
 
 static uncoru_stats_t * uncoru_stats_new(void);
+static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line);
 
 uncoru_stats_t * uncoru_stats_load(FILE *stream)
 {
@@ -43,7 +46,8 @@ uncoru_stats_t * uncoru_stats_load(FILE *stream)
         }
         else {
         LOAD_LINE:
-            PRINT("");  /* Remove it later. */
+            if (!uncoru_stats_eval(stats, line))
+                goto ERROR_UNCORU_STATS;
         }
     }
 
@@ -75,6 +79,13 @@ static uncoru_stats_t * uncoru_stats_new(void)
     stats->height = 0;
 
     return stats;
+}
+
+static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line)
+{
+    assert(self);
+
+    return TRUE;
 }
 
 void uncoru_stats_delete(void *self)
