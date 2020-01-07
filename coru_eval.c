@@ -53,6 +53,11 @@ BOOL coru_eval_eval(coru_eval_t *self,
 {
     assert(self);
 
+    char *single_start = NULL;
+    char *single_end = NULL;
+    char *multi_start = NULL;
+    char *multi_end = NULL;
+
     coru_lexer_t *lexer = NULL;
     coru_parser_t *parser = NULL;
 
@@ -82,10 +87,21 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     char *lang_string = language_to_string(lang);
 
-    char *single_start = hash_table_get(comment_single_start, lang_string);
-    char *single_end = hash_table_get(comment_single_end, lang_string);
-    char *multi_start = hash_table_get(comment_multiple_start, lang_string);
-    char *multi_end = hash_table_get(comment_multiple_end, lang_string);
+    single_start = hash_table_get(comment_single_start, lang_string);
+    if (!single_start)
+        goto ERROR_CORU_EVAL;
+
+    single_end = hash_table_get(comment_single_end, lang_string);
+    if (!single_end)
+        goto ERROR_CORU_EVAL;
+
+    multi_start = hash_table_get(comment_multiple_start, lang_string);
+    if (!multi_start)
+        goto ERROR_CORU_EVAL;
+
+    multi_end = hash_table_get(comment_multiple_end, lang_string);
+    if (!multi_end)
+        goto ERROR_CORU_EVAL;
 
     /* The format of line number:
        *start*    1 *end*
