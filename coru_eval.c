@@ -301,7 +301,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         }
     }
 
-    char *num_s = (char *) malloc(digit_line_number * sizeof(char));
+    char *num_s = (char *) malloc((digit_line_number + 1) * sizeof(char));
     if (!num_s) {
         PUTERR("Failed to allocate memory for number string");
         PUTERR("Check available system memory");
