@@ -64,15 +64,13 @@ endif
 COMPILER_GCC := cc gcc clang
 
 ifneq (,$(filter $(COMPILER_GCC),$(CC)))
-	CFLAGS_INTERNAL=-Wall -Wextra -std=c89
-	OPTIMIZE=-O2
+	CFLAGS=-Wall -Wextra -std=c89
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_EXEC=-o $(TARGET_EXEC)
 	OBJ_TO_UNEXEC=-o $(UNTARGET_EXEC)
 else
 ifeq ($(CC),cl)
-	CFLAGS_INTERNAL=/W4
-	OPTIMIZE=/O2
+	CFLAGS=/W4 /sdl
 	SRC_TO_OBJ=/c $<
 	OBJ_TO_EXEC=/Fe:$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=/Fe:$(UNTARGET_EXEC)
@@ -87,6 +85,12 @@ ifeq ($(CC),cl)
 	CFLAGS+=/D DEBUG
 else
 	CFLAGS+=-DDEBUG -g
+endif
+else
+ifeq ($(CC),cl)
+	CFLAGS+=/O2
+else
+	CFLAGS+=-O2
 endif
 endif
 
@@ -131,22 +135,12 @@ endif
 endif
 
 $(TARGET_EXEC): $(EXEC_OBJS) static
-ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(OBJ_TO_EXEC) $(EXEC_OBJS) $(TARGET_LIB_STATIC) \
-		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
-else
-	$(CC) $(OBJ_TO_EXEC) $(EXEC_OBJS) $(TARGET_LIB_STATIC) $(OPTIMIZE) \
+	$(CC) $(OBJ_TO_EXEC) $(EXEC_OBJS) $(TARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
-endif
 
 $(UNTARGET_EXEC): $(SRC_UNTARGET) static
-ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(UNTARGET_LIB_STATIC) \
-		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
-else
-	$(CC) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(UNTARGET_LIB_STATIC) $(OPTIMIZE) \
+	$(CC) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) $(UNTARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
-endif
 
 static: $(TARGET_LIB_STATIC) $(UNTARGET_LIB_STATIC)
 
@@ -184,38 +178,20 @@ dynamic: $(TARGET_LIB_DYNAMIC)
 
 $(TARGET_LIB_DYNAMIC): $(OBJS)
 ifeq ($(CC),cl)
-	echo "Not supported yet"
-else
-ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(GCC) -shared -o $(TARGET_LIB_DYNAMIC) $(OBJS) $(DEBUG) \
-		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
+	link /DLL /OUT:$(TARGET_LIB_DYNAMIC) $(OBJS)
 else
 	$(CC) -shared -o $(TARGET_LIB_DYNAMIC) $(OBJS) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
-endif
 
 %.obj: %.c
-ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
-		$(LDFLAGS)
-else
-	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
-endif
+	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS)
 
 %.o: %.c
 ifeq (dynamic,$(MAKECMDGOALS))
-ifeq ($(CC),cl)
-	echo "Not supported yet"
+	$(CC) -fPIC $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS)
 else
-	$(CC) -fPIC $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
-endif  # CC
-else
-ifeq ($(CC),cl)
-	echo "Not supported yet"
-else
-	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
-endif  # CC
+	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS)
 endif  # dynamic
 
 clean_objs:
