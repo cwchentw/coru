@@ -20,7 +20,6 @@ else
 	UNTARGET_EXEC=$(UNTARGET)
 endif
 
-SRC_TARGET=coru_cli.c
 SRC_UNTARGET=uncoru_cli.c
 
 ifeq ($(CC),cl)
@@ -42,18 +41,20 @@ endif
 
 ifeq ($(CC),cl)
 	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
-		coru_argument.obj coru_command.obj coru_help.obj coru_stats.obj \
+		coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
 		coru_eval.obj coru.obj
+	EXEC_OBJS=coru_argument.obj coru_command.obj coru_help.obj coru_cli.obj
 	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		uncoru_command.obj uncoru_help.obj uncoru_argument.obj \
 		uncoru_stats.obj uncoru_lexer.obj uncoru_eval.obj \
 		uncoru.obj uncoru_cli.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
-		coru_argument.o coru_command.o coru_help.o coru_stats.o \
+		coru_stats.o \
 		coru_token.o coru_lexer.o coru_ast.o coru_parser.o \
 		coru_eval.o coru.o
+	EXEC_OBJS=coru_command.o coru_argument.o coru_help.o coru_cli.o
 	UNOBJS=cstring.o language.o hash_table.o syntax_data.o \
 		uncoru_command.o uncoru_help.o uncoru_argument.o \
 		uncoru_stats.o uncoru_lexer.o uncoru_eval.o \
@@ -129,12 +130,12 @@ debug: $(TARGET_EXEC) $(UNTARGET_EXEC)
 
 release: $(TARGET_EXEC) $(UNTARGET_EXEC)
 
-$(TARGET_EXEC): $(SRC_TARGET) static
+$(TARGET_EXEC): $(EXEC_OBJS) static
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(OBJ_TO_EXEC) $(SRC_TARGET) $(TARGET_LIB_STATIC) \
+	$(CC) $(DEBUG) $(OBJ_TO_EXEC) $(EXEC_OBJS) $(TARGET_LIB_STATIC) \
 		$(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) $(LDFLAGS) $(LIBS)
 else
-	$(CC) $(OBJ_TO_EXEC) $(SRC_TARGET) $(TARGET_LIB_STATIC) $(OPTIMIZE) \
+	$(CC) $(OBJ_TO_EXEC) $(EXEC_OBJS) $(TARGET_LIB_STATIC) $(OPTIMIZE) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
@@ -226,5 +227,6 @@ clean_objs:
 	$(RM) $(OBJS)
 
 clean:
-	$(RM) $(OBJS) $(TARGET_EXEC) $(TARGET_LIB_STATIC) $(TARGET_LIB_DYNAMIC) \
+	$(RM) $(OBJS) $(EXEC_OBJS) \
+		$(TARGET_EXEC) $(TARGET_LIB_STATIC) $(TARGET_LIB_DYNAMIC) \
 		$(UNOBJS) $(UNTARGET_EXEC) $(UNTARGET_LIB_STATIC)

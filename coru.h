@@ -74,7 +74,6 @@ typedef struct coru_stats_t coru_stats_t;
 coru_stats_t * coru_stats_load(FILE *stream);
 void coru_stats_delete(void *self);
 
-BOOL coru_run(int argc, char **argv, char **out);
 BOOL coru_load_all(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
 BOOL coru_load_non_empty(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
 
