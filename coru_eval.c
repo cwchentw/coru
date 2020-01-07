@@ -121,8 +121,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     #endif
 
     if (!(*out)) {
-        *out = \
-        (char *) malloc(
+        *out = (char *) malloc(
             (coru_stats_height(stats) * width_new + 1) * sizeof(char));
         if (!(*out)) {
             PUTERR("Failed to allocate memory for output");
@@ -133,7 +132,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         (*out)[0] = '\0';  /* Strip down the string to zero. */
     }
 
-    size_t total_size = strlen(*out);
+    size_t total_size = 0 + strlen(*out);
 
     /* Detect #! (shebang) on first line. */
     if (self->first_line) {
@@ -322,7 +321,10 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
     /* Insert EOL. */
-    strncat(*out, END_OF_LINE, strlen(END_OF_LINE) + 1);
+    strcat(*out, END_OF_LINE);
+
+    total_size += strlen(END_OF_LINE);
+    (*out)[total_size] = '\0';
 
 END_CORU_EVAL:
     coru_parser_delete(parser);

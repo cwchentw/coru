@@ -11,21 +11,27 @@ BOOL coru_run(int argc, char **argv, char **out);
 
 int main(int argc, char *argv[])
 {
-    char *out = NULL;
-
-    if (!coru_run(argc, argv, &out)) {
+    char **out = (char **) malloc(sizeof(char *));
+    if (!out)
         goto ERROR_CORU_CLI;
-    }
 
-    if (out)
-        PRINT("%s", out);
+    *out = NULL;
 
-    if (out)
-        free(out);
+    if (!coru_run(argc, argv, out))
+        goto ERROR_CORU_CLI;
+
+    if (*out)
+        PRINT("%s", *out);
+
+    free(*out);
+    free(out);
 
     return 0;
 
 ERROR_CORU_CLI:
+    if (out && *out)
+        free(*out);
+
     if (out)
         free(out);
 
