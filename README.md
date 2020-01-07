@@ -30,7 +30,7 @@ By the way, `uncoru`, the sister program of `coru`, removes the line numbers and
 
 To use GNU Make on non-Linux Unix or Unix-like systems, use `gmake`. To use GNU Make on Windows, use `mingw32-make`.
 
-We compile and run `coru` against GCC, Clang and Visual C++.
+We compile and run `coru` with GCC, Clang and Visual C++.
 
 We test `coru` against several Unix or Unix-like systems:
 
@@ -39,6 +39,8 @@ We test `coru` against several Unix or Unix-like systems:
 * openSUSE Leap 15.1
 * TrueOS, which is FreeBSD-compatible
 * Solaris 11
+
+Besides, we check `coru` manually on Windows 10 as well.
 
 It should work on any platform that provides a decent C compiler.
 
@@ -150,8 +152,7 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
 * `coru` cannot detect heredoc
-* Though usable, Valgrind still reports errors on the codebase of `coru`, related to string concatenation issues
 
 ## Copyright
 
-Copyright (c) 2019 Michael Chen. Licensed under MIT.
+Copyright (c) 2019-2020 Michael Chen. Licensed under MIT.
