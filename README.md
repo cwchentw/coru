@@ -28,17 +28,19 @@ By the way, `uncoru`, the sister program of `coru`, removes the line numbers and
 * A C compiler that supports ANSI C
 * GNU Make
 
-We tested `coru` against several Unix or Unix-like systems:
+To use GNU Make on non-Linux Unix or Unix-like systems, use `gmake`. To use GNU Make on Windows, use `mingw32-make`.
+
+We compile and run `coru` against GCC, Clang and Visual C++.
+
+We test `coru` against several Unix or Unix-like systems:
 
 * Ubuntu 18.04 LTS
 * CentOS 8
 * openSUSE Leap 15.1
-* TrueOS, FreeBSD compatible
+* TrueOS, which is FreeBSD-compatible
 * Solaris 11
 
-It should work on any platform that owns a standard C compiler.
-
-Currently, our Makefile works with GNU Make. On some Unix or Unix-like systems, use `gmake` instead of `make`.
+It should work on any platform that provides a decent C compiler.
 
 ## Supported Languages
 
