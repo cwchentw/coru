@@ -69,8 +69,6 @@ ifneq (,$(filter $(COMPILER_GCC),$(CC)))
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_EXEC=-o $(TARGET_EXEC)
 	OBJ_TO_UNEXEC=-o $(UNTARGET_EXEC)
-	DEBUG=-DDEBUG
-	DEBUG_INFO=-g
 else
 ifeq ($(CC),cl)
 	CFLAGS_INTERNAL=/W4
@@ -79,15 +77,20 @@ ifeq ($(CC),cl)
 	OBJ_TO_EXEC=/Fe:$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=/Fe:$(UNTARGET_EXEC)
 	LIBS=/link shlwapi.lib
-	DEBUG=/D DEBUG
 else
 	echo "Not supported yet"
 endif
 endif
 
-TEST_DIR=test
+ifneq (,$(DEBUG))
+ifeq ($(CC),cl)
+	CFLAGS+=/D DEBUG
+else
+	CFLAGS+=-DDEBUG -g
+endif
+endif
 
-GOAL_DEBUG := test debug
+TEST_DIR=test
 
 
 .PHONY: all test debug release static dynamic clean_objs clean
@@ -95,40 +98,37 @@ GOAL_DEBUG := test debug
 all:
 	$(MAKE) dynamic
 	$(MAKE) clean_objs
-	$(MAKE) release
+	$(MAKE) $(TARGET_EXEC)
+	$(MAKE) $(UNTARGET_EXEC)
 
 test:
 ifeq ($(detected_OS),Windows)
 	echo "Not supported yet"
 else
 ifeq ($(detected_OS),SunOS)
-	$(MAKE) debug
+	$(MAKE) DEBUG=1
 	bash $(TEST_DIR)/coru/showHelp
 	bash $(TEST_DIR)/coru/detectFiles
 	bash $(TEST_DIR)/coru/runProgram
 	bash $(TEST_DIR)/uncoru/showHelp
 	$(MAKE) clean
 
-	$(MAKE) release
+	$(MAKE)
 	bash $(TEST_DIR)/coru/checkModifiedFiles
 	$(MAKE) clean
 else
-	$(MAKE) debug
+	$(MAKE) DEBUG=1
 	$(TEST_DIR)/coru/showHelp
 	$(TEST_DIR)/coru/detectFiles
 	$(TEST_DIR)/coru/runProgram
 	$(TEST_DIR)/uncoru/showHelp
 	$(MAKE) clean
 
-	$(MAKE) release
+	$(MAKE)
 	$(TEST_DIR)/coru/checkModifiedFiles
 	$(MAKE) clean
 endif
 endif
-
-debug: $(TARGET_EXEC) $(UNTARGET_EXEC)
-
-release: $(TARGET_EXEC) $(UNTARGET_EXEC)
 
 $(TARGET_EXEC): $(EXEC_OBJS) static
 ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
@@ -214,12 +214,7 @@ else
 ifeq ($(CC),cl)
 	echo "Not supported yet"
 else
-ifneq (,$(filter $(GOAL_DEBUG),$(MAKECMDGOALS)))
-	$(CC) $(DEBUG) $(SRC_TO_OBJ) $(CFLAGS_INTERNAL) $(CFLAGS) $(DEBUG_INFO) \
-		$(LDFLAGS)
-else
 	$(CC) $(SRC_TO_OBJ) $(OPTIMIZE) $(CFLAGS) $(LDFLAGS)
-endif  # DEBUG
 endif  # CC
 endif  # dynamic
 

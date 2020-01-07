@@ -4,6 +4,7 @@
 #include "coru_command.h"
 #include "coru_help.h"
 #include "coru_metadata.h"
+#include "coru_stats.h"
 #include "print.h"
 
 BOOL coru_run(int argc, char **argv, char **out);
