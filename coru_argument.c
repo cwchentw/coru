@@ -16,12 +16,21 @@ struct coru_argument_t {
     char *path;
 };
 
-static BOOL _is_c(char *opt);
-static BOOL _is_cpp(char *opt);
-static BOOL _is_java(char *opt);
-static BOOL _is_csharp(char *opt);
-static BOOL _is_cmake(char *opt);
-static BOOL _is_make(char *opt);
+#define _is_c(opt) \
+    (0 == strcmp(opt, "-c") || 0 == strcmp(opt, "--as-c"))
+#define _is_cpp(opt) \
+    (0 == strcmp(opt, "-cpp") || 0 == strcmp(opt, "-cxx") \
+        || 0 == strcmp(opt, "-c++") || 0 == strcmp(opt, "--as-cpp") \
+        || 0 == strcmp(opt, "--as-cxx") || 0 == strcmp(opt, "--as-c++"))
+#define _is_java(opt) \
+    (0 == strcmp(opt, "-java") || 0 == strcmp(opt, "--as-java"))
+#define _is_csharp(opt) \
+    (0 == strcmp(opt, "-c#") || 0 == strcmp(opt, "-csharp") \
+        || 0 == strcmp(opt, "--as-c#") || 0 == strcmp(opt, "--as-csharp"))
+#define _is_cmake(opt) \
+    (0 == strcmp(opt, "-cmake") || 0 == strcmp(opt, "--as-cmake"))
+#define _is_make(opt) \
+    (0 == strcmp(opt, "-make") || 0 == strcmp(opt, "--as-make"))
 
 coru_argument_t * coru_argument_parse(int argc, char **argv)
 {
@@ -111,39 +120,6 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
     }
 
     return arg;
-}
-
-static BOOL _is_c(char *opt)
-{
-    return 0 == strcmp(opt, "-c") || 0 == strcmp(opt, "--as-c");
-}
-
-static BOOL _is_cpp(char *opt)
-{
-    return 0 == strcmp(opt, "-cpp") || 0 == strcmp(opt, "-cxx")
-        || 0 == strcmp(opt, "-c++") || 0 == strcmp(opt, "--as-cpp")
-        || 0 == strcmp(opt, "--as-cxx") || 0 == strcmp(opt, "--as-c++");
-}
-
-static BOOL _is_java(char *opt)
-{
-    return 0 == strcmp(opt, "-java") || 0 == strcmp(opt, "--as-java");
-}
-
-static BOOL _is_csharp(char *opt)
-{
-    return 0 == strcmp(opt, "-c#") || 0 == strcmp(opt, "-csharp")
-        || 0 == strcmp(opt, "--as-c#") || 0 == strcmp(opt, "--as-csharp");
-}
-
-static BOOL _is_cmake(char *opt)
-{
-    return 0 == strcmp(opt, "-cmake") || 0 == strcmp(opt, "--as-cmake");
-}
-
-static BOOL _is_make(char *opt)
-{
-    return 0 == strcmp(opt, "-make") || 0 == strcmp(opt, "--as-make");
 }
 
 void coru_argument_delete(void *self)
