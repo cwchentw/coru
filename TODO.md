@@ -9,4 +9,3 @@ Priority from high to low:
 * (feature) Add parser for `uncoru`
 * (feature) Add `corucb`, aka `coru` for clipboard
 * (feature) Add `uncorucb`, aka `uncoru` for clipboard
-* (bug) Fix an unknown bug on FreeBSD or TrueOS
