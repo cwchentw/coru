@@ -84,12 +84,7 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
     PUTS("Source height: %lu", uncoru_stats_height(stats));
 #endif
 
-    fclose(fp);
-    fp = NULL;
-
-    fp = fopen(uncoru_argument_path(arg), "r");
-    if (!fp)
-        goto ERROR_LOAD;
+    rewind(fp);
 
     if (!uncoru_load(fp, stats, lang, out))
         goto ERROR_LOAD;

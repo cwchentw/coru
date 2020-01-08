@@ -133,23 +133,13 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
     if (!stats)
         goto ERROR_LOAD;
 
-    fclose(fp);
-
-    fp = NULL;
+    rewind(fp);
 
 #if DEBUG
     PUTS("Source width: %lu", coru_stats_width(stats));
     PUTS("Source height: %lu", coru_stats_height(stats));
     /* Add stats for non-comment lines. */
 #endif
-
-    fp = fopen(coru_argument_path(arg), "r");
-    if (!fp) {
-    #if DEBUG
-        PUTERR("Failed to open file at %s", coru_argument_path(arg));
-    #endif
-        goto ERROR_LOAD;
-    }
 
     BOOL is_all = coru_argument_is_all(arg);
 
