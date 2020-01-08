@@ -3,7 +3,7 @@
 
 #include "coru.h"
 
-typedef char CORU_COMMAND;
+typedef unsigned char CORU_COMMAND;
 
 #define CORU_COMMAND_UNKNOWN   0
 #define CORU_COMMAND_VERSION   1

@@ -1,7 +1,7 @@
 #ifndef CORU_TOKEN_H
 #define CORU_TOKEN_H
 
-typedef char CORU_TOKEN_TYPE;
+typedef unsigned char CORU_TOKEN_TYPE;
 
 #define CORU_TOKEN_CODE           0  /* Any non-specified code. */
 #define CORU_TOKEN_SPACE          1  /* ' ' */
