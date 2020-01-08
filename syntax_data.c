@@ -31,27 +31,29 @@ hash_table_t * init_comment_single_start(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
-        STRING_CMAKE
+        STRING_CMAKE,
+        STRING_MAKE
     };
 
     char *values[] = {
-        "/*",  /* C */
-        "/*",  /* C++ */
-        "/*",  /* Java */
-        "/*",  /* C# */
-        "#",   /* Perl */
-        "#",   /* Python */
-        "#",   /* Ruby */
-        "/*",  /* PHP */
-        "/*",  /* JavaScript */
-        "/*",  /* Golang */
-        "/*",  /* Rust */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
-        "/*",  /* Swift */
-        "#",   /* C shell */
-        "#",   /* Bourne shell */
-        "#[["  /* CMake */
+        "/*",   /* C */
+        "/*",   /* C++ */
+        "/*",   /* Java */
+        "/*",   /* C# */
+        "#",    /* Perl */
+        "#",    /* Python */
+        "#",    /* Ruby */
+        "/*",   /* PHP */
+        "/*",   /* JavaScript */
+        "/*",   /* Golang */
+        "/*",   /* Rust */
+        "/*",   /* ObjC */
+        "/*",   /* ObjC++ */
+        "/*",   /* Swift */
+        "#",    /* C shell */
+        "#",    /* Bourne shell */
+        "#[[",  /* CMake */
+        "#"     /* Make */
     };
 
     {
@@ -98,7 +100,8 @@ hash_table_t * init_comment_single_end(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
-        STRING_CMAKE
+        STRING_CMAKE,
+        STRING_MAKE
     };
 
     char *values[] = {
@@ -118,7 +121,8 @@ hash_table_t * init_comment_single_end(void)
         "*/",  /* Swift */
         "",    /* C shell */
         "",    /* Bourne shell */
-        "]]"   /* CMake */
+        "]]",  /* CMake */
+        ""     /* Make */
     };
 
     {
@@ -165,27 +169,29 @@ hash_table_t * init_comment_multiple_start(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
-        STRING_CMAKE
+        STRING_CMAKE,
+        STRING_MAKE
     };
 
     char *values[] = {
-        "/*",  /* C */
-        "/*",  /* C++ */
-        "/*",  /* Java */
-        "/*",  /* C# */
-        "",    /* Perl */
-        "",    /* Python */
-        "",    /* Ruby */
-        "/*",  /* PHP */
-	    "/*",  /* JavaScript */
-        "/*",  /* Golang */
-        "/*",  /* Rust */
-        "/*",  /* ObjC */
-        "/*",  /* ObjC++ */
-        "/*",  /* Swift */
-        "",    /* C shell */
-        "",    /* Bourne shell */
-        "#[["  /* CMake */
+        "/*",   /* C */
+        "/*",   /* C++ */
+        "/*",   /* Java */
+        "/*",   /* C# */
+        "",     /* Perl */
+        "",     /* Python */
+        "",     /* Ruby */
+        "/*",   /* PHP */
+	    "/*",   /* JavaScript */
+        "/*",   /* Golang */
+        "/*",   /* Rust */
+        "/*",   /* ObjC */
+        "/*",   /* ObjC++ */
+        "/*",   /* Swift */
+        "",     /* C shell */
+        "",     /* Bourne shell */
+        "#[[",  /* CMake */
+        ""      /* Make */
     };
 
     {
@@ -232,7 +238,8 @@ hash_table_t * init_comment_multiple_end(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
-        STRING_CMAKE
+        STRING_CMAKE,
+        STRING_MAKE
     };
 
     char *values[] = {
@@ -252,7 +259,8 @@ hash_table_t * init_comment_multiple_end(void)
         "*/",  /* Swift */
         "",    /* C shell */
         "",    /* Bourne shell */
-        "]]"   /* CMake */
+        "]]",  /* CMake */
+        ""     /* Make */
     };
 
     {

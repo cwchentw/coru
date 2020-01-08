@@ -46,24 +46,25 @@
     #define _LANGUAGE_TYPE_IS_DEFINED
 #endif
 
-#define LANGUAGE_UNKNOWN   0
-#define LANGUAGE_C         1
-#define LANGUAGE_CPP       2
-#define LANGUAGE_JAVA      3
-#define LANGUAGE_CSHARP    4
-#define LANGUAGE_PERL      5
-#define LANGUAGE_PYTHON    6
-#define LANGUAGE_RUBY      7
-#define LANGUAGE_PHP       8
-#define LANGUAGE_JS        9
-#define LANGUAGE_GO       10
-#define LANGUAGE_RUST     11
-#define LANGUAGE_OBJC     12
-#define LANGUAGE_OBJCPP   13
-#define LANGUAGE_SWIFT    14
-#define LANGUAGE_CSH      15
-#define LANGUAGE_SH       16
-#define LANGUAGE_CMAKE    17
+#define  LANGUAGE_UNKNOWN   0
+#define  LANGUAGE_C         1
+#define  LANGUAGE_CPP       2
+#define  LANGUAGE_JAVA      3
+#define  LANGUAGE_CSHARP    4
+#define  LANGUAGE_PERL      5
+#define  LANGUAGE_PYTHON    6
+#define  LANGUAGE_RUBY      7
+#define  LANGUAGE_PHP       8
+#define  LANGUAGE_JS        9
+#define  LANGUAGE_GO       10
+#define  LANGUAGE_RUST     11
+#define  LANGUAGE_OBJC     12
+#define  LANGUAGE_OBJCPP   13
+#define  LANGUAGE_SWIFT    14
+#define  LANGUAGE_CSH      15
+#define  LANGUAGE_SH       16
+#define  LANGUAGE_CMAKE    17
+#define  LANGUAGE_MAKE     18
 
 #ifdef __cplusplus
 extern "C" {
