@@ -37,7 +37,7 @@ check_tool_exists go "Golang";
 check_tool_exists rustc "Rust";
 check_tool_exists swift "Swift";
 
-coru=./coru
+coru=./dist/coru
 detect_c_by_extension ()
 {
     local result="$($coru demo/hello.c | head -n 1)";

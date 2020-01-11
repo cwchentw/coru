@@ -2,7 +2,7 @@
 
 . ./test/common.sh
 
-coru=./coru
+coru=./dist/coru
 test_no_input_file ()
 {
     $coru 2>/dev/null;

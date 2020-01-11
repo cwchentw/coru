@@ -57,5 +57,9 @@ dkms.conf
 # Backup files
 *~
 
+# Output
+dist/*
+!dist/.gitkeep
+
 # VS Code config
 .vscode/

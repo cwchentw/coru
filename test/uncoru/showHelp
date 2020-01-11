@@ -5,7 +5,7 @@
 VERSION=0.1.0
 LICENSE=MIT
 
-uncoru=./uncoru
+uncoru=./dist/uncoru
 test_show_version_short ()
 {
     local result="$($uncoru -v)";

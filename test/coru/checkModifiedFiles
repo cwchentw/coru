@@ -14,7 +14,7 @@ clean ()
     rm -f $TARGET_EXEC
 }
 
-coru=./coru
+coru=./dist/coru
 
 # Test modified C code.
 echo "Test modified C code";
