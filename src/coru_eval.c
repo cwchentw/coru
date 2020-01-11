@@ -153,7 +153,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     /* Detect #! (shebang) on first line. */
     if (self->first_line) {
         if (string_starts_with(line, "#!")) {
-            strcat(*out, line);
+            strcpy((*out)+total_size, line);
 
             total_size += strlen(line);
             (*out)[total_size] = '\0';
@@ -191,13 +191,12 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
     /* Copy original text. */
-    strcat(*out, line);
-
+    strcpy((*out)+total_size, line);
     total_size += strlen(line);
     (*out)[total_size] = '\0';
 
     if (self->multi > 0 || (self->mstart ^ self->mend)) {
-        strcat(*out, END_OF_LINE);
+        strcpy((*out)+total_size, END_OF_LINE);
 
         total_size += strlen(END_OF_LINE);
         (*out)[total_size] = '\0';
@@ -206,7 +205,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
     if (!is_all && string_is_space_only(line)) {
-        strcat(*out, END_OF_LINE);
+        strcpy((*out)+total_size, END_OF_LINE);
 
         total_size += strlen(END_OF_LINE);
         (*out)[total_size] = '\0';
@@ -239,7 +238,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     coru_ast_t *ast = coru_parser_next(parser);
     while (ast) {
         if (CORU_AST_BACKSLASH == coru_ast_type(ast)) {
-            strcat(*out, END_OF_LINE);
+            strcpy((*out)+total_size, END_OF_LINE);
 
             total_size += strlen(END_OF_LINE);
             (*out)[total_size] = '\0';
@@ -256,7 +255,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     {
         size_t i;
         for (i = 0; i < sz_space; i++) {
-            strcat(*out, " ");
+            strcpy((*out)+total_size, " ");
 
             total_size += strlen(" ");
             (*out)[total_size] = '\0';
@@ -266,19 +265,19 @@ BOOL coru_eval_eval(coru_eval_t *self,
     self->line_number += 1;
 
     /* Insert indent. */
-    strcat(*out, "  ");
+    strcpy((*out)+total_size, "  ");
 
     total_size += strlen("  ");
     (*out)[total_size] = '\0';
 
     /* Insert the start word of comment. */
-    strcat(*out, single_start);
+    strcpy((*out)+total_size, single_start);
 
     total_size += strlen(single_start);
     (*out)[total_size] = '\0';
 
     /* Insert a space. */
-    strcat(*out, " ");
+    strcpy((*out)+total_size, " ");
 
     total_size += strlen(" ");
     (*out)[total_size] = '\0';
@@ -294,7 +293,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     {
         size_t i;
         for (i = 0; i < digit - digit_line_number; i++) {
-            strcat(*out, " ");
+            strcpy((*out)+total_size, " ");
 
             total_size += strlen(" ");
             (*out)[total_size] = '\0';
@@ -315,7 +314,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         goto ERROR_CORU_EVAL;
     }
 
-    strcat(*out, num_s);
+    strcpy((*out)+total_size, num_s);
 
     total_size += strlen(num_s);
     (*out)[total_size] = '\0';
@@ -324,20 +323,20 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     if (0 != strcmp("", single_end)) {
         /* Insert a space. */
-        strcat(*out, " ");
+        strcpy((*out)+total_size, " ");
 
         total_size += strlen(" ");
         (*out)[total_size] = '\0';
 
         /* Insert the end word of single line comment. */
-        strcat(*out, single_end);
+        strcpy((*out)+total_size, single_end);
 
         total_size += strlen(single_end);
         (*out)[total_size] = '\0';
     }
 
     /* Insert EOL. */
-    strcat(*out, END_OF_LINE);
+    strcpy((*out)+total_size, END_OF_LINE);
 
     total_size += strlen(END_OF_LINE);
     (*out)[total_size] = '\0';
