@@ -268,7 +268,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     /* Insert indent. */
     strcat(*out, "  ");
 
-    total_size += strlen(" ");
+    total_size += strlen("  ");
     (*out)[total_size] = '\0';
 
     /* Insert the start word of comment. */
