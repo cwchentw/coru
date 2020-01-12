@@ -89,9 +89,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!spaces)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Space as token: -->%s<--", spaces);
-                #endif
+            #if DEBUG
+                PUTERR("Space as token: -->%s<--", spaces);
+            #endif
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_SPACE, spaces);
@@ -110,9 +110,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!tab)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("TAB as token: -->%s<--", tab);
-                #endif
+            #if DEBUG
+                PUTERR("TAB as token: -->%s<--", tab);
+            #endif
 
                 coru_token_t *token = coru_token_new(CORU_TOKEN_TAB, tab);
                 if (!token) {
@@ -128,9 +128,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Single quote as token: -->%s<--", quote);
-                #endif
+            #if DEBUG
+                PUTERR("Single quote as token: -->%s<--", quote);
+            #endif
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_SINGLE_QUOTE, quote);
@@ -147,9 +147,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Double quote as token: -->%s<--", quote);
-                #endif
+            #if DEBUG
+                PUTERR("Double quote as token: -->%s<--", quote);
+            #endif
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_DOUBLE_QUOTE, quote);
@@ -166,9 +166,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!backslash)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Backslash as token: -->%s<--", backslash);
-                #endif
+            #if DEBUG
+                PUTERR("Backslash as token: -->%s<--", backslash);
+            #endif
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_BACKSLASH, backslash);
@@ -202,9 +202,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!code)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Code as token: -->%s<--", code);
-                #endif
+            #if DEBUG
+                PUTERR("Code as token: -->%s<--", code);
+            #endif
 
                 coru_token_t *token = \
                     coru_token_new(CORU_TOKEN_CODE, code);
@@ -219,9 +219,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 i = j - 1;
             }
             else {
-                #if DEBUG
-                    PUTERR("Left char: -->%c<--", input[i]);
-                #endif
+            #if DEBUG
+                PUTERR("Left char: -->%c<--", input[i]);
+            #endif
                 /* Pass. */
             }
         }

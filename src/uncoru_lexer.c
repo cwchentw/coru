@@ -71,6 +71,13 @@ void uncoru_lexer_delete(void *self)
 #define SINGLE_QUOTE  '\''
 #define DOUBLE_QUOTE  '"'
 
+#define IS_CODE(c) \
+    (SPACE != (c) \
+     && TAB != (c) \
+     && BACKSLASH != (c) \
+     && SINGLE_QUOTE != (c) \
+     && DOUBLE_QUOTE != (c))
+
 static BOOL _uncoru_lexer_push(uncoru_lexer_t *self, uncoru_token_t *token);
 
 BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
@@ -101,9 +108,9 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!spaces)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("Space as token: -->%s<--", spaces);
-                #endif
+            #if DEBUG
+                PUTERR("Space as token: -->%s<--", spaces);
+            #endif
 
                 uncoru_token_t *token = \
                     uncoru_token_new(UNCORU_TOKEN_SPACE, spaces);
@@ -122,9 +129,9 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!tab)
                     return FALSE;
 
-                #if DEBUG
-                    PUTERR("TAB as token: -->%s<--", tab);
-                #endif
+            #if DEBUG
+                PUTERR("TAB as token: -->%s<--", tab);
+            #endif
 
                 uncoru_token_t *token = uncoru_token_new(UNCORU_TOKEN_TAB, tab);
                 if (!token) {
@@ -134,6 +141,101 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 
                 if (!_uncoru_lexer_push(self, token))
                     return FALSE;
+            }
+            else if (SINGLE_QUOTE == input[i]) {
+                char *quote = string_allocate("'");
+                if (!quote)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Single quote as token: -->%s<--", quote);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_SINGLE_QUOTE, quote);
+                if (!token) {
+                    free(quote);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (DOUBLE_QUOTE == input[i]) {
+                char *quote = string_allocate("\"");
+                if (!quote)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Double quote as token: -->%s<--", quote);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_DOUBLE_QUOTE, quote);
+                if (!token) {
+                    free(quote);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (BACKSLASH == input[i]) {
+                char *backslash = string_allocate("\\");
+                if (!backslash)
+                    return FALSE;
+            #if DEBUG
+                PUTERR("Backslash as token: -->%s<--", backslash);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_BACKSLASH, backslash);
+                if (!token) {
+                    free(backslash);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (IS_CODE(input[i])) {
+                size_t j;
+
+                for (j = i; j < strlen(input); j++) {
+                    if (!IS_CODE(input[j]))
+                        break;
+                }
+
+                size_t len = j - i;
+
+                if (len < 1)
+                    continue;
+
+                char *code = string_allocate_substring(input, i, j - 1);
+                if (!code)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Code as token: -->%s<--", code);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_CODE, code);
+                if (!token) {
+                    free(code);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j - 1;
+            }
+            else {
+            #if DEBUG
+                PUTERR("Left char: -->%c<--", input[i]);
+            #endif
+                /* Pass. */
             }
         }
     }
