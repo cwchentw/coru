@@ -82,7 +82,7 @@ ifneq (,$(filter $(COMPILER_GCC),$(CC)))
 	OBJ_TO_UNEXEC=-o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_EXEC)
 else
 ifeq ($(CC),cl)
-	CFLAGS=/W4 /sdl
+	CFLAGS=/W4 /sdl /D _CRT_SECURE_NO_WARNINGS
 	SRC_TO_OBJ=/c $<
 	OBJ_TO_EXEC=/Fe:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=/Fe:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_EXEC)
