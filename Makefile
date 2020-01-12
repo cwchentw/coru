@@ -8,7 +8,7 @@ endif
 ifeq ($(detected_OS),Windows)
 	SEP=\\
 else
-	SEP=\/
+	SEP=/
 endif
 
 SRC_DIR=src
