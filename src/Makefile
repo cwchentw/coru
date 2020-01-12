@@ -16,7 +16,7 @@ DIST_DIR=dist
 TEST_DIR=test
 
 ifeq ($(detected_OS),Windows)
-	RM=del
+	RM=del /q /s
 endif
 
 TARGET=coru
@@ -167,8 +167,7 @@ dynamic: $(TARGET_LIB_DYNAMIC) $(UNTARGET_LIB_DYNAMIC)
 
 $(TARGET_LIB_DYNAMIC): $(OBJS)
 ifeq ($(CC),cl)
-	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS) \
-		$(CFLAGS) $(LDFLAGS) $(LIBS)
+	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS)
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
 		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
@@ -179,8 +178,7 @@ endif
 
 $(UNTARGET_LIB_DYNAMIC): $(UNOBJS)
 ifeq ($(CC),cl)
-	link /DLL /OUT..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS) \
-		$(CFLAGS) $(LDFLAGS) $(LIBS)
+	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS)
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
 		$(UNOBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)

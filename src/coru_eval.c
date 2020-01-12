@@ -153,9 +153,15 @@ BOOL coru_eval_eval(coru_eval_t *self,
     /* Detect #! (shebang) on first line. */
     if (self->first_line) {
         if (string_starts_with(line, "#!")) {
-            strcpy((*out)+total_size, line);
+            size_t sz = strlen(line);
 
-            total_size += strlen(line);
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, line);
+        #else
+            strcpy((*out)+total_size, line);
+        #endif
+
+            total_size += sz;
             (*out)[total_size] = '\0';
 
             self->first_line = FALSE;
@@ -191,23 +197,44 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
     /* Copy original text. */
-    strcpy((*out)+total_size, line);
-    total_size += strlen(line);
-    (*out)[total_size] = '\0';
+    {
+        size_t sz = strlen(line);
+    
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, line);
+    #else
+        strcpy((*out)+total_size, line);
+    #endif
+
+        total_size += sz;
+        (*out)[total_size] = '\0';
+    }
 
     if (self->multi > 0 || (self->mstart ^ self->mend)) {
+        size_t sz = strlen(END_OF_LINE);
+    
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, END_OF_LINE);
+    #else
         strcpy((*out)+total_size, END_OF_LINE);
+    #endif
 
-        total_size += strlen(END_OF_LINE);
+        total_size += sz;
         (*out)[total_size] = '\0';
 
         return TRUE;
     }
 
     if (!is_all && string_is_space_only(line)) {
-        strcpy((*out)+total_size, END_OF_LINE);
+        size_t sz = strlen(END_OF_LINE);
 
-        total_size += strlen(END_OF_LINE);
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, END_OF_LINE);
+    #else
+        strcpy((*out)+total_size, END_OF_LINE);
+    #endif
+
+        total_size += sz;
         (*out)[total_size] = '\0';
 
         return TRUE;
@@ -238,9 +265,15 @@ BOOL coru_eval_eval(coru_eval_t *self,
     coru_ast_t *ast = coru_parser_next(parser);
     while (ast) {
         if (CORU_AST_BACKSLASH == coru_ast_type(ast)) {
-            strcpy((*out)+total_size, END_OF_LINE);
+            size_t sz = strlen(END_OF_LINE);
 
-            total_size += strlen(END_OF_LINE);
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, END_OF_LINE);
+        #else
+            strcpy((*out)+total_size, END_OF_LINE);
+        #endif
+
+            total_size += sz;
             (*out)[total_size] = '\0';
 
             goto END_CORU_EVAL;
@@ -255,9 +288,15 @@ BOOL coru_eval_eval(coru_eval_t *self,
     {
         size_t i;
         for (i = 0; i < sz_space; i++) {
-            strcpy((*out)+total_size, " ");
+            size_t sz = strlen(" ");
 
-            total_size += strlen(" ");
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, " ");
+        #else
+            strcpy((*out)+total_size, " ");
+        #endif
+
+            total_size += sz;
             (*out)[total_size] = '\0';
         }
     }
@@ -265,22 +304,48 @@ BOOL coru_eval_eval(coru_eval_t *self,
     self->line_number += 1;
 
     /* Insert indent. */
-    strcpy((*out)+total_size, "  ");
+    {
+        size_t sz = strlen("  ");
 
-    total_size += strlen("  ");
-    (*out)[total_size] = '\0';
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, "  ");
+    #else
+        strcpy((*out)+total_size, "  ");
+    #endif
+
+        total_size += sz;
+        (*out)[total_size] = '\0';
+    }
+    
 
     /* Insert the start word of comment. */
-    strcpy((*out)+total_size, single_start);
+    {
+        size_t sz = strlen(single_start);
 
-    total_size += strlen(single_start);
-    (*out)[total_size] = '\0';
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, single_start);
+    #else
+        strcpy((*out)+total_size, single_start);
+    #endif
+
+        total_size += strlen(single_start);
+        (*out)[total_size] = '\0';
+    }
 
     /* Insert a space. */
-    strcpy((*out)+total_size, " ");
+    {
+        size_t sz = strlen(" ");
 
-    total_size += strlen(" ");
-    (*out)[total_size] = '\0';
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, " ");
+    #else
+        strcpy((*out)+total_size, " ");
+    #endif
+
+        total_size += sz;
+        (*out)[total_size] = '\0';
+    }
+    
 
     temp = self->line_number;
     size_t digit_line_number = 1;
@@ -293,9 +358,15 @@ BOOL coru_eval_eval(coru_eval_t *self,
     {
         size_t i;
         for (i = 0; i < digit - digit_line_number; i++) {
-            strcpy((*out)+total_size, " ");
+            size_t sz = strlen(" ");
 
-            total_size += strlen(" ");
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, " ");
+        #else
+            strcpy((*out)+total_size, " ");
+        #endif
+
+            total_size += sz;
             (*out)[total_size] = '\0';
         }
     }
@@ -309,37 +380,76 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     num_s[0] = '\0';
 
+#if _MSC_VER
+    if (sprintf_s(num_s, digit_line_number+1, "%lu", self->line_number) < 0) {
+        PUTERR("Failed to insert a number");
+        goto ERROR_CORU_EVAL;
+    }
+#else
     if (sprintf(num_s, "%lu", self->line_number) < 0) {
         PUTERR("Failed to insert a number");
         goto ERROR_CORU_EVAL;
     }
+#endif
 
-    strcpy((*out)+total_size, num_s);
+    {
+        size_t sz = strlen(num_s);
 
-    total_size += strlen(num_s);
-    (*out)[total_size] = '\0';
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, num_s);
+    #else
+        strcpy((*out)+total_size, num_s);
+    #endif
+
+        total_size += sz;
+        (*out)[total_size] = '\0';
+    }
 
     free(num_s);
 
     if (0 != strcmp("", single_end)) {
         /* Insert a space. */
-        strcpy((*out)+total_size, " ");
+        {
+            size_t sz = strlen(" ");
 
-        total_size += strlen(" ");
-        (*out)[total_size] = '\0';
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, " ");
+        #else
+            strcpy((*out)+total_size, " ");
+        #endif
+
+            total_size += sz;
+            (*out)[total_size] = '\0';
+        }
 
         /* Insert the end word of single line comment. */
-        strcpy((*out)+total_size, single_end);
+        {
+            size_t sz = strlen(single_end);
 
-        total_size += strlen(single_end);
-        (*out)[total_size] = '\0';
+        #if _MSC_VER
+            strcpy_s((*out)+total_size, total_size+sz, single_end);
+        #else
+            strcpy((*out)+total_size, single_end);
+        #endif
+
+            total_size += sz;
+            (*out)[total_size] = '\0';
+        }
     }
 
     /* Insert EOL. */
-    strcpy((*out)+total_size, END_OF_LINE);
+    {
+        size_t sz = strlen(END_OF_LINE);
 
-    total_size += strlen(END_OF_LINE);
-    (*out)[total_size] = '\0';
+    #if _MSC_VER
+        strcpy_s((*out)+total_size, total_size+sz, END_OF_LINE);
+    #else
+        strcpy((*out)+total_size, END_OF_LINE);
+    #endif
+
+        total_size += sz;
+        (*out)[total_size] = '\0';
+    }
 
 END_CORU_EVAL:
     coru_parser_delete(parser);

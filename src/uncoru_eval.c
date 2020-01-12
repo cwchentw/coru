@@ -10,7 +10,12 @@
 #include "uncoru_stats.h"
 
 struct uncoru_eval_t {
-    /* Declare it later. */
+    /* Refactor it later. */
+    BOOL first_line;
+    BOOL mstart;
+    BOOL mend;
+    size_t multi;
+    size_t line_number;
 };
 
 uncoru_eval_t * uncoru_eval_new(void)

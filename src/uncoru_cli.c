@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     char *out = NULL;
 
     if (!uncoru_run(argc, argv, &out))
-        goto ERROR;
+        goto ERROR_UNCORU;
 
     if (out)
         PRINT("%s", out);
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     return 0;
 
-ERROR:
+ERROR_UNCORU:
     if (out)
         free(out);
 
@@ -90,9 +90,14 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
     language_t lang = \
         detect_target_language(uncoru_argument_path(arg));
 
+#if _MSC_VER
+    if (0 != fopen_s(&fp, uncoru_argument_path(arg), "r"))
+        goto ERROR_LOAD;
+#else
     fp = fopen(uncoru_argument_path(arg), "r");
     if (!fp)
         goto ERROR_LOAD;
+#endif
 
     stats = uncoru_stats_load(fp);
     if (!stats)

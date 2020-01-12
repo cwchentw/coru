@@ -93,10 +93,14 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
 
-    fp = fopen(coru_argument_path(arg), "r");
-    if (!fp) {
+#if _MSC_VER
+    if (0 != fopen_s(&fp, coru_argument_path(arg), "r"))
         goto ERROR_LOAD;
-    }
+#else
+    fp = fopen(coru_argument_path(arg), "r");
+    if (!fp)
+        goto ERROR_LOAD;
+#endif
 
     fclose(fp);
     fp = NULL;
@@ -121,6 +125,14 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
     }
 #endif
 
+#if _MSC_VER
+    if (0 != fopen_s(&fp, coru_argument_path(arg), "r")) {
+    #if DEBUG
+        PUTERR("Failed to open file at %s", coru_argument_path(arg));
+    #endif
+        goto ERROR_LOAD;
+    }
+#else
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
     #if DEBUG
@@ -128,6 +140,8 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
     #endif
         goto ERROR_LOAD;
     }
+#endif
+    
 
     stats = coru_stats_load(fp);
     if (!stats)

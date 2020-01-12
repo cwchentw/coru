@@ -4,7 +4,10 @@
 #include "uncoru_lexer.h"
 
 struct uncoru_lexer_t {
-    /* Declare it later. */
+    /* Refactor it later. */
+    size_t size;
+    size_t capacity;
+    size_t index;
 };
 
 uncoru_lexer_t * uncoru_lexer_new(void)
