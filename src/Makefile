@@ -163,18 +163,28 @@ endif  # Linux
 endif  # Darwin
 endif  # CC
 
-dynamic: $(TARGET_LIB_DYNAMIC)
+dynamic: $(TARGET_LIB_DYNAMIC) $(UNTARGET_LIB_DYNAMIC)
 
 $(TARGET_LIB_DYNAMIC): $(OBJS)
 ifeq ($(CC),cl)
-	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS)
-else
-	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS) \
+	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
+else
+	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 
 %.obj: %.c
 	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS)
+
+$(UNTARGET_LIB_DYNAMIC): $(UNOBJS)
+ifeq ($(CC),cl)
+	link /DLL /OUT..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS) \
+		$(CFLAGS) $(LDFLAGS) $(LIBS)
+else
+	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
+		$(UNOBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 
 %.o: %.c
 ifeq (dynamic,$(MAKECMDGOALS))
@@ -192,4 +202,5 @@ clean:
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_STATIC) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_EXEC) \
-		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_STATIC)
+		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_STATIC) \
+		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC)
