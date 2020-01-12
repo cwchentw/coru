@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include "cstring.h"
@@ -7,11 +8,12 @@
 #include "uncoru_token.h"
 
 struct uncoru_lexer_t {
-    /* Refactor it later. */
     size_t size;
     size_t capacity;
     size_t index;
     uncoru_token_t **tokens;
+    char *comment_start;
+    char *comment_end;
 };
 
 uncoru_lexer_t * uncoru_lexer_new(void)
@@ -42,6 +44,9 @@ uncoru_lexer_t * uncoru_lexer_new(void)
         for (i = 0; i < lexer->capacity; i++)
             lexer->tokens[i] = NULL;
     }
+
+    lexer->comment_start = NULL;
+    lexer->comment_end = NULL;
 
     return lexer;
 }
@@ -74,6 +79,7 @@ void uncoru_lexer_delete(void *self)
 #define IS_CODE(c) \
     (SPACE != (c) \
      && TAB != (c) \
+     && !isdigit(c) \
      && BACKSLASH != (c) \
      && SINGLE_QUOTE != (c) \
      && DOUBLE_QUOTE != (c))
@@ -197,6 +203,39 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 
                 if (!_uncoru_lexer_push(self, token))
                     return FALSE;
+            }
+            else if (isdigit(input[i])) {
+                size_t j;
+
+                for (j = i; j < strlen(input); j++) {
+                    if (!isdigit(input[j]))
+                        break;
+                }
+
+                size_t len = j - i;
+
+                if (len < 1)
+                    continue;
+
+                char *integer = string_allocate_substring(input, i, j - 1);
+                if (!integer)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Integer as token: -->%s<--", integer);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_INTEGER, integer);
+                if (!token) {
+                    free(integer);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j - 1;
             }
             else if (IS_CODE(input[i])) {
                 size_t j;

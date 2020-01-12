@@ -13,6 +13,9 @@ struct uncoru_token_t {
     (UNCORU_TOKEN_CODE == (t) \
      || UNCORU_TOKEN_SPACE == (t) \
      || UNCORU_TOKEN_TAB == (t) \
+     || UNCORU_TOKEN_INTEGER == (t) \
+     || UNCORU_TOKEN_COMMENT_START == (t) \
+     || UNCORU_TOKEN_COMMENT_END == (t) \
      || UNCORU_TOKEN_SINGLE_QUOTE == (t) \
      || UNCORU_TOKEN_DOUBLE_QUOTE == (t) \
      || UNCORU_TOKEN_BACKSLASH == (t))

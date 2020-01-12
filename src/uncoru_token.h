@@ -3,12 +3,15 @@
 
 typedef unsigned char UNCORU_TOKEN_TYPE;
 
-#define  UNCORU_TOKEN_CODE          0  /* Any non-specified code. */
-#define  UNCORU_TOKEN_SPACE         1  /* ' ' */
-#define  UNCORU_TOKEN_TAB           2  /* '\t' */
-#define  UNCORU_TOKEN_SINGLE_QUOTE  3  /* '\'' */
-#define  UNCORU_TOKEN_DOUBLE_QUOTE  4  /* '"'  */
-#define  UNCORU_TOKEN_BACKSLASH     5  /* '\\' */
+#define  UNCORU_TOKEN_CODE           0  /* Any non-specified code. */
+#define  UNCORU_TOKEN_SPACE          1  /* ' ' */
+#define  UNCORU_TOKEN_TAB            2  /* '\t' */
+#define  UNCORU_TOKEN_SINGLE_QUOTE   3  /* '\'' */
+#define  UNCORU_TOKEN_DOUBLE_QUOTE   4  /* '"'  */
+#define  UNCORU_TOKEN_BACKSLASH      5  /* '\\' */
+#define  UNCORU_TOKEN_COMMENT_START  6  /* The start text of comment. */
+#define  UNCORU_TOKEN_COMMENT_END    7  /* The end text of comment. */
+#define  UNCORU_TOKEN_INTEGER        8  /* Integer. */
 
 typedef struct uncoru_token_t uncoru_token_t;
 

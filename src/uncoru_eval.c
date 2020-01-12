@@ -74,28 +74,9 @@ BOOL uncoru_eval_eval(
         hash_table_get(comment_single_end, lang_string);
 
     if (!(*out)) {
-        size_t temp = uncoru_stats_height(stats);
-        size_t digit = 1;
-        while (temp >= 10) {
-            temp /= 10;
-            digit += 1;
-        }
-
-        size_t line_size = \
-            uncoru_stats_width(stats)
-            - 2  /* indent */
-            - strlen(comment_start)
-            - 1  /* space */
-            - digit
-            + strlen(END_OF_LINE);
-
-        if (0 != strcmp("", comment_end)) {
-            line_size -= 1; /* space */
-            line_size -= strlen(comment_end);
-        }
-
         *out = (char *) malloc(
-            (uncoru_stats_height(stats) * line_size + 1) * sizeof(char));
+            (uncoru_stats_width(stats) * uncoru_stats_height(stats) + 1)
+             * sizeof(char));
         if (!(*out))
             goto ERROR_UNCORU_EVAL;
 
