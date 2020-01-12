@@ -12,20 +12,30 @@ static BOOL uncoru_run(int argc, char **argv, char **out);
 
 int main(int argc, char *argv[])
 {
-    char *out = NULL;
+    char **out = (char **) malloc(sizeof(char *));
+    if (!out) {
+        PUTERR("Failed to allocate memory for output");
+        PUTERR("Check available system memory");
+        return 1;
+    }
 
-    if (!uncoru_run(argc, argv, &out))
+    *out = NULL;
+
+    if (!uncoru_run(argc, argv, out))
         goto ERROR_UNCORU;
 
-    if (out)
-        PRINT("%s", out);
+    if (*out)
+        PRINT("%s", *out);
 
-    if (out)
-        free(out);
+    free(*out);
+    free(out);
 
     return 0;
 
 ERROR_UNCORU:
+    if (*out)
+        free(*out);
+
     if (out)
         free(out);
 

@@ -141,7 +141,7 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
         goto ERROR_LOAD;
     }
 #endif
-    
+
 
     stats = coru_stats_load(fp);
     if (!stats)

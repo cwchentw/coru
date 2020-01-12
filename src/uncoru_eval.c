@@ -49,6 +49,8 @@ BOOL uncoru_eval_eval(
 {
     assert(self);
 
+    char *comment_start = NULL;
+    char *comment_end = NULL;
     uncoru_lexer_t *lexer = NULL;
 
     if (!comment_single_start) {
@@ -65,10 +67,10 @@ BOOL uncoru_eval_eval(
 
     char *lang_string = language_to_string(lang);
 
-    char *comment_start = \
+    comment_start = \
         hash_table_get(comment_single_start, lang_string);
 
-    char *comment_end = \
+    comment_end = \
         hash_table_get(comment_single_end, lang_string);
 
     if (!(*out)) {
@@ -92,11 +94,12 @@ BOOL uncoru_eval_eval(
             line_size -= strlen(comment_end);
         }
 
-        *out = \
-            (char *) malloc(
-                uncoru_stats_height(stats) * line_size * sizeof(char));
+        *out = (char *) malloc(
+            (uncoru_stats_height(stats) * line_size + 1) * sizeof(char));
         if (!(*out))
             goto ERROR_UNCORU_EVAL;
+
+        (*out)[0] = '\0';
     }
 
     lexer = uncoru_lexer_new();

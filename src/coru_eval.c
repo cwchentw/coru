@@ -271,7 +271,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         total_size += sz;
         (*out)[total_size] = '\0';
     }
-    
+
 
     /* Insert the start word of comment. */
     {
@@ -288,7 +288,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         total_size += sz;
         (*out)[total_size] = '\0';
     }
-    
+
 
     temp = self->line_number;
     size_t digit_line_number = 1;
