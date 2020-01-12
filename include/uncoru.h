@@ -67,7 +67,6 @@ typedef struct uncoru_stats_t uncoru_stats_t;
 #define LANGUAGE_SH       16
 #define LANGUAGE_CMAKE    17
 
-BOOL uncoru_run(int argc, char **argv, char **out);
 BOOL uncoru_load(FILE *stream, uncoru_stats_t *stats, language_t lang, char **out);
 
 #endif  /* UNCORU_H */

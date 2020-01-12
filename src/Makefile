@@ -8,7 +8,7 @@ endif
 ifeq ($(detected_OS),Windows)
 	SEP=\\
 else
-	SEP=\/
+	SEP=/
 endif
 
 INCLUDE_DIR=include
@@ -56,9 +56,10 @@ ifeq ($(CC),cl)
 		coru_eval.obj coru.obj
 	EXEC_OBJS=coru_argument.obj coru_command.obj coru_help.obj coru_cli.obj
 	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
-		uncoru_command.obj uncoru_help.obj uncoru_argument.obj \
 		uncoru_stats.obj uncoru_lexer.obj uncoru_eval.obj \
-		uncoru.obj uncoru_cli.obj
+		uncoru.obj
+	EXEC_UNOBJS=uncoru_argument.obj uncoru_command.obj uncoru_help.obj \
+		uncoru_cli.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
 		coru_stats.o \
@@ -66,9 +67,10 @@ else
 		coru_eval.o coru.o
 	EXEC_OBJS=coru_command.o coru_argument.o coru_help.o coru_cli.o
 	UNOBJS=cstring.o language.o hash_table.o syntax_data.o \
-		uncoru_command.o uncoru_help.o uncoru_argument.o \
 		uncoru_stats.o uncoru_lexer.o uncoru_eval.o \
-		uncoru.o uncoru_cli.o
+		uncoru.o
+	EXEC_UNOBJS=uncoru_command.o uncoru_help.o uncoru_argument.o \
+		uncoru_cli.o
 endif
 
 COMPILER_GCC := cc gcc clang
@@ -124,8 +126,8 @@ $(TARGET_EXEC): $(EXEC_OBJS) static
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 
-$(UNTARGET_EXEC): $(SRC_UNTARGET) static
-	$(CC) $(OBJ_TO_UNEXEC) $(SRC_UNTARGET) \
+$(UNTARGET_EXEC): $(EXEC_UNOBJS) static
+	$(CC) $(OBJ_TO_UNEXEC) $(EXEC_UNOBJS) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 
@@ -185,7 +187,7 @@ clean_objs:
 	$(RM) $(OBJS)
 
 clean:
-	$(RM) $(OBJS) $(EXEC_OBJS) $(UNOBJS) \
+	$(RM) $(OBJS) $(EXEC_OBJS) $(UNOBJS) $(EXEC_UNOBJS) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_EXEC) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_STATIC) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
