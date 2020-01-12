@@ -26,7 +26,7 @@ uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text)
     assert(text);
 
     uncoru_token_t * token = \
-        (uncoru_token_t *) malloc(sizeof(uncoru_token_t *));
+        (uncoru_token_t *) malloc(sizeof(uncoru_token_t));
     if (!token) {
         PUTERR("Failed to allocate memory for uncoru token");
         PUTERR("Check available system memory");
