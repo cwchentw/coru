@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
+#include "cstring.h"
 #include "print.h"
 #include "uncoru_lexer.h"
 #include "uncoru_token.h"
@@ -62,9 +64,131 @@ void uncoru_lexer_delete(void *self)
     free(self);
 }
 
-BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *line)
+/* Predefined characters in uncoru lexer. */
+#define SPACE         ' '
+#define TAB           '\t'
+#define BACKSLASH     '\\'
+#define SINGLE_QUOTE  '\''
+#define DOUBLE_QUOTE  '"'
+
+static BOOL _uncoru_lexer_push(uncoru_lexer_t *self, uncoru_token_t *token);
+
+BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 {
     assert(self);
+
+    #if DEBUG
+        PUTERR("Source to scan: -->%s<--", input);
+    #endif
+    {
+        size_t i;
+        for (i = 0; i < strlen(input); i++) {
+            if (SPACE == input[i]) {
+                size_t j;
+
+                /* Scan greedily. */
+                for (j = i; j < strlen(input); j++) {
+                    if (SPACE != input[j])
+                        break;
+                }
+
+                size_t len = j - 1 + i + 1;
+
+                if (len < 1)
+                    continue;
+
+                char *spaces = string_allocate_substring(input, i, j - 1);
+                if (!spaces)
+                    return FALSE;
+
+                #if DEBUG
+                    PUTERR("Space as token: -->%s<--", spaces);
+                #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_SPACE, spaces);
+                if (!token) {
+                    free(spaces);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j - 1;
+            }
+            else if (TAB == input[i]) {
+                char *tab = string_allocate("\t");
+                if (!tab)
+                    return FALSE;
+
+                #if DEBUG
+                    PUTERR("TAB as token: -->%s<--", tab);
+                #endif
+
+                uncoru_token_t *token = uncoru_token_new(UNCORU_TOKEN_TAB, tab);
+                if (!token) {
+                    free(tab);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+            }
+        }
+    }
+
+    return TRUE;
+}
+
+static BOOL _uncoru_lexer_expand(uncoru_lexer_t *self);
+
+static BOOL _uncoru_lexer_push(uncoru_lexer_t *self, uncoru_token_t *token)
+{
+    assert(self);
+    assert(token);
+
+    if (!_uncoru_lexer_expand(self))
+        return FALSE;
+
+    self->tokens[self->size] = token;
+    self->size += 1;
+
+    return TRUE;
+}
+
+static BOOL _uncoru_lexer_expand(uncoru_lexer_t *self)
+{
+    assert(self);
+
+    if (self->size + 1 <= self->capacity)
+        return TRUE;
+
+    self->capacity <<= 1;
+
+    uncoru_token_t **old_tokens = self->tokens;
+    uncoru_token_t **new_tokens = \
+        (uncoru_token_t **) malloc(self->capacity * sizeof(uncoru_token_t *));
+    if (!new_tokens) {
+        PUTERR("Failed to allocate new tokens of uncoru lexer");
+        PUTERR("Check available system memory");
+        return FALSE;
+    }
+
+    {
+        size_t i;
+        for (i = 0; i < self->size; i++)
+            new_tokens[i] = old_tokens[i];
+    }
+
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_tokens[i] = NULL;
+    }
+
+    self->tokens = new_tokens;
+    free(old_tokens);
 
     return TRUE;
 }
