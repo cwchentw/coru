@@ -9,8 +9,18 @@ struct coru_token_t {
     char *text;
 };
 
+#define IS_VALID_TOKEN_TYPE(t) \
+    (CORU_TOKEN_CODE == (t) \
+     || CORU_TOKEN_SPACE == (t) \
+     || CORU_TOKEN_TAB == (t) \
+     || CORU_TOKEN_SINGLE_QUOTE == (t) \
+     || CORU_TOKEN_DOUBLE_QUOTE == (t) \
+     || CORU_TOKEN_BACKSLASH == (t))
+
 coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text)
 {
+    assert(IS_VALID_TOKEN_TYPE(t));
+
     coru_token_t *tn = (coru_token_t *) malloc(sizeof(coru_token_t));
     if (!tn) {
         PUTERR("Failed to allocate memory for token object");
