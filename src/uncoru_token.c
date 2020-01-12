@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include "cstring.h"
 #include "print.h"
 #include "uncoru_token.h"
 
@@ -19,6 +20,7 @@ struct uncoru_token_t {
 uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text)
 {
     assert(IS_VALID_TOKEN_TYPE(type));
+    assert(text);
 
     uncoru_token_t * token = \
         (uncoru_token_t *) malloc(sizeof(uncoru_token_t *));
@@ -29,7 +31,7 @@ uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text)
     }
 
     token->token_t = type;
-    token->text = NULL;
+    token->text = text;
 
     return token;
 }
@@ -43,4 +45,35 @@ void uncoru_token_delete(void *self)
         free((void *) text);
 
     free(self);
+}
+
+uncoru_token_t * uncoru_token_copy(uncoru_token_t *self)
+{
+    assert(self);
+
+    char *s = string_allocate(self->text);
+    if (!s)
+        return NULL;
+
+    uncoru_token_t *token = uncoru_token_new(self->token_t, s);
+    if (!token) {
+        free(s);
+        return NULL;
+    }
+
+    return token;
+}
+
+UNCORU_TOKEN_TYPE uncoru_token_type(uncoru_token_t *self)
+{
+    assert(self);
+
+    return self->token_t;
+}
+
+char * uncoru_token_text(uncoru_token_t *self)
+{
+    assert(self);
+
+    return self->text;
 }

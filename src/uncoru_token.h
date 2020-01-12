@@ -14,5 +14,8 @@ typedef struct uncoru_token_t uncoru_token_t;
 
 uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text);
 void uncoru_token_delete(void *self);
+uncoru_token_t * uncoru_token_copy(uncoru_token_t *self);
+UNCORU_TOKEN_TYPE uncoru_token_type(uncoru_token_t *self);
+char * uncoru_token_text(uncoru_token_t *self);
 
 #endif  /* UNCORU_TOKEN_H */

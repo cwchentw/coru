@@ -20,6 +20,7 @@ struct coru_token_t {
 coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text)
 {
     assert(IS_VALID_TOKEN_TYPE(t));
+    assert(text);
 
     coru_token_t *tn = (coru_token_t *) malloc(sizeof(coru_token_t));
     if (!tn) {
