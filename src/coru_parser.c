@@ -45,8 +45,13 @@ coru_parser_t * coru_parser_new(void)
     return parser;
 }
 
+#define IS_CODE_TOKEN(t) \
+    (CORU_TOKEN_SINGLE_QUOTE != (t) \
+     && CORU_TOKEN_DOUBLE_QUOTE != (t) \
+     && CORU_TOKEN_TAB != (t) \
+     && CORU_TOKEN_BACKSLASH != (t))
+
 static BOOL _coru_parser_expand(coru_parser_t *self);
-static BOOL _is_code_token(CORU_TOKEN_TYPE token_t);
 
 BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 {
@@ -197,11 +202,11 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 
             token = coru_lexer_next(lexer);
         }
-        else if (token && _is_code_token(coru_token_type(token))) {
-            #if DEBUG
-                PUTERR("Pass code token: (%d) -->%s<--",
-                    coru_token_type(token), coru_token_text(token));
-            #endif
+        else if (token && IS_CODE_TOKEN(coru_token_type(token))) {
+        #if DEBUG
+            PUTERR("Pass code token: (%d) -->%s<--",
+                coru_token_type(token), coru_token_text(token));
+        #endif
             /* Refactor it later. */
             coru_token_delete(token);
             token = coru_lexer_next(lexer);  /* Pass. */
@@ -257,14 +262,6 @@ static BOOL _coru_parser_expand(coru_parser_t *self)
     free(old_asts);
 
     return TRUE;
-}
-
-static BOOL _is_code_token(CORU_TOKEN_TYPE token_t)
-{
-    return CORU_TOKEN_SINGLE_QUOTE != token_t
-        && CORU_TOKEN_DOUBLE_QUOTE != token_t
-        && CORU_TOKEN_TAB != token_t
-        && CORU_TOKEN_BACKSLASH != token_t;
 }
 
 coru_ast_t * coru_parser_next(coru_parser_t *self)
