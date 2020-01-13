@@ -53,8 +53,14 @@ coru_lexer_t * coru_lexer_new(void)
     return lexer;
 }
 
+#define IS_CODE(c) \
+    ((SPACE != c) \
+      && (TAB != c) \
+      && (BACKSLASH != c) \
+      && (SINGLE_QUOTE != c) \
+      && (DOUBLE_QUOTE != c))
+
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
-static BOOL _is_common_code(char c);
 
 BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 {
@@ -180,13 +186,13 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!_coru_lexer_push(self, token))
                     return FALSE;
             }
-            else if (_is_common_code(input[i])) {
+            else if (IS_CODE(input[i])) {
                 size_t j;
 
                 /* Scan greedily. */
                 for (j = i; j < strlen(input); j++) {
                     /* Go one step over last valid position. */
-                    if (!_is_common_code(input[j]))
+                    if (!IS_CODE(input[j]))
                         break;
                 }
 
@@ -280,15 +286,6 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self)
     free(old_tokens);
 
     return TRUE;
-}
-
-static BOOL _is_common_code(char c)
-{
-    return (SPACE != c)
-        && (TAB != c)
-        && (BACKSLASH != c)
-        && (SINGLE_QUOTE != c)
-        && (DOUBLE_QUOTE != c);
 }
 
 coru_token_t * coru_lexer_next(coru_lexer_t *self)
