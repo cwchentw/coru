@@ -32,7 +32,9 @@ endif
 
 SRC_UNTARGET=uncoru_cli.c
 
-ifeq ($(CC),cl)
+CL := cl icl
+
+ifneq (,$(findstring $(CC),$(CL)))
 	TARGET_LIB_DYNAMIC=$(TARGET).dll
 	TARGET_LIB_STATIC=$(TARGET).lib
 	UNTARGET_LIB_DYNAMIC=$(UNTARGET).dll
@@ -49,7 +51,7 @@ endif
 	UNTARGET_LIB_STATIC=lib$(UNTARGET).a
 endif
 
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
@@ -71,7 +73,7 @@ else
 	EXEC_UNOBJS=uncoru_argument.o uncoru_help.o uncoru_cli.o
 endif
 
-COMPILER_GCC := cc gcc clang
+COMPILER_GCC := cc gcc clang icc
 
 ifneq (,$(filter $(COMPILER_GCC),$(CC)))
 	CFLAGS=-Wall -Wextra -std=c89
@@ -79,7 +81,7 @@ ifneq (,$(filter $(COMPILER_GCC),$(CC)))
 	OBJ_TO_EXEC=-o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=-o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_EXEC)
 else
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	CFLAGS=/W4 /sdl /D _CRT_SECURE_NO_WARNINGS
 	SRC_TO_OBJ=/c $<
 	OBJ_TO_EXEC=/Fe:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_EXEC)
@@ -91,20 +93,20 @@ endif
 endif
 
 ifneq (,$(DEBUG))
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	CFLAGS+=/D DEBUG
 else
 	CFLAGS+=-DDEBUG -g
 endif
 else
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	CFLAGS+=/O2
 else
 	CFLAGS+=-O2
 endif
 endif
 
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	CFLAGS+=/I ..$(SEP)$(INCLUDE_DIR)
 else
 	CFLAGS+=-I ..$(SEP)$(INCLUDE_DIR)
@@ -132,7 +134,7 @@ $(UNTARGET_EXEC): $(EXEC_UNOBJS) static
 static: $(TARGET_LIB_STATIC) $(UNTARGET_LIB_STATIC)
 
 $(TARGET_LIB_STATIC): $(OBJS)
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	lib /out:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_STATIC) $(OBJS)
 else
 ifeq ($(detected_OS),Darwin)
@@ -147,7 +149,7 @@ endif  # Darwin
 endif  # CC
 
 $(UNTARGET_LIB_STATIC): $(UNOBJS)
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	lib /out:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_STATIC) $(UNOBJS)
 else
 ifeq ($(detected_OS),Darwin)
@@ -164,7 +166,7 @@ endif  # CC
 dynamic: $(TARGET_LIB_DYNAMIC) $(UNTARGET_LIB_DYNAMIC)
 
 $(TARGET_LIB_DYNAMIC): $(OBJS)
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS)
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
@@ -175,7 +177,7 @@ endif
 	$(CC) $(SRC_TO_OBJ) $(CFLAGS) $(LDFLAGS)
 
 $(UNTARGET_LIB_DYNAMIC): $(UNOBJS)
-ifeq ($(CC),cl)
+ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS)
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
