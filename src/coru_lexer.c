@@ -66,9 +66,9 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 {
     assert(self);
 
-    #if DEBUG
-        PUTERR("Source to scan: -->%s<--", input);
-    #endif
+#if DEBUG
+    PUTERR("Source to scan: -->%s<--", input);
+#endif
     {
         size_t i;
         /* Scan the input with a finite automata. */
