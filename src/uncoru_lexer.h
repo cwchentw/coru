@@ -7,6 +7,8 @@ typedef struct uncoru_lexer_t uncoru_lexer_t;
 
 uncoru_lexer_t * uncoru_lexer_new(void);
 void uncoru_lexer_delete(void *self);
+void uncoru_lexer_set_comment_start(uncoru_lexer_t *self, char *comment);
+void uncoru_lexer_set_comment_end(uncoru_lexer_t *self, char *comment);
 BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input);
 
 #endif  /* UNCORU_LEXER_H */

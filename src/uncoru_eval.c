@@ -87,6 +87,9 @@ BOOL uncoru_eval_eval(
     if (!lexer)
         goto ERROR_UNCORU_EVAL;
 
+    uncoru_lexer_set_comment_start(lexer, comment_start);
+    uncoru_lexer_set_comment_end(lexer, comment_end);
+
     if (!uncoru_lexer_lex(lexer, line))
         goto ERROR_UNCORU_EVAL;
 

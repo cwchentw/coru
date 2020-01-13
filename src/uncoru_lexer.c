@@ -69,12 +69,35 @@ void uncoru_lexer_delete(void *self)
     free(self);
 }
 
+void uncoru_lexer_set_comment_start(uncoru_lexer_t *self, char *comment)
+{
+    assert(self);
+
+    self->comment_start = comment;
+}
+
+void uncoru_lexer_set_comment_end(uncoru_lexer_t *self, char *comment)
+{
+    assert(self);
+
+    self->comment_end = comment;
+}
+
 /* Predefined characters in uncoru lexer. */
 #define SPACE         ' '
 #define TAB           '\t'
 #define BACKSLASH     '\\'
 #define SINGLE_QUOTE  '\''
 #define DOUBLE_QUOTE  '"'
+
+#define IS_COMMENT_START(c) \
+    (self->comment_start \
+     && *(self->comment_start) == (c))
+
+#define IS_COMMENT_END(c) \
+    (self->comment_end \
+     && 0 != strcmp("", self->comment_end) \
+     && *(self->comment_end) == (c))
 
 #define IS_CODE(c) \
     (SPACE != (c) \
@@ -90,9 +113,9 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 {
     assert(self);
 
-    #if DEBUG
-        PUTERR("Source to scan: -->%s<--", input);
-    #endif
+#if DEBUG
+    PUTERR("Source to scan: -->%s<--", input);
+#endif
     {
         size_t i;
         for (i = 0; i < strlen(input); i++) {
@@ -237,7 +260,71 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 
                 i = j - 1;
             }
+            else if (IS_COMMENT_START(input[i])) {
+                size_t j;
+
+                for (j = i;
+                     j < strlen(input) && j - i < strlen(self->comment_start);
+                     j++) {
+                    if (self->comment_start[j-i] != input[j])
+                        break;
+                }
+
+                if (j - i < strlen(self->comment_start))
+                    goto SCAN_CODE;
+
+                char *comment = string_allocate(self->comment_start);
+                if (!comment)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Comment start as token: -->%s<--", comment);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_COMMENT_START, comment);
+                if (!token)
+                    return FALSE;
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j - 1;
+            }
+            else if (IS_COMMENT_END(input[i])) {
+                size_t j;
+
+                for (j = i;
+                     j < strlen(input) && j - i < strlen(self->comment_end);
+                     j++) {
+                    if (self->comment_end[j-i] != input[j])
+                        break;
+                }
+
+                if (j - i < strlen(self->comment_end))
+                    goto SCAN_CODE;
+
+                char *comment = string_allocate(self->comment_end);
+                if (!comment)
+                    return FALSE;
+
+            #if DEBUG
+                PUTERR("Comment end as token: -->%s<--", comment);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_COMMENT_END, comment);
+                if (!token)
+                    return FALSE;
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+
+                i = j - 1;
+            }
             else if (IS_CODE(input[i])) {
+            SCAN_CODE:
+                1;  /* Trick for label. */
                 size_t j;
 
                 for (j = i; j < strlen(input); j++) {
