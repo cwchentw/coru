@@ -5,16 +5,6 @@
 #include "platform.h"
 #include "print.h"
 
-void coru_help_version(void)
-{
-    PUTS("%s", CORU_VERSION);
-}
-
-void coru_help_license(void)
-{
-    PUTS("%s", CORU_LICENSE);
-}
-
 /*-------1---------2---------3---------4---------5---------6---------7---------8*/
 /*345678901234567890123456789012345678901234567890123456789012345678901234567890*/
 void coru_help_help(FILE *stream)

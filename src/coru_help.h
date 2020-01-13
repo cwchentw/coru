@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 
-void coru_help_version(void);
-void coru_help_license(void);
+#define coru_help_version(x) PUTS("%s", CORU_VERSION)
+#define coru_help_license(x) PUTS("%s", CORU_LICENSE)
+
 void coru_help_help(FILE *stream);
 
 #endif  /* CORU_HELP_H */

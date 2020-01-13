@@ -54,7 +54,7 @@ ifeq ($(CC),cl)
 		coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
 		coru_eval.obj coru.obj
-	EXEC_OBJS=coru_argument.obj coru_command.obj coru_help.obj coru_cli.obj
+	EXEC_OBJS=coru_argument.obj coru_help.obj coru_cli.obj
 	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		uncoru_stats.obj uncoru_token.obj uncoru_lexer.obj uncoru_eval.obj \
 		uncoru.obj
@@ -65,7 +65,7 @@ else
 		coru_stats.o \
 		coru_token.o coru_lexer.o coru_ast.o coru_parser.o \
 		coru_eval.o coru.o
-	EXEC_OBJS=coru_command.o coru_argument.o coru_help.o coru_cli.o
+	EXEC_OBJS=coru_argument.o coru_help.o coru_cli.o
 	UNOBJS=cstring.o language.o hash_table.o syntax_data.o \
 		uncoru_stats.o uncoru_token.o uncoru_lexer.o uncoru_eval.o \
 		uncoru.o

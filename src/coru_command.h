@@ -13,6 +13,6 @@ typedef unsigned char CORU_COMMAND;
 #define CORU_COMMAND_LOAD      5
 #define CORU_COMMAND_TOO_MANY  6
 
-BOOL is_coru_command_equal(CORU_COMMAND a, CORU_COMMAND b);
+#define is_coru_command_equal(a, b) ((a) == (b))
 
 #endif  /* CORU_CORU_COMMAND_H */
