@@ -58,8 +58,7 @@ ifeq ($(CC),cl)
 	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
 		uncoru_stats.obj uncoru_token.obj uncoru_lexer.obj uncoru_eval.obj \
 		uncoru.obj
-	EXEC_UNOBJS=uncoru_argument.obj uncoru_command.obj uncoru_help.obj \
-		uncoru_cli.obj
+	EXEC_UNOBJS=uncoru_argument.obj uncoru_help.obj uncoru_cli.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
 		coru_stats.o \
@@ -69,8 +68,7 @@ else
 	UNOBJS=cstring.o language.o hash_table.o syntax_data.o \
 		uncoru_stats.o uncoru_token.o uncoru_lexer.o uncoru_eval.o \
 		uncoru.o
-	EXEC_UNOBJS=uncoru_command.o uncoru_help.o uncoru_argument.o \
-		uncoru_cli.o
+	EXEC_UNOBJS=uncoru_argument.o uncoru_help.o uncoru_cli.o
 endif
 
 COMPILER_GCC := cc gcc clang

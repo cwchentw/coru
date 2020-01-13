@@ -13,6 +13,6 @@ typedef char UNCORU_COMMAND;
 #define UNCORU_COMMAND_LOAD      5
 #define UNCORU_COMMAND_TOO_MANY  6
 
-BOOL is_uncoru_command_equal(UNCORU_COMMAND a, UNCORU_COMMAND b);
+#define is_uncoru_command_equal(a, b) ((a) == (b))
 
 #endif  /* UNCORU_COMMAND_H */
