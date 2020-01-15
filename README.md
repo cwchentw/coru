@@ -61,8 +61,8 @@ Most major tier languages are supported. Here are currently supported ones:
 * Swift
 * Golang
 * Rust
-* C Shell
-* Bourne Shell
+* C shell or its derivatives
+* Bourne shell or its derivatives
 * CMake config file (default to *CMakeLists.txt*)
 * Make config file (default to *Makefile*)
 
