@@ -64,6 +64,7 @@ Most major tier languages are supported. Here are currently supported ones:
 * C Shell
 * Bourne Shell
 * CMake config file (default to *CMakeLists.txt*)
+* Make config file (default to *Makefile*)
 
 For unsupported language, you may set custom character for single line comment. It should work as well.
 
