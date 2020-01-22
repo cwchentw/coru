@@ -6,6 +6,13 @@
 
 `coru` and her sister programs are still experimental. Back up your code before using either.
 
+## `coru` and her Sister Programs
+
+* `coru` adds line numbers and, optionally, width numbers to source
+* `corucb` does the same code conversion as `coru` but for clipboard data
+* `uncoru` removes line numbers and width numbers from source left by `coru`
+* `uncorucb` does the same code conversion as `uncoru` but for clipboard data
+
 ## Why `coru`?
 
 When we write programming tutorials, demonstrative code snippets are essential. Nevertheless, it is uneasy for beginners to trace the code if no helpful information is provided. Line numbers represent conventional means to guide learners to trace code.
@@ -15,13 +22,6 @@ Some online tutorials add line numbers in the form of HTML elements on web pages
 In contrary, `coru` adds line numbers and, optionally, width numbers, to source code as its comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
 
 By the way, `uncoru`, the sister program of `coru`, removes the line numbers and the width numbers in source left by `coru` in case that you no longer require such metadata on code.
-
-## `coru` and her Sister Programs
-
-* `coru` adds line numbers and, optionally, width numbers to source
-* `corucb` does the same code conversion as `coru` but for clipboard data
-* `uncoru` removes line numbers and width numbers from source left by `coru`
-* `uncorucb` does the same code conversion as `uncoru` but for clipboard data
 
 ## System Requirements
 
@@ -61,9 +61,10 @@ Most major tier languages are supported. Here are currently supported ones:
 * Swift
 * Golang
 * Rust
-* C Shell
-* Bourne Shell
+* C shell or its derivatives
+* Bourne shell or its derivatives
 * CMake config file (default to *CMakeLists.txt*)
+* Make config file (default to *Makefile*)
 
 For unsupported language, you may set custom character for single line comment. It should work as well.
 
