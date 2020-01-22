@@ -113,20 +113,18 @@ else
 endif
 
 
-.PHONY: all test debug release static dynamic clean_objs clean
+.PHONY: all test debug exec static dynamic clean_objs clean
 
-all:
-	$(MAKE) dynamic
-	$(MAKE) clean_objs
-	$(MAKE) $(TARGET_EXEC)
-	$(MAKE) $(UNTARGET_EXEC)
+all: exec
 
-$(TARGET_EXEC): $(EXEC_OBJS) static
+exec: $(TARGET_EXEC) $(UNTARGET_EXEC)
+
+$(TARGET_EXEC): static $(EXEC_OBJS)
 	$(CC) $(OBJ_TO_EXEC) $(EXEC_OBJS) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)
 
-$(UNTARGET_EXEC): $(EXEC_UNOBJS) static
+$(UNTARGET_EXEC): static $(EXEC_UNOBJS)
 	$(CC) $(OBJ_TO_UNEXEC) $(EXEC_UNOBJS) \
 		..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_STATIC) \
 		$(CFLAGS) $(LDFLAGS) $(LIBS)

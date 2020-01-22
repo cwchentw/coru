@@ -14,9 +14,11 @@ endif
 SRC_DIR=src
 TEST_DIR=test
 
-.PHONY: all test dynamic static clean
+.PHONY: all exec test dynamic static clean
 
-all:
+all: exec
+
+exec:
 	$(MAKE) -C .$(SEP)$(SRC_DIR)
 
 test:
