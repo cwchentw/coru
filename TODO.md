@@ -1,3 +1,4 @@
+* Fix `realloc()` related code
 * Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
 * Refactor the output of coru from C string to stream
 * (feature) Detect *CMakeLists.txt* as CMake config file
