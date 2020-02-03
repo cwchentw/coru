@@ -18,8 +18,11 @@ static BOOL _coru_stats_eval(coru_stats_t *self, char *line);
 
 coru_stats_t * coru_stats_load(FILE *stream)
 {
+    char *line = NULL;
+    char *more_line = NULL;
+
     size_t line_size = 150;  /* Sensible line width */
-    char *line = (char *) malloc(line_size * sizeof(char));
+    line = (char *) malloc(line_size * sizeof(char));
     if (!line) {
         PUTERR("Failed to allocate line object");
         PUTERR("Check available system memory");
@@ -36,10 +39,14 @@ coru_stats_t * coru_stats_load(FILE *stream)
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;
-                if (!realloc(line, line_size)) {
+                more_line = realloc(line, line_size);
+                if (!more_line) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
                     goto ERROR_CORU_STATS;
+                }
+                else {
+                    line = more_line;
                 }
             }
             else {
