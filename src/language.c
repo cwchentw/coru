@@ -110,6 +110,7 @@ language_t detect_target_language(char *path)
 
     FILE *fp = NULL;
     char *line = NULL;
+    char *more_line = NULL;
 
 #if _MSC_VER
     if (0 != fopen_s(&fp, path, "r")) {
@@ -141,12 +142,15 @@ language_t detect_target_language(char *path)
             if ('\n' != line[size-1]) {
                 /* Double the size of the buffer. */
                 size <<= 1;
-                line = realloc(line, size);
-                if (!line) {
+                more_line = realloc(line, size);
+                if (!more_line) {
                 #if DEBUG
                     PUTERR("Failed to reallocate line");
                 #endif
                     goto ERROR_LANGUAGE;
+                }
+                else {
+                    line = more_line;
                 }
             } else {
                 goto PARSE_LINE;

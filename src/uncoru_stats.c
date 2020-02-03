@@ -16,6 +16,7 @@ static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line);
 uncoru_stats_t * uncoru_stats_load(FILE *stream)
 {
     char *line = NULL;
+    char *more_line = NULL;
     uncoru_stats_t *stats = NULL;
 
     size_t line_size = 150;  /* Sensible default line width. */
@@ -34,10 +35,14 @@ uncoru_stats_t * uncoru_stats_load(FILE *stream)
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size-1]) {
                 line_size <<= 1;
-                if (!realloc(line, line_size)) {
+                more_line = realloc(line, line_size);
+                if (!more_line) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
                     goto ERROR_UNCORU_STATS;
+                }
+                else {
+                    line = more_line;
                 }
             }
             else {
