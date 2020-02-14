@@ -38,7 +38,6 @@ We test `coru` against several Unix or Unix-like systems:
 * CentOS 8
 * openSUSE Leap 15.1
 * TrueOS, which is FreeBSD-compatible
-* Solaris 11
 
 Besides, we check `coru` manually on Windows 10 as well.
 
