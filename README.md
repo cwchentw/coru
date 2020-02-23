@@ -50,6 +50,7 @@ Most major tier languages are supported. Here are currently supported ones:
 
 * C
 * C++
+* Modern Fortran
 * Java
 * C#
 * Perl

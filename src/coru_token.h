@@ -9,6 +9,7 @@ typedef unsigned char CORU_TOKEN_TYPE;
 #define CORU_TOKEN_SINGLE_QUOTE   3  /* '\'' */
 #define CORU_TOKEN_DOUBLE_QUOTE   4  /* '"' */
 #define CORU_TOKEN_BACKSLASH      5  /* '\\' */
+#define CORU_TOKEN_AMPERSAND      6  /* '&' */
 
 typedef struct coru_token_t coru_token_t;
 

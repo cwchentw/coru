@@ -37,6 +37,7 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "%s", END_OF_LINE);
     fprintf(stream, "Supported languages:%s", END_OF_LINE);
     fprintf(stream, "    C and C++%s", END_OF_LINE);
+    fprintf(stream, "    Modern Fortran%s", END_OF_LINE);
     fprintf(stream, "    Java%s", END_OF_LINE);
     fprintf(stream, "    C# (C sharp)%s", END_OF_LINE);
     fprintf(stream, "    Perl%s", END_OF_LINE);

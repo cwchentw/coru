@@ -48,24 +48,26 @@ typedef struct uncoru_stats_t uncoru_stats_t;
     #define _LANGUAGE_TYPE_IS_DEFINED
 #endif
 
-#define LANGUAGE_UNKNOWN   0
-#define LANGUAGE_C         1
-#define LANGUAGE_CPP       2
-#define LANGUAGE_JAVA      3
-#define LANGUAGE_CSHARP    4
-#define LANGUAGE_PERL      5
-#define LANGUAGE_PYTHON    6
-#define LANGUAGE_RUBY      7
-#define LANGUAGE_PHP       8
-#define LANGUAGE_JS        9
-#define LANGUAGE_GO       10
-#define LANGUAGE_RUST     11
-#define LANGUAGE_OBJC     12
-#define LANGUAGE_OBJCPP   13
-#define LANGUAGE_SWIFT    14
-#define LANGUAGE_CSH      15
-#define LANGUAGE_SH       16
-#define LANGUAGE_CMAKE    17
+#define  LANGUAGE_UNKNOWN   0
+#define  LANGUAGE_C         1
+#define  LANGUAGE_CPP       2
+#define  LANGUAGE_FORTRAN   3
+#define  LANGUAGE_JAVA      4
+#define  LANGUAGE_CSHARP    5
+#define  LANGUAGE_PERL      6
+#define  LANGUAGE_PYTHON    7
+#define  LANGUAGE_RUBY      8
+#define  LANGUAGE_PHP       9
+#define  LANGUAGE_JS       10
+#define  LANGUAGE_GO       11
+#define  LANGUAGE_RUST     12
+#define  LANGUAGE_OBJC     13
+#define  LANGUAGE_OBJCPP   14
+#define  LANGUAGE_SWIFT    15
+#define  LANGUAGE_CSH      16
+#define  LANGUAGE_SH       17
+#define  LANGUAGE_CMAKE    18
+#define  LANGUAGE_MAKE     19
 
 BOOL uncoru_load(FILE *stream, uncoru_stats_t *stats, language_t lang, char **out);
 

@@ -58,6 +58,9 @@ language_t detect_target_language(char *path)
     else if (string_is_equal(".hpp", ext)) {
         lang = LANGUAGE_CPP;
     }
+    else if (string_is_equal(".f90", ext)) {
+        lang = LANGUAGE_FORTRAN;
+    }
     else if (string_is_equal(".java", ext)) {
         lang = LANGUAGE_JAVA;
     }
@@ -219,6 +222,8 @@ char * language_to_string(language_t lang)
         return STRING_C;
     case LANGUAGE_CPP:
         return STRING_CPP;
+    case LANGUAGE_FORTRAN:
+        return STRING_FORTRAN;
     case LANGUAGE_JAVA:
         return STRING_JAVA;
     case LANGUAGE_CSHARP:

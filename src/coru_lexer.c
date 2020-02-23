@@ -13,6 +13,7 @@
 #define BACKSLASH     '\\'
 #define SINGLE_QUOTE  '\''
 #define DOUBLE_QUOTE  '"'
+#define AMPERSAND     '&'
 
 struct coru_lexer_t {
     size_t size;
@@ -54,11 +55,12 @@ coru_lexer_t * coru_lexer_new(void)
 }
 
 #define IS_CODE(c) \
-    ((SPACE != c) \
-      && (TAB != c) \
-      && (BACKSLASH != c) \
-      && (SINGLE_QUOTE != c) \
-      && (DOUBLE_QUOTE != c))
+    ((SPACE != (c)) \
+      && (TAB != (c)) \
+      && (BACKSLASH != (c)) \
+      && (SINGLE_QUOTE != (c)) \
+      && (DOUBLE_QUOTE != (c)) \
+      && (AMPERSAND != (c)))
 
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
 
@@ -180,6 +182,24 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                     coru_token_new(CORU_TOKEN_BACKSLASH, backslash);
                 if (!token) {
                     free(backslash);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (AMPERSAND == input[i]) {
+                char *ampersand = string_allocate("&");
+                if (!ampersand)
+                    return FALSE;
+            #if DEBUG
+                PUTERR("Ampersand as token: -->%s<--", ampersand);
+            #endif
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_AMPERSAND, ampersand);
+                if (!token) {
+                    free(ampersand);
                     return FALSE;
                 }
 

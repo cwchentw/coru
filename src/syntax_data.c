@@ -17,6 +17,7 @@ hash_table_t * init_comment_single_start(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
+        STRING_FORTRAN,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -38,6 +39,7 @@ hash_table_t * init_comment_single_start(void)
     char *values[] = {
         "/*",   /* C */
         "/*",   /* C++ */
+        "!",    /* Fortran */
         "/*",   /* Java */
         "/*",   /* C# */
         "#",    /* Perl */
@@ -86,6 +88,7 @@ hash_table_t * init_comment_single_end(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
+        STRING_FORTRAN,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -107,6 +110,7 @@ hash_table_t * init_comment_single_end(void)
     char *values[] = {
         "*/",  /* C */
         "*/",  /* C++ */
+        "",    /* Fortran */
         "*/",  /* Java */
         "*/",  /* C# */
         "",    /* Perl */
@@ -155,6 +159,7 @@ hash_table_t * init_comment_multiple_start(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
+        STRING_FORTRAN,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -176,6 +181,7 @@ hash_table_t * init_comment_multiple_start(void)
     char *values[] = {
         "/*",   /* C */
         "/*",   /* C++ */
+        "",     /* Fortran */
         "/*",   /* Java */
         "/*",   /* C# */
         "",     /* Perl */
@@ -224,6 +230,7 @@ hash_table_t * init_comment_multiple_end(void)
     char *keys[] = {
         STRING_C,
         STRING_CPP,
+        STRING_FORTRAN,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -245,6 +252,7 @@ hash_table_t * init_comment_multiple_end(void)
     char *values[] = {
         "*/",  /* C */
         "*/",  /* C++ */
+        "",    /* Fortran */
         "*/",  /* Java */
         "*/",  /* C# */
         "",    /* Perl */

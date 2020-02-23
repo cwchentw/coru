@@ -8,6 +8,7 @@
 typedef struct coru_ast_code_t coru_ast_code_t;
 typedef struct coru_ast_tab_t coru_ast_tab_t;
 typedef struct coru_ast_backslash_t coru_ast_backslash_t;
+typedef struct coru_ast_ampersand_t coru_ast_ampersand_t;
 typedef struct coru_ast_string_t coru_ast_string_t;
 
 static coru_ast_code_t * _coru_ast_code_new(void);
@@ -20,6 +21,10 @@ static coru_ast_backslash_t * _coru_ast_backslash_new(void);
 static BOOL _coru_ast_backslash_add(
     coru_ast_backslash_t *self, coru_token_t *token);
 static void _coru_ast_backslash_delete(void *self);
+static coru_ast_ampersand_t * _coru_ast_ampersand_new(void);
+static BOOL _coru_ast_ampersand_add(
+    coru_ast_ampersand_t *self, coru_token_t *token);
+static void _coru_ast_ampersand_delete(void *self);
 static coru_ast_string_t * _coru_ast_string_new(void);
 static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token);
 static void _coru_ast_string_delete(void *self);
@@ -30,6 +35,7 @@ struct coru_ast_t {
         coru_ast_code_t *code_t;
         coru_ast_tab_t *tab_t;
         coru_ast_backslash_t *backslash_t;
+        coru_ast_ampersand_t *ampersand_t;
         coru_ast_string_t *string_t;
     } ast;
 };
@@ -76,6 +82,13 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
             return NULL;
         }
     }
+    else if (CORU_AST_AMPERSAND == ast->ast_t) {
+        ast->ast.ampersand_t = _coru_ast_ampersand_new();
+        if (!(ast->ast.ampersand_t)) {
+            free(ast);
+            return NULL;
+        }
+    }
     else if (CORU_AST_STRING == ast->ast_t) {
         ast->ast.string_t = _coru_ast_string_new();
         if (!(ast->ast.string_t)) {
@@ -92,7 +105,8 @@ static BOOL _is_valid_ast_type(CORU_AST_TYPE ast_t)
     return CORU_AST_CODE == ast_t
         || CORU_AST_TAB == ast_t
         || CORU_AST_BACKSLASH == ast_t
-        || CORU_AST_STRING == ast_t;
+        || CORU_AST_STRING == ast_t
+        || CORU_AST_AMPERSAND == ast_t;
 }
 
 BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
@@ -108,6 +122,8 @@ BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
         added = _coru_ast_tab_add(self->ast.tab_t, token);
     else if (CORU_AST_BACKSLASH == self->ast_t)
         added = _coru_ast_backslash_add(self->ast.backslash_t, token);
+    else if (CORU_AST_AMPERSAND == self->ast_t)
+        added = _coru_ast_ampersand_add(self->ast.ampersand_t, token);
     else if (CORU_AST_STRING == self->ast_t)
         added = _coru_ast_string_add(self->ast.string_t, token);
 
@@ -142,6 +158,11 @@ void coru_ast_delete(void *self)
         coru_ast_backslash_t *ast = \
             ((coru_ast_t *) self)->ast.backslash_t;
         _coru_ast_backslash_delete(ast);
+    }
+    else if (CORU_AST_AMPERSAND == ast_t) {
+        coru_ast_ampersand_t *ast = \
+            ((coru_ast_t *) self)->ast.ampersand_t;
+        _coru_ast_ampersand_delete(ast);
     }
     else if (CORU_AST_STRING == ast_t) {
         coru_ast_string_t *ast = \
@@ -344,7 +365,53 @@ static void _coru_ast_backslash_delete(void *self)
     if (!self)
         return;
 
-    coru_token_t *token = ((coru_ast_tab_t *) self)->token;
+    coru_token_t *token = ((coru_ast_backslash_t *) self)->token;
+
+    coru_token_delete(token);
+    free(self);
+}
+
+struct coru_ast_ampersand_t {
+    size_t size;
+    size_t capacity;
+    coru_token_t *token;
+};
+
+static coru_ast_ampersand_t * _coru_ast_ampersand_new(void)
+{
+    coru_ast_ampersand_t *ast = \
+        (coru_ast_ampersand_t *) malloc(sizeof(coru_ast_ampersand_t));
+    if (!ast) {
+        PERROR("Failed to allocate memory for coru ast");
+        PERROR("Check available system memory");
+        return ast;
+    }
+
+    ast->size = 0;
+    ast->capacity = 1;
+    ast->token = NULL;
+
+    return ast;
+}
+
+static BOOL _coru_ast_ampersand_add(
+    coru_ast_ampersand_t *self, coru_token_t *token)
+{
+    if (self->size >= self->capacity)
+        return FALSE;
+
+    self->token = token;
+    self->size += 1;
+
+    return TRUE;
+}
+
+static void _coru_ast_ampersand_delete(void *self)
+{
+    if (!self)
+        return;
+
+    coru_token_t *token = ((coru_ast_ampersand_t *) self)->token;
 
     coru_token_delete(token);
     free(self);

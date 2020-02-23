@@ -237,7 +237,17 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     coru_ast_t *ast = coru_parser_next(parser);
     while (ast) {
-        if (CORU_AST_BACKSLASH == coru_ast_type(ast)) {
+        if (CORU_AST_BACKSLASH == coru_ast_type(ast)
+            && LANGUAGE_FORTRAN != lang) {
+            size_t sz = strlen(END_OF_LINE);
+            strcpy((*out)+total_size, END_OF_LINE);
+            total_size += sz;
+            (*out)[total_size] = '\0';
+
+            goto END_CORU_EVAL;
+        }
+        else if (CORU_AST_AMPERSAND == coru_ast_type(ast)
+                 && LANGUAGE_FORTRAN == lang) {
             size_t sz = strlen(END_OF_LINE);
             strcpy((*out)+total_size, END_OF_LINE);
             total_size += sz;
