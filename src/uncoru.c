@@ -25,6 +25,7 @@ uncoru_load(
     char **out)
 {
     char *line = NULL;
+    char *more_line = NULL;
     uncoru_eval_t *eval = NULL;
 
     eval = uncoru_eval_new();
@@ -43,10 +44,14 @@ uncoru_load(
         if (sz_line == strlen(line)) {
             if ('\n' != line[sz_line-1]) {
                 sz_line <<= 1;
-                if (!realloc(line, sz_line)) {
+                more_line = realloc(line, sz_line);
+                if (!more_line) {
                     PUTERR("Failed to reallocate line object");
                     PUTERR("Check available system memory");
                     goto ERROR_UNCORU_LOAD;
+                }
+                else {
+                    line = more_line;
                 }
             }
             else {

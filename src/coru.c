@@ -51,6 +51,7 @@ _coru_load(
     char **out)
 {
     char *line = NULL;
+    char *more_line = NULL;
     coru_eval_t *eval = NULL;
 
     size_t line_size = 150;  /* Sensible line width. */
@@ -70,10 +71,14 @@ _coru_load(
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;
-                if (!realloc(line, line_size)) {
+                more_line = realloc(line, line_size);
+                if (!more_line) {
                     PUTERR("Failed to realloc line buffer object");
                     PUTERR("Check available system memory");
                     goto ERROR_CORU_LOAD;
+                }
+                else {
+                    line = more_line;
                 }
             }
             else {
