@@ -9,6 +9,7 @@
 
 #define STRING_C       "C"
 #define STRING_CPP     "C++"
+#define STRING_PASCAL  "Pascal"
 #define STRING_FORTRAN "Fortran"
 #define STRING_JAVA    "Java"
 #define STRING_CSHARP  "C sharp"

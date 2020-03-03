@@ -58,6 +58,12 @@ language_t detect_target_language(char *path)
     else if (string_is_equal(".hpp", ext)) {
         lang = LANGUAGE_CPP;
     }
+    else if (string_is_equal(".pp", ext)) {
+        lang = LANGUAGE_PASCAL;
+    }
+    else if (string_is_equal(".pas", ext)) {
+        lang = LANGUAGE_PASCAL;
+    }
     else if (string_is_equal(".f90", ext)) {
         lang = LANGUAGE_FORTRAN;
     }
@@ -186,6 +192,9 @@ PARSE_LINE:
                 else if (string_contains(line, "sh")) {
                     lang = LANGUAGE_SH;
                 }
+                else if (string_contains(line, "instantfpc")) {
+                    lang = LANGUAGE_PASCAL;
+                }
                 else {
                     lang = LANGUAGE_UNKNOWN;
                 }
@@ -226,6 +235,8 @@ char * language_to_string(language_t lang)
         return STRING_C;
     case LANGUAGE_CPP:
         return STRING_CPP;
+    case LANGUAGE_PASCAL:
+        return STRING_PASCAL;
     case LANGUAGE_FORTRAN:
         return STRING_FORTRAN;
     case LANGUAGE_JAVA:

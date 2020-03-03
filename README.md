@@ -45,10 +45,11 @@ It should work on any platform that provides a decent C compiler.
 
 ## Supported Languages
 
-Most major tier languages are supported. Here are currently supported ones:
+Here are currently supported programming languages:
 
 * C
 * C++
+* Object Pascal and Delphi
 * Modern Fortran
 * Java
 * C#
@@ -57,7 +58,7 @@ Most major tier languages are supported. Here are currently supported ones:
 * Ruby
 * PHP
 * JavaScript
-* Objective-C (and Objective-C++)
+* Objective-C and Objective-C++
 * Swift
 * Golang
 * Rust

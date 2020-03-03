@@ -36,7 +36,9 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-make%s", END_OF_LINE);
     fprintf(stream, "%s", END_OF_LINE);
     fprintf(stream, "Supported languages:%s", END_OF_LINE);
-    fprintf(stream, "    C and C++%s", END_OF_LINE);
+    fprintf(stream, "    C%s", END_OF_LINE);
+    fprintf(stream, "    C++%s", END_OF_LINE);
+    fprintf(stream, "    Object Pascal and Delphi%s", END_OF_LINE);
     fprintf(stream, "    Modern Fortran%s", END_OF_LINE);
     fprintf(stream, "    Java%s", END_OF_LINE);
     fprintf(stream, "    C# (C sharp)%s", END_OF_LINE);
@@ -47,7 +49,7 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    JavaScript%s", END_OF_LINE);
     fprintf(stream, "    Golang%s", END_OF_LINE);
     fprintf(stream, "    Rust%s", END_OF_LINE);
-    fprintf(stream, "    Objective-C (and Objective++)%s", END_OF_LINE);
+    fprintf(stream, "    Objective-C and Objective++%s", END_OF_LINE);
     fprintf(stream, "    Swift%s", END_OF_LINE);
     fprintf(stream, "    C Shell%s", END_OF_LINE);
     fprintf(stream, "    Bourne Shell%s", END_OF_LINE);
