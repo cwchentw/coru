@@ -1,7 +1,6 @@
 * Fix EOL issue on Windows
 * Refactor the output of coru from C string to stream
 * Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
-* (feature) Support Fortran
 * (feature) Detect *CMakeLists.txt* as CMake config file
 * (feature) Detect *Makefile* as Make config file
 * (feature) Write to file
@@ -12,4 +11,3 @@
 * (feature) Add parser for `uncoru`
 * (feature) Add `corucb`, aka `coru` for clipboard
 * (feature) Add `uncorucb`, aka `uncoru` for clipboard
-* (bug) Fix unknown Windows-specific bug
