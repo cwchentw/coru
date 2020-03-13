@@ -1,5 +1,6 @@
-* Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
+* Fix EOL issue on Windows
 * Refactor the output of coru from C string to stream
+* Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
 * (feature) Support Fortran
 * (feature) Detect *CMakeLists.txt* as CMake config file
 * (feature) Detect *Makefile* as Make config file
