@@ -1,4 +1,5 @@
 * Fix EOL issue on Windows
+* Fix CJK text issue
 * Refactor the output of coru from C string to stream
 * Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
 * (feature) Detect *CMakeLists.txt* as CMake config file

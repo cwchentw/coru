@@ -11,6 +11,7 @@
 #define STRING_CPP     "C++"
 #define STRING_PASCAL  "Pascal"
 #define STRING_FORTRAN "Fortran"
+#define STRING_CL      "Common Lisp"
 #define STRING_JAVA    "Java"
 #define STRING_CSHARP  "C sharp"
 #define STRING_PERL    "Perl"

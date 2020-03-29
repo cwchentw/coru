@@ -51,6 +51,7 @@ Here are currently supported programming languages:
 * C++
 * Object Pascal and Delphi
 * Modern Fortran
+* Common Lisp
 * Java
 * C#
 * Perl

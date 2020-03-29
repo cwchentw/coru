@@ -19,6 +19,7 @@ hash_table_t * init_comment_single_start(void)
         STRING_CPP,
         STRING_PASCAL,
         STRING_FORTRAN,
+        STRING_CL,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -42,6 +43,7 @@ hash_table_t * init_comment_single_start(void)
         "/*",   /* C++ */
         "(*",   /* Object Pascal */
         "!",    /* Fortran */
+        ";",    /* Common Lisp */
         "/*",   /* Java */
         "/*",   /* C# */
         "#",    /* Perl */
@@ -92,6 +94,7 @@ hash_table_t * init_comment_single_end(void)
         STRING_CPP,
         STRING_PASCAL,
         STRING_FORTRAN,
+        STRING_CL,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -115,6 +118,7 @@ hash_table_t * init_comment_single_end(void)
         "*/",  /* C++ */
         "*)",  /* Object Pascal */
         "",    /* Fortran */
+        "",    /* Common Lisp */
         "*/",  /* Java */
         "*/",  /* C# */
         "",    /* Perl */
@@ -165,6 +169,7 @@ hash_table_t * init_comment_multiple_start(void)
         STRING_CPP,
         STRING_PASCAL,
         STRING_FORTRAN,
+        STRING_CL,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -188,6 +193,7 @@ hash_table_t * init_comment_multiple_start(void)
         "/*",   /* C++ */
         "(*",   /* Object Pascal */
         "",     /* Fortran */
+        "#|",   /* Common Lisp */
         "/*",   /* Java */
         "/*",   /* C# */
         "",     /* Perl */
@@ -238,6 +244,7 @@ hash_table_t * init_comment_multiple_end(void)
         STRING_CPP,
         STRING_PASCAL,
         STRING_FORTRAN,
+        STRING_CL,
         STRING_JAVA,
         STRING_CSHARP,
         STRING_PERL,
@@ -261,6 +268,7 @@ hash_table_t * init_comment_multiple_end(void)
         "*/",  /* C++ */
         "*)",  /* Object Pascal */
         "",    /* Fortran */
+        "|#",  /* Common Lisp */
         "*/",  /* Java */
         "*/",  /* C# */
         "",    /* Perl */

@@ -67,6 +67,21 @@ language_t detect_target_language(char *path)
     else if (string_is_equal(".f90", ext)) {
         lang = LANGUAGE_FORTRAN;
     }
+    else if (string_is_equal(".lisp", ext)) {
+        lang = LANGUAGE_CL;
+    }
+    else if (string_is_equal(".lsp", ext)) {
+        lang = LANGUAGE_CL;
+    }
+    else if (string_is_equal(".l", ext)) {
+        lang = LANGUAGE_CL;
+    }
+    else if (string_is_equal(".cl", ext)) {
+        lang = LANGUAGE_CL;
+    }
+    else if (string_is_equal(".fasl", ext)) {
+        lang = LANGUAGE_CL;
+    }
     else if (string_is_equal(".java", ext)) {
         lang = LANGUAGE_JAVA;
     }
@@ -239,6 +254,8 @@ char * language_to_string(language_t lang)
         return STRING_PASCAL;
     case LANGUAGE_FORTRAN:
         return STRING_FORTRAN;
+    case LANGUAGE_CL:
+        return STRING_CL;
     case LANGUAGE_JAVA:
         return STRING_JAVA;
     case LANGUAGE_CSHARP:
