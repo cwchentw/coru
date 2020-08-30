@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
     if (!out)
         goto ERROR_CORU_CLI;
 
-    *out = NULL;
-
     if (!coru_run(argc, argv, out))
         goto ERROR_CORU_CLI;
 
