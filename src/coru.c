@@ -18,7 +18,7 @@ _coru_load(
     char **out);
 
 BOOL
-coru_load_all(
+coru_load_all_s(
     FILE *stream,
     coru_stats_t *stats,
     language_t lang,

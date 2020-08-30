@@ -158,7 +158,7 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
     BOOL is_all = coru_argument_is_all(arg);
 
     if (is_all) {
-        if (!coru_load_all(fp, stats, lang, out)) {
+        if (!coru_load_all_s(fp, stats, lang, out)) {
             goto ERROR_LOAD;
         }
     }
