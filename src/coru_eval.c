@@ -168,10 +168,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     {
         size_t len = strlen(line);
 
-        if (len >= strlen("\r\n") && line[len-2] == '\r' && line[len-1] == '\n')
-            line[len-2] = '\0';
-        else if (len >= strlen("\n") && line[len-1] == '\n')
-            line[len-1] = '\0';
+        line[len-1] = '\0';
     }
 
     self->mstart = FALSE;
