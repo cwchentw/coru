@@ -13,7 +13,7 @@ struct uncoru_stats_t {
 static uncoru_stats_t * uncoru_stats_new(void);
 static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line);
 
-uncoru_stats_t * uncoru_stats_load(FILE *stream)
+uncoru_stats_t * uncoru_stats_load_fs(FILE *stream)
 {
     char *line = NULL;
     char *more_line = NULL;

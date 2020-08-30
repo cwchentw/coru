@@ -109,7 +109,7 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
         goto ERROR_LOAD;
 #endif
 
-    stats = uncoru_stats_load(fp);
+    stats = uncoru_stats_load_fs(fp);
     if (!stats)
         goto ERROR_LOAD;
 #if DEBUG

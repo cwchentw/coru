@@ -16,7 +16,7 @@ struct coru_stats_t {
 static coru_stats_t * coru_stats_new(void);
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line);
 
-coru_stats_t * coru_stats_load(FILE *stream)
+coru_stats_t * coru_stats_load_fs(FILE *stream)
 {
     char *line = NULL;
     char *more_line = NULL;
