@@ -119,7 +119,7 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
 
     rewind(fp);
 
-    if (!uncoru_load_s(fp, stats, lang, out))
+    if (!uncoru_load_fs(fp, out, stats, lang))
         goto ERROR_LOAD;
 
     uncoru_stats_delete(stats);

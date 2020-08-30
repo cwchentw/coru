@@ -18,11 +18,11 @@ extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 
 BOOL
-uncoru_load_s(
+uncoru_load_fs(
     FILE *stream,
+    char **out,
     uncoru_stats_t *stats,
-    language_t lang,
-    char **out)
+    language_t lang)
 {
     char *line = NULL;
     char *more_line = NULL;
