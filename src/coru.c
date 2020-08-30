@@ -28,7 +28,7 @@ coru_load_all_s(
 }
 
 BOOL
-coru_load_non_empty(
+coru_load_non_empty_s(
     FILE *stream,
     coru_stats_t *stats,
     language_t lang,
