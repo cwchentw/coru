@@ -18,7 +18,7 @@ extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 
 BOOL
-uncoru_load(
+uncoru_load_s(
     FILE *stream,
     uncoru_stats_t *stats,
     language_t lang,
