@@ -11,7 +11,7 @@ BOOL coru_run(int argc, char **argv, char **out);
 
 int main(int argc, char *argv[])
 {
-    char **out = (char **) malloc(sizeof(char *));
+    char **out = coru_out_new();
     if (!out)
         goto ERROR_CORU_CLI;
 
@@ -23,8 +23,7 @@ int main(int argc, char *argv[])
     if (*out)
         PRINT("%s", *out);
 
-    free(*out);
-    free(out);
+    coru_out_delete((void *) out);
 
     return 0;
 

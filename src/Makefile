@@ -53,7 +53,7 @@ endif
 
 ifneq (,$(findstring $(CC),$(CL)))
 	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
-		coru_stats.obj \
+		coru_out.obj coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
 		coru_eval.obj coru.obj
 	EXEC_OBJS=coru_argument.obj coru_help.obj coru_cli.obj
@@ -63,7 +63,7 @@ ifneq (,$(findstring $(CC),$(CL)))
 	EXEC_UNOBJS=uncoru_argument.obj uncoru_help.obj uncoru_cli.obj
 else
 	OBJS=cstring.o language.o hash_table.o syntax_data.o \
-		coru_stats.o \
+		coru_out.o coru_stats.o \
 		coru_token.o coru_lexer.o coru_ast.o coru_parser.o \
 		coru_eval.o coru.o
 	EXEC_OBJS=coru_argument.o coru_help.o coru_cli.o
