@@ -71,16 +71,17 @@ lang = ffi.cast("unsigned char", 9)
 st = coru.coru_load_all_fs(fs, out, stats, lang)
 
 # Print out the result within Python.
-print(ffi.string(out[0]).decode("utf-8"), end="")
+if st != 0:
+    print(ffi.string(out[0]).decode("utf-8"), end="")
 
 # Close the temp file.
 tmp.close()
 
-# Release the coru stats object.
-coru.coru_stats_delete(stats)
-
 # Release the coru out object.
 coru.coru_out_delete(out)
+
+# Release the coru stats object.
+coru.coru_stats_delete(stats)
 
 # Close coru.
 ffi.dlclose(coru)
