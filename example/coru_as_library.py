@@ -15,6 +15,9 @@ ffi.cdef("""typedef struct coru_stats_t coru_stats_t;
 coru_stats_t * coru_stats_load_fs(FILE *stream);
 void coru_stats_delete(void *self);
 
+char ** coru_out_new();
+void coru_out_delete(void *self);
+
 unsigned char coru_load_all_fs(FILE *stream, char **out, coru_stats_t *stats, unsigned char lang);
 unsigned char coru_load_non_empty_fs(FILE *stream, char **out, coru_stats_t *stats, unsigned char lang);
 """)
@@ -57,8 +60,8 @@ stats = coru.coru_stats_load_fs(fs)
 # Rewind the same file again.
 tmp.seek(0)
 
-# Create a `char **` object as our output.
-out = ffi.new("char **")
+# Create a coru out object as the output.
+out = coru.coru_out_new()
 
 # Due to the limitation introduced by cffi,
 #  we hardcode the language code here, which is Python.
@@ -76,7 +79,8 @@ tmp.close()
 # Release the coru stats object.
 coru.coru_stats_delete(stats)
 
-# TODO: Release the inner string of `out` object and itself.
+# Release the coru out object.
+coru.coru_out_delete(out)
 
 # Close coru.
 ffi.dlclose(coru)
