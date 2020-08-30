@@ -18,11 +18,11 @@ _coru_load(
     char **out);
 
 BOOL
-coru_load_all_s(
+coru_load_all_fs(
     FILE *stream,
+    char **out,
     coru_stats_t *stats,
-    language_t lang,
-    char **out)
+    language_t lang)
 {
     return _coru_load(stream, stats, lang, TRUE, out);
 }

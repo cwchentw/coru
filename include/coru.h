@@ -78,7 +78,7 @@ typedef struct coru_stats_t coru_stats_t;
 coru_stats_t * coru_stats_load(FILE *stream);
 void coru_stats_delete(void *self);
 
-BOOL coru_load_all_s(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
+BOOL coru_load_all_fs(FILE *stream, char **out, coru_stats_t *stats, language_t lang);
 BOOL coru_load_non_empty_s(FILE *stream, coru_stats_t *stats, language_t lang, char **out);
 
 #ifdef __cplusplus
