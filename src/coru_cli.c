@@ -163,7 +163,7 @@ BOOL coru_run_load(coru_argument_t * arg, char **out)
         }
     }
     else {
-        if (!coru_load_non_empty_s(fp, stats, lang, out)) {
+        if (!coru_load_non_empty_fs(fp, out, stats, lang)) {
             goto ERROR_LOAD;
         }
     }

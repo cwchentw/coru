@@ -28,11 +28,11 @@ coru_load_all_fs(
 }
 
 BOOL
-coru_load_non_empty_s(
+coru_load_non_empty_fs(
     FILE *stream,
+    char **out,
     coru_stats_t *stats,
-    language_t lang,
-    char **out)
+    language_t lang)
 {
     return _coru_load(stream, stats, lang, FALSE, out);
 }
