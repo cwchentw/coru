@@ -26,11 +26,8 @@ int main(int argc, char *argv[])
     return 0;
 
 ERROR_CORU_CLI:
-    if (out && *out)
-        free(*out);
-
     if (out)
-        free(out);
+        coru_out_delete((void *) out);
 
     return 1;
 }
