@@ -1,4 +1,3 @@
-from ctypes import CDLL
 import tempfile
 
 from cffi import FFI
