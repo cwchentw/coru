@@ -71,6 +71,9 @@ typedef struct uncoru_stats_t uncoru_stats_t;
 #define  LANGUAGE_CMAKE    20
 #define  LANGUAGE_MAKE     21
 
+char ** uncoru_out_new();
+void uncoru_out_delete(void *self);
+
 BOOL uncoru_load_fs(FILE *stream, char **out, uncoru_stats_t *stats, language_t lang);
 
 #endif  /* UNCORU_H */
