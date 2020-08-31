@@ -27,6 +27,9 @@ struct coru_argument_t {
 #define _is_csharp(opt) \
     (0 == strcmp(opt, "-c#") || 0 == strcmp(opt, "-csharp") \
         || 0 == strcmp(opt, "--as-c#") || 0 == strcmp(opt, "--as-csharp"))
+#define _is_python(opt) \
+    (0 == strcmp(opt, "-py") || 0 == strcmp(opt, "-python") \
+        || 0 == strcmp(opt, "--as-python"))
 #define _is_cmake(opt) \
     (0 == strcmp(opt, "-cmake") || 0 == strcmp(opt, "--as-cmake"))
 #define _is_make(opt) \
@@ -92,6 +95,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
         else if (_is_csharp(opt)) {
             arg->lang = LANGUAGE_CSHARP;
+            arg->index += 1;
+        }
+        else if (_is_python(opt)) {
+            arg->lang = LANGUAGE_PYTHON;
             arg->index += 1;
         }
         else if (_is_cmake(opt)) {

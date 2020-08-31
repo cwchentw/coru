@@ -3,7 +3,7 @@
 
 char ** coru_out_new()
 {
-    char ** out = (char **) malloc(sizeof(char *));
+    char **out = (char **) malloc(sizeof(char *));
     if (!out)
         return out;
 

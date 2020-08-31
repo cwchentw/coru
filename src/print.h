@@ -15,7 +15,7 @@
 #endif
 
 #ifndef END_OF_LINE
-    #define END_OF_LINE  "\n"
+    #define END_OF_LINE "\n"
 #endif
 
 /** @def   PRINT(format, ...)
