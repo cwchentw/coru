@@ -1,3 +1,4 @@
+* (bug) Fix some parameter induced segmentation fault
 * (feature) Write to file
 * (feature) Modify in place
 * (feature) Add width ruler
