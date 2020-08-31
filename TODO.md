@@ -7,5 +7,7 @@
 * (feature) Add parser for `uncoru`
 * (feature) Add `corucb`, aka `coru` for clipboard
 * (feature) Add `uncorucb`, aka `uncoru` for clipboard
+* (feature) Enable the detection of *Makefile* for `uncoru`
+* (feature) Enable the detection of *CMakeLists.txt* for `uncoru`
 * (bug) Fix CJK text issue
 * Refactor some BOOL into either CORU_STATUS or UNCORU_STATUS
