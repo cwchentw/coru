@@ -4,9 +4,25 @@
 #include "uncoru_token.h"
 #include "print.h"
 
+typedef struct uncoru_ast_code_t uncoru_ast_code_t;
+typedef struct uncoru_ast_space_t uncoru_ast_space_t;
+typedef struct uncoru_ast_tab_t uncoru_ast_tab_t;
+typedef struct uncoru_ast_backslash_t uncoru_ast_backslash_t;
+typedef struct uncoru_ast_ampersand_t uncoru_ast_ampersand_t;
+typedef struct uncoru_ast_line_number_t uncoru_ast_line_number_t;
+typedef struct uncoru_ast_string_t uncoru_ast_string_t;
+
 struct uncoru_ast_t {
     UNCORU_AST_TYPE ast_t;
-    /* Add uncoru ast union later. */
+    union {
+        uncoru_ast_code_t *code_t;
+        uncoru_ast_space_t *space_t;
+        uncoru_ast_tab_t *tab_t;
+        uncoru_ast_backslash_t *backslash_t;
+        uncoru_ast_ampersand_t *ampersand_t;
+        uncoru_ast_line_number_t *line_number_t;
+        uncoru_ast_string_t *string_t;
+    } ast;
 };
 
 #define _is_valid_ast_type(ast_t) \
