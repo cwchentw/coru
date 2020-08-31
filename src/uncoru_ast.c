@@ -12,6 +12,9 @@ typedef struct uncoru_ast_ampersand_t uncoru_ast_ampersand_t;
 typedef struct uncoru_ast_line_number_t uncoru_ast_line_number_t;
 typedef struct uncoru_ast_string_t uncoru_ast_string_t;
 
+static uncoru_ast_code_t * _uncoru_ast_code_new(void);
+static void _uncoru_ast_code_delete(void *self);
+
 struct uncoru_ast_t {
     UNCORU_AST_TYPE ast_t;
     union {
@@ -52,6 +55,14 @@ uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
 
     ast->ast_t = ast_t;
 
+    if (UNCORU_AST_CODE == ast->ast_t) {
+        ast->ast.code_t = _uncoru_ast_code_new();
+        if (!(ast->ast.code_t)) {
+            free(ast);
+            return NULL;
+        }
+    }
+
     /* Create uncoru ast union object later.*/
 
     return ast;
@@ -62,5 +73,63 @@ void uncoru_ast_delete(void *self)
     if (!self)
         return;
 
+    free(self);
+}
+
+struct uncoru_ast_code_t {
+    size_t size;
+    size_t capacity;
+    uncoru_token_t **tokens;
+};
+
+static uncoru_ast_code_t * _uncoru_ast_code_new(void)
+{
+    uncoru_ast_code_t *ast = \
+        (uncoru_ast_code_t *) malloc(sizeof(uncoru_ast_code_t));
+    if (!ast) {
+        PERROR("Failed to allocate memory for uncoru ast");
+        PERROR("Check available system memory");
+        return ast;
+    }
+
+    ast->size = 0;
+    ast->capacity = 8;
+
+    ast->tokens = \
+        (uncoru_token_t **) \
+        malloc(ast->capacity * sizeof(uncoru_token_t *));
+    if (!(ast->tokens)) {
+        PERROR("Failed to allocate memory for the tokens in uncoru ast");
+        PERROR("Check available system memory");
+        free(ast);
+        return NULL;
+    }
+
+    {
+        size_t i;
+        for (i = 0; i < ast->capacity; i++)
+            ast->tokens[i] = NULL;
+    }
+
+    return ast;    
+}
+
+static void _uncoru_ast_code_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((uncoru_ast_code_t *) self)->capacity;
+    uncoru_token_t **tokens = ((uncoru_ast_code_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++) {
+            if (tokens[i])
+                uncoru_token_delete(tokens[i]);
+        }
+    }
+
+    free(tokens);
     free(self);
 }
