@@ -126,9 +126,9 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
     }
 
-    if (strstr(arg->path, "Makefile") && LANGUAGE_UNKNOWN == arg->lang)
+    if (arg->path && strstr(arg->path, "Makefile") && LANGUAGE_UNKNOWN == arg->lang)
         arg->lang = LANGUAGE_MAKE;
-    else if (strstr(arg->path, "CMakeLists.txt") && LANGUAGE_UNKNOWN == arg->lang)
+    else if (arg->path && strstr(arg->path, "CMakeLists.txt") && LANGUAGE_UNKNOWN == arg->lang)
         arg->lang = LANGUAGE_CMAKE;
 
     return arg;
