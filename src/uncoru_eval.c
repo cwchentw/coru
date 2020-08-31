@@ -7,6 +7,7 @@
 #include "syntax_data.h"
 #include "uncoru_eval.h"
 #include "uncoru_lexer.h"
+#include "uncoru_parser.h"
 #include "uncoru_stats.h"
 
 struct uncoru_eval_t {
@@ -52,6 +53,7 @@ BOOL uncoru_eval_eval(
     char *comment_start = NULL;
     char *comment_end = NULL;
     uncoru_lexer_t *lexer = NULL;
+    uncoru_parser_t *parser = NULL;
 
     if (!comment_single_start) {
         comment_single_start = init_comment_single_start();
@@ -93,11 +95,19 @@ BOOL uncoru_eval_eval(
     if (!uncoru_lexer_lex(lexer, line))
         goto ERROR_UNCORU_EVAL;
 
+    parser = uncoru_parser_new();
+    if (!parser)
+        goto ERROR_UNCORU_EVAL;
+
+    uncoru_parser_delete(parser);
     uncoru_lexer_delete(lexer);
 
     return TRUE;
 
 ERROR_UNCORU_EVAL:
+    if (parser)
+        uncoru_parser_delete(parser);
+
     if (lexer)
         uncoru_lexer_delete(lexer);
 
