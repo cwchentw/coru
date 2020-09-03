@@ -81,7 +81,7 @@ Our default build task will generate
 
 Pending more information.
 
-## Usage of `coru`
+## Use `coru` as a Console Program
 
 Just feed your sample source file:
 
@@ -106,6 +106,10 @@ For unsupported target source, you may apply start text and, optionally, end tex
 ```console
 $ coru --start "/*" --end "*/"  path/to/unknown.ext
 ```
+
+## Use `coru` as a Python Library
+
+See [pycoru](https://github.com/cwchentw/pycoru).
 
 ## Options for `coru`
 
