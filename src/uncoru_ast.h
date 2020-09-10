@@ -17,6 +17,7 @@ typedef unsigned char UNCORU_AST_TYPE;
 #define UNCORU_AST_STRING       6
 
 uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t);
+BOOL uncoru_ast_add(uncoru_ast_t *self, uncoru_token_t *token);
 void uncoru_ast_delete(void *self);
 
 #endif  /* CORU_AST_H */
