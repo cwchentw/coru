@@ -89,6 +89,7 @@ void uncoru_lexer_set_comment_end(uncoru_lexer_t *self, char *comment)
 #define BACKSLASH     '\\'
 #define SINGLE_QUOTE  '\''
 #define DOUBLE_QUOTE  '"'
+#define AMPERSAND     '&'
 
 #define IS_COMMENT_START(c) \
     (self->comment_start \
@@ -221,6 +222,24 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                     uncoru_token_new(UNCORU_TOKEN_BACKSLASH, backslash);
                 if (!token) {
                     free(backslash);
+                    return FALSE;
+                }
+
+                if (!_uncoru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (AMPERSAND == input[i]) {
+                char *ampersand = string_allocate("&");
+                if (!ampersand)
+                    return FALSE;
+            #if DEBUG
+                PUTERR("Backslash as token: -->%s<--", ampersand);
+            #endif
+
+                uncoru_token_t *token = \
+                    uncoru_token_new(UNCORU_TOKEN_AMPERSAND, ampersand);
+                if (!token) {
+                    free(ampersand);
                     return FALSE;
                 }
 

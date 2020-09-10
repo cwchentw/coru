@@ -110,6 +110,23 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
 
             token = uncoru_lexer_peek_n(lexer, 0);
         }
+        else if (token && UNCORU_TOKEN_AMPERSAND == uncoru_token_type(token)) {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                PUTERR("Transform BACKSLASH token: (%d) -->%s<--",
+                    uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+            ast = uncoru_ast_new(UNCORU_AST_AMPERSAND);
+            if (!ast)
+                return FALSE;
+
+            if (!uncoru_ast_add(ast, token))
+                return FALSE;
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+        }
         else {
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
