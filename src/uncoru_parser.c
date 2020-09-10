@@ -52,13 +52,84 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
     assert(self);
     assert(lexer);
 
-    uncoru_token_t *token = uncoru_lexer_peek_n(lexer, 1);
+    uncoru_token_t *token = uncoru_lexer_peek_n(lexer, 0);
     while (token) {
         if (!_uncoru_parser_expand(self))
             return FALSE;
 
-        /* Parse the tokens later. */
-        break;  /* Remove it later. */
+        uncoru_ast_t *ast = NULL;
+
+        if (token && UNCORU_TOKEN_SPACE == uncoru_token_type(token)) {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                PUTERR("Transform SPACE token: (%d) -->%s<--",
+                    uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+            ast = uncoru_ast_new(UNCORU_AST_SPACE);
+            if (!ast)
+                return FALSE;
+
+            if (!uncoru_ast_add(ast, token))
+                return FALSE;
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+        }
+        else if (token && UNCORU_TOKEN_TAB == uncoru_token_type(token)) {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                PUTERR("Transform TAB token: (%d) -->%s<--",
+                    uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+            ast = uncoru_ast_new(UNCORU_AST_TAB);
+            if (!ast)
+                return FALSE;
+
+            if (!uncoru_ast_add(ast, token))
+                return FALSE;
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+        }
+        else if (token && UNCORU_TOKEN_BACKSLASH == uncoru_token_type(token)) {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                PUTERR("Transform BACKSLASH token: (%d) -->%s<--",
+                    uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+            ast = uncoru_ast_new(UNCORU_AST_BACKSLASH);
+            if (!ast)
+                return FALSE;
+
+            if (!uncoru_ast_add(ast, token))
+                return FALSE;
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+        }
+        else {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                if (token)
+                    PUTERR("Pass other token: (%d) -->%s<--",
+                        uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+
+            if (token)
+                uncoru_token_delete(token);  /* Pass. */
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+        }
+
+        if (ast) {
+            self->asts[self->size] = ast;
+            self->size += 1;
+        }
     }
 
     return TRUE;
