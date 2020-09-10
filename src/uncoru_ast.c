@@ -14,6 +14,8 @@ typedef struct uncoru_ast_string_t uncoru_ast_string_t;
 
 static uncoru_ast_code_t * _uncoru_ast_code_new(void);
 static void _uncoru_ast_code_delete(void *self);
+static uncoru_ast_space_t * _uncoru_ast_space_new(void);
+static void _uncoru_ast_space_delete(void *self);
 static uncoru_ast_tab_t * _uncoru_ast_tab_new(void);
 static void _uncoru_ast_tab_delete(void *self);
 
@@ -72,6 +74,13 @@ uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
             return NULL;
         }
     }
+    else if (UNCORU_AST_SPACE == ast->ast_t) {
+        ast->ast.space_t = _uncoru_ast_space_new();
+        if (!(ast->ast.space_t)) {
+            free(ast);
+            return NULL;
+        }
+    }
     else if (UNCORU_AST_TAB == ast->ast_t) {
         ast->ast.tab_t = _uncoru_ast_tab_new();
         if (!(ast->ast.tab_t)) {
@@ -94,6 +103,11 @@ void uncoru_ast_delete(void *self)
         uncoru_ast_code_t *ast = \
             ((uncoru_ast_t *) self)->ast.code_t;
         _uncoru_ast_code_delete(ast);
+    }
+    else if (UNCORU_AST_SPACE == ast_t) {
+        uncoru_ast_space_t *ast = \
+            ((uncoru_ast_t *) self)->ast.space_t;
+        _uncoru_ast_space_delete(ast);
     }
     else if (UNCORU_AST_TAB == ast_t) {
         uncoru_ast_tab_t *ast = \
@@ -159,6 +173,40 @@ static void _uncoru_ast_code_delete(void *self)
     }
 
     free(tokens);
+    free(self);
+}
+
+struct uncoru_ast_space_t {
+    size_t size;
+    size_t capacity;
+    uncoru_token_t *token;
+};
+
+static uncoru_ast_space_t * _uncoru_ast_space_new(void)
+{
+    uncoru_ast_space_t *ast = \
+        (uncoru_ast_space_t *) malloc(sizeof(uncoru_ast_space_t));
+    if (!ast) {
+        PERROR("Failed to allocate memory for coru ast");
+        PERROR("Check available system memory");
+        return ast;
+    }
+
+    ast->size = 0;
+    ast->capacity = 1;
+    ast->token = NULL;
+
+    return ast;
+}
+
+static void _uncoru_ast_space_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_space_t *) self)->token;
+
+    uncoru_token_delete(token);
     free(self);
 }
 
