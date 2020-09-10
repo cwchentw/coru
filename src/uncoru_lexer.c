@@ -420,3 +420,37 @@ static BOOL _uncoru_lexer_expand(uncoru_lexer_t *self)
 
     return TRUE;
 }
+
+uncoru_token_t * coru_lexer_next(uncoru_lexer_t *self)
+{
+    assert(self);
+
+    if (self->index >= self->size)
+        return NULL;
+
+    uncoru_token_t *token = self->tokens[self->index];
+    if (!token)
+        return NULL;
+
+    self->index += 1;
+
+    uncoru_token_t *copied = uncoru_token_copy(token);
+    if (!copied)
+        return NULL;
+
+    return copied;
+}
+
+uncoru_token_t * coru_lexer_peek_n(uncoru_lexer_t *self, size_t n)
+{
+    assert(self);
+
+    if (self->index + n >= self->size)
+        return NULL;
+
+    uncoru_token_t *token = self->tokens[self->index + n];
+    if (!token)
+        return NULL;
+
+    return token;
+}
