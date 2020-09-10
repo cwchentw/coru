@@ -59,7 +59,67 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
 
         uncoru_ast_t *ast = NULL;
 
-        if (token && UNCORU_TOKEN_DOUBLE_QUOTE == uncoru_token_type(token)) {
+        if (token && UNCORU_TOKEN_SINGLE_QUOTE == uncoru_token_type(token)) {
+            /* Consume a token. */
+            token = uncoru_lexer_next(lexer);
+
+            #if DEBUG
+                PUTERR("Transform single quote token: (%d) -->%s<--",
+                    uncoru_token_type(token), uncoru_token_text(token));
+            #endif
+
+            ast = uncoru_ast_new(UNCORU_AST_STRING);
+            if (!ast)
+                return FALSE;
+
+            /* Consume the starting single quote token. */
+            if (!uncoru_ast_add(ast, token))
+                return FALSE;
+
+            token = uncoru_lexer_peek_n(lexer, 0);
+
+            /* Scan the tokens to parse the rest of a single-quoted string. */
+            while (token) {
+                if (!_uncoru_parser_expand(self))
+                    return FALSE;
+
+                /* Consume a token. */
+                token = uncoru_lexer_next(lexer);
+
+                if (token && UNCORU_TOKEN_BACKSLASH == uncoru_token_type(token)) {
+                    /* Consume the backslash token. */
+                    if (!uncoru_ast_add(ast, token))
+                        return FALSE;
+
+                    /* Consume one extra token. */
+                    token = uncoru_lexer_next(lexer);
+                    if (token) {
+                        if (!uncoru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+                else if (token && UNCORU_TOKEN_SINGLE_QUOTE == uncoru_token_type(token)) {
+                    /* Consume the ending single quote token. */
+                    if (!uncoru_ast_add(ast, token))
+                        return FALSE;
+
+                    token = uncoru_lexer_peek_n(lexer, 0);
+
+                    /* Stop the finite automata. */
+                    break;
+                }
+                else {
+                    /* Consume any text token within this string. */
+                    if (token) {
+                        if (!uncoru_ast_add(ast, token))
+                            return FALSE;
+                    }
+                }
+
+                token = uncoru_lexer_peek_n(lexer, 0);
+            }
+        }
+        else if (token && UNCORU_TOKEN_DOUBLE_QUOTE == uncoru_token_type(token)) {
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
