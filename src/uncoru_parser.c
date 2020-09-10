@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "print.h"
 #include "uncoru_ast.h"
+#include "uncoru_lexer.h"
 #include "uncoru_parser.h"
 
 struct uncoru_parser_t {
@@ -44,10 +45,54 @@ uncoru_parser_t * uncoru_parser_new()
     return parser;
 }
 
+static BOOL _uncoru_parser_expand(uncoru_parser_t *self);
+
 BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
 {
     assert(self);
     assert(lexer);
+
+    uncoru_token_t *token = uncoru_lexer_peek_n(lexer, 1);
+    while (token) {
+        if (!_uncoru_parser_expand(self))
+            return FALSE;
+
+        /* Parse the tokens later. */
+        break;  /* Remove it later. */
+    }
+
+    return TRUE;
+}
+
+static BOOL _uncoru_parser_expand(uncoru_parser_t *self)
+{
+    if (self->size < self->capacity)
+        return TRUE;
+
+    self->capacity <<= 1;
+    uncoru_ast_t **old_asts = self->asts;
+    uncoru_ast_t **new_asts = \
+        (uncoru_ast_t **) \
+        malloc(self->capacity * sizeof(uncoru_ast_t *));
+    if (!new_asts)
+        return FALSE;
+
+    {
+        size_t i = 0;
+        while (i < self->size) {
+            new_asts[i] = old_asts[i];
+            i++;
+        }
+    }
+
+    {
+        size_t i;
+        for (i = self->size; i < self->capacity; i++)
+            new_asts[i] = NULL;
+    }
+
+    self->asts = new_asts;
+    free(old_asts);
 
     return TRUE;
 }

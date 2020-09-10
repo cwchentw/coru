@@ -421,7 +421,7 @@ static BOOL _uncoru_lexer_expand(uncoru_lexer_t *self)
     return TRUE;
 }
 
-uncoru_token_t * coru_lexer_next(uncoru_lexer_t *self)
+uncoru_token_t * uncoru_lexer_next(uncoru_lexer_t *self)
 {
     assert(self);
 
@@ -441,7 +441,7 @@ uncoru_token_t * coru_lexer_next(uncoru_lexer_t *self)
     return copied;
 }
 
-uncoru_token_t * coru_lexer_peek_n(uncoru_lexer_t *self, size_t n)
+uncoru_token_t * uncoru_lexer_peek_n(uncoru_lexer_t *self, size_t n)
 {
     assert(self);
 
