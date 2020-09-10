@@ -45,6 +45,14 @@ uncoru_parser_t * uncoru_parser_new()
     return parser;
 }
 
+#define IS_CODE_TOKEN(t) \
+    (UNCORU_TOKEN_SINGLE_QUOTE != (t) \
+     && UNCORU_TOKEN_DOUBLE_QUOTE != (t) \
+     && UNCORU_TOKEN_SPACE != (t) \
+     && UNCORU_TOKEN_TAB != (t) \
+     && UNCORU_TOKEN_BACKSLASH != (t) \
+     && UNCORU_TOKEN_AMPERSAND != (t))
+
 static BOOL _uncoru_parser_expand(uncoru_parser_t *self);
 
 BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
@@ -64,8 +72,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             token = uncoru_lexer_next(lexer);
 
             #if DEBUG
-                PUTERR("Transform single quote token: (%d) -->%s<--",
-                    uncoru_token_type(token), uncoru_token_text(token));
+                PUTERR("Transform a SINGLE-QUOTED STRING token");
             #endif
 
             ast = uncoru_ast_new(UNCORU_AST_STRING);
@@ -124,8 +131,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             token = uncoru_lexer_next(lexer);
 
             #if DEBUG
-                PUTERR("Transform double quote token: (%d) -->%s<--",
-                    uncoru_token_type(token), uncoru_token_text(token));
+                PUTERR("Transform a DOUBLE-QUOTED STRING token");
             #endif
 
             ast = uncoru_ast_new(UNCORU_AST_STRING);
@@ -248,19 +254,27 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             token = uncoru_lexer_peek_n(lexer, 0);
         }
         else {
-            /* Consume a token. */
-            token = uncoru_lexer_next(lexer);
+            /* Parse a number comment later. */
+
+            /* Currently, we pass anything else as code token. */
+            ast = uncoru_ast_new(UNCORU_AST_CODE);
+            if (!ast)
+                return FALSE;
+
+            while (token && IS_CODE_TOKEN(uncoru_token_type(token))) {
+                /* Consume a token. */
+                token = uncoru_lexer_next(lexer);
+
+                if (!uncoru_ast_add(ast, token))
+                    return FALSE;
+
+                token = uncoru_lexer_peek_n(lexer, 0);
+            }
 
             #if DEBUG
-                if (token)
-                    PUTERR("Pass other token: (%d) -->%s<--",
-                        uncoru_token_type(token), uncoru_token_text(token));
+                if (ast)
+                    PUTERR("Transform a CODE ast");
             #endif
-
-            if (token)
-                uncoru_token_delete(token);  /* Pass. */
-
-            token = uncoru_lexer_peek_n(lexer, 0);
         }
 
         if (ast) {
