@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "print.h"
 #include "uncoru_ast.h"
@@ -41,6 +42,14 @@ uncoru_parser_t * uncoru_parser_new()
     }
 
     return parser;
+}
+
+BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
+{
+    assert(self);
+    assert(lexer);
+
+    return TRUE;
 }
 
 void uncoru_parser_delete(void *self)
