@@ -18,6 +18,8 @@ static uncoru_ast_space_t * _uncoru_ast_space_new(void);
 static void _uncoru_ast_space_delete(void *self);
 static uncoru_ast_tab_t * _uncoru_ast_tab_new(void);
 static void _uncoru_ast_tab_delete(void *self);
+static uncoru_ast_backslash_t * _uncoru_ast_backslash_new(void);
+static void _uncoru_ast_backslash_delete(void *self);
 
 struct uncoru_ast_t {
     UNCORU_AST_TYPE ast_t;
@@ -88,6 +90,13 @@ uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
             return NULL;
         }
     }
+    else if (UNCORU_AST_BACKSLASH == ast->ast_t) {
+        ast->ast.backslash_t = _uncoru_ast_backslash_new();
+        if (!(ast->ast.backslash_t)) {
+            free(ast);
+            return NULL;
+        }
+    }
 
     return ast;
 }
@@ -113,6 +122,11 @@ void uncoru_ast_delete(void *self)
         uncoru_ast_tab_t *ast = \
             ((uncoru_ast_t *) self)->ast.tab_t;
         _uncoru_ast_tab_delete(ast);
+    }
+    else if (UNCORU_AST_BACKSLASH == ast_t) {
+        uncoru_ast_backslash_t *ast = \
+            ((uncoru_ast_t *) self)->ast.backslash_t;
+        _uncoru_ast_backslash_delete(ast);
     }
 
     free(self);
@@ -239,6 +253,40 @@ static void _uncoru_ast_tab_delete(void *self)
         return;
 
     uncoru_token_t *token = ((uncoru_ast_tab_t *) self)->token;
+
+    uncoru_token_delete(token);
+    free(self);
+}
+
+struct uncoru_ast_backslash_t {
+    size_t size;
+    size_t capacity;
+    uncoru_token_t *token;
+};
+
+static uncoru_ast_backslash_t * _uncoru_ast_backslash_new(void)
+{
+    uncoru_ast_backslash_t *ast = \
+        (uncoru_ast_backslash_t *) malloc(sizeof(uncoru_ast_backslash_t));
+    if (!ast) {
+        PERROR("Failed to allocate memory for coru ast");
+        PERROR("Check available system memory");
+        return ast;
+    }
+
+    ast->size = 0;
+    ast->capacity = 1;
+    ast->token = NULL;
+
+    return ast;
+}
+
+static void _uncoru_ast_backslash_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_backslash_t *) self)->token;
 
     uncoru_token_delete(token);
     free(self);
