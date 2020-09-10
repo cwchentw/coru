@@ -179,7 +179,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                 token = uncoru_lexer_peek_n(lexer, 0);
             }
         }
-        if (token && UNCORU_TOKEN_SPACE == uncoru_token_type(token)) {
+        else if (token && UNCORU_TOKEN_SPACE == uncoru_token_type(token)) {
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
