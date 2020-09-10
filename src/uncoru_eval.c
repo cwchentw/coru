@@ -99,6 +99,11 @@ BOOL uncoru_eval_eval(
     if (!parser)
         goto ERROR_UNCORU_EVAL;
 
+    if (!uncoru_parser_parse(parser, lexer)) {
+        PUTERR("Failed to parse input");
+        goto ERROR_UNCORU_EVAL;
+    }
+
     uncoru_parser_delete(parser);
     uncoru_lexer_delete(lexer);
 
