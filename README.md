@@ -158,6 +158,7 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 ## Known Issues or Bugs
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
+* `coru` fails to handle the multiline strings in some languages
 * `coru` cannot detect heredoc
 
 ## Copyright
