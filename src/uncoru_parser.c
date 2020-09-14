@@ -420,5 +420,16 @@ void uncoru_parser_delete(void *self)
     if (!self)
         return;
 
+    size_t capacity = ((uncoru_parser_t *) self)->capacity;
+    uncoru_ast_t **asts = ((uncoru_parser_t *) self)->asts;
+    {
+        size_t i;
+        for (i = 0; i < capacity; i++) {
+            if (asts[i])
+                uncoru_ast_delete((void *) asts[i]);
+        }
+    }
+
+    free((void *) asts);
     free(self);
 }
