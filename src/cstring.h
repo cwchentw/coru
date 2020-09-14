@@ -8,10 +8,6 @@
 #ifndef CLIBS_CSTRING_H
 #define CLIBS_CSTRING_H
 
-#ifdef _WIN32
-    #include <windows.h>
-#endif
-
 #ifdef __cplusplus
     #include <cstdio>
 #else
@@ -19,7 +15,9 @@
 #endif
 
 /* Custom boolean type. */
-#ifndef _WIN32
+#if _MSC_VER
+    #include <windows.h>
+#else
 #ifdef __cplusplus
     #ifndef _BOOL_IS_DEFINED
         typedef bool BOOL;
@@ -51,13 +49,13 @@
 extern "C" {
 #endif
 
-/** @fn      string_is_equal(const char *a, const char *b)
+/** @def     string_is_equal(a, b)
  *  @brief   Check whether two strings are equal.
  *  @param   a The first string.
  *  @param   b The second string.
  *  @return  BOOL
  */
-BOOL string_is_equal(const char *a, const char *b);
+#define string_is_equal(a, b) (0 == strcmp((a), (b)))
 
 /** @fn      string_starts_with(const char *a, const char *b)
  *  @brief   Check whether string \a a starts with string \a b
@@ -84,6 +82,14 @@ BOOL string_contains(const char *a, const char *b);
  */
 BOOL string_is_space_only(const char *s);
 
+/** @fn      string_allocate_char(const char c)
+ *  @brief   Allocate a new string out of char \a c
+ *  @param   c The source char.
+ *  @return  char *
+ *  @warning  Free the memory of the returning string by yourself.
+ */
+char * string_allocate_char(const char c);
+
 /** @fn      string_allocate(const char *s)
  *  @brief   Allocate a new string out of string \a s
  *  @param   s The source string.
@@ -101,6 +107,15 @@ char * string_allocate(const char *s);
  *  @warning  Free the memory of the returning string by yourself.
  */
 char * string_allocate_substring(const char *s, size_t from, size_t to);
+
+/** @fn       string_concat(const char *a, const char *b)
+ *  @brief    Concat two strings \a and \b
+ *  @param    a The source string.
+ *  @param    b The source string.
+ *  @return   char *
+ *  @warning  Free the memory of the returning string by yourself.
+ */
+char * string_concat(const char *a, const char *b);
 
 /** @fn       string_to_stream(char *s)
  *  @brief    Convert a string to a file stream.

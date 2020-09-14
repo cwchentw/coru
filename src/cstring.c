@@ -15,14 +15,6 @@
     }
 #endif
 
-BOOL string_is_equal(const char *a, const char *b)
-{
-    if (0 == strcmp(a, b))
-        return TRUE;
-
-    return FALSE;
-}
-
 BOOL string_starts_with(const char *a, const char *b)
 {
     size_t i = 0;
@@ -89,6 +81,23 @@ BOOL string_is_space_only(const char *s)
     return TRUE;
 }
 
+char * string_allocate_char(const char c)
+{
+    size_t sz = 2;  /* char + '\0' */
+
+    char *out = (char *) malloc(sz * sizeof(char));
+    if (!out) {
+        DEBUG_INFO("Failed to allocate memory for C string");
+        DEBUG_INFO("Check available system memory");
+        return out;
+    }
+
+    out[0] = c;
+    out[1] = '\0';
+
+    return out;
+}
+
 char * string_allocate(const char *s)
 {
     size_t sz = strlen(s) + 1;  /* strlen(s) + '\0' */
@@ -104,10 +113,8 @@ char * string_allocate(const char *s)
 
     {
         size_t i;
-        for (i = 0; i < sz - 1; i++) {
+        for (i = 0; i < sz - 1; i++)
             out[i] = s[i];
-        }
-
     }
     out[sz-1] = '\0';  /* Trailing zero. */
 
@@ -130,6 +137,8 @@ char * string_allocate_substring(const char *s, size_t from, size_t to)
         return out;
     }
 
+    out[0] = '\0';
+
     {
         size_t i;
         for (i = from; i <= to; i++)
@@ -137,6 +146,40 @@ char * string_allocate_substring(const char *s, size_t from, size_t to)
     }
 
     out[sz-1] = '\0';  /* Trailing zero. */
+
+    return out;
+}
+
+char * string_concat(const char *a, const char *b)
+{
+    assert(a);
+    assert(b);
+
+    size_t sz_a = strlen(a);
+    size_t sz_b = strlen(b);
+
+    size_t sz = sz_a + sz_b + 1 /* Trailing zero. */;
+
+    char *out = (char *) malloc(sz * sizeof(char));
+    if (!out) {
+        DEBUG_INFO("Failed to allocate memory for C string");
+        DEBUG_INFO("Check available system memory");
+        return out;
+    }
+
+    {
+        size_t i;
+        for (i = 0; i < sz_a; ++i)
+            out[i] = a[i];
+    }
+
+    {
+        size_t i;
+        for (i = 0; i < sz_b; ++i)
+            out[i+sz_a] = b[i];
+    }
+
+    out[sz-1] = '\0'; /* Trailing zero. */
 
     return out;
 }
