@@ -153,6 +153,13 @@ BOOL uncoru_ast_add(uncoru_ast_t *self, uncoru_token_t *token)
     return added;
 }
 
+UNCORU_AST_TYPE uncoru_ast_type(uncoru_ast_t *self)
+{
+    assert(self);
+
+    return self->ast_t;
+}
+
 void uncoru_ast_delete(void *self)
 {
     if (!self)
