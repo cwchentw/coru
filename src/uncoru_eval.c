@@ -90,7 +90,14 @@ BOOL uncoru_eval_eval(
         goto ERROR_UNCORU_EVAL;
 
     uncoru_lexer_set_comment_start(lexer, comment_start);
+#if DEBUG
+    PUTERR("The start comment: -->%s<--", uncoru_lexer_comment_start(lexer));
+#endif
+
     uncoru_lexer_set_comment_end(lexer, comment_end);
+#if DEBUG
+    PUTERR("The end comment: -->%s<--", uncoru_lexer_comment_end(lexer));
+#endif
 
     if (!uncoru_lexer_lex(lexer, line))
         goto ERROR_UNCORU_EVAL;

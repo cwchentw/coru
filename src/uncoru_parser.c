@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "print.h"
 #include "uncoru_ast.h"
 #include "uncoru_lexer.h"
@@ -254,9 +255,101 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             token = uncoru_lexer_peek_n(lexer, 0);
         }
         else {
-            /* Parse a number comment later. */
+            /* Parse a number comment. */
+            if (token && UNCORU_TOKEN_COMMENT_START == uncoru_token_type(token)) {
+            #if DEBUG
+                PUTERR("Try to parse space in a line number.");
+            #endif
+                uncoru_token_t *tokenSpace = uncoru_lexer_peek_n(lexer, 1);
 
-            /* Currently, we pass anything else as code token. */
+                if (!tokenSpace)
+                    goto PARSE_CODE_AST;
+                else if (UNCORU_TOKEN_SPACE != uncoru_token_type(tokenSpace))
+                    goto PARSE_CODE_AST;
+
+            #if DEBUG
+                PUTERR("Try to parse integer in a line number.");
+            #endif
+                uncoru_token_t *tokenInt = uncoru_lexer_peek_n(lexer, 2);
+
+                if (!tokenInt)
+                    goto PARSE_CODE_AST;
+                else if (UNCORU_TOKEN_INTEGER != uncoru_token_type(tokenInt))
+                    goto PARSE_CODE_AST;
+
+                if (0 != strcmp("", uncoru_lexer_comment_end(lexer))) {
+                #if DEBUG
+                    PUTERR("Try to parse space in a line number.");
+                #endif
+                    uncoru_token_t *tokenSpace2 = uncoru_lexer_peek_n(lexer, 3);
+
+                    if (!tokenSpace2)
+                        goto PARSE_CODE_AST;
+                    else if (UNCORU_TOKEN_SPACE != uncoru_token_type(tokenSpace2))
+                        goto PARSE_CODE_AST;
+
+                #if DEBUG
+                    PUTERR("Try to prase end comment in a line number.")
+                #endif
+                    uncoru_token_t *tokenCommentEnd = uncoru_lexer_peek_n(lexer, 4);
+
+                    if (!tokenCommentEnd)
+                        goto PARSE_CODE_AST;
+                    else if (UNCORU_TOKEN_COMMENT_END != uncoru_token_type(tokenCommentEnd))
+                        goto PARSE_CODE_AST;
+                }
+
+                ast = uncoru_ast_new(UNCORU_AST_LINE_NUNBER);
+
+                if (0 == strcmp("", uncoru_lexer_comment_end(lexer))) {
+                    BOOL done = FALSE;
+
+                    while (token) {
+                        if (done)
+                            break;
+
+                        /* Consume one token. */
+                        token = uncoru_lexer_next(lexer);
+
+                        if (UNCORU_TOKEN_INTEGER == uncoru_token_type(token))                        
+                            done = TRUE;
+
+                        if (!uncoru_ast_add(ast, token))
+                            return FALSE;
+
+                        token = uncoru_lexer_peek_n(lexer, 0);
+                    }
+                }
+                else {
+                    BOOL done = FALSE;
+
+                    while (token) {
+                        if (done)
+                            break;
+
+                        /* Consume one token. */
+                        token = uncoru_lexer_next(lexer);
+
+                        if (UNCORU_TOKEN_COMMENT_END == uncoru_token_type(token))
+                            done = TRUE;
+
+                        if (!uncoru_ast_add(ast, token))
+                            return FALSE;
+
+                        token = uncoru_lexer_peek_n(lexer, 0);                        
+                    }
+                }
+
+            #if DEBUG
+                if (ast)
+                    PUTERR("Transform a LINE NUMBER ast");
+            #endif
+
+                goto PARSE_LINE_NUMBER;
+            }
+
+            /* Parse anything else as code token. */
+        PARSE_CODE_AST:
             ast = uncoru_ast_new(UNCORU_AST_CODE);
             if (!ast)
                 return FALSE;
@@ -276,6 +369,9 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                     PUTERR("Transform a CODE ast");
             #endif
         }
+
+    PARSE_LINE_NUMBER:
+        /* After parsing a line number, finish this iteration. */
 
         if (ast) {
             self->asts[self->size] = ast;
