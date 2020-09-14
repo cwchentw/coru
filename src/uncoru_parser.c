@@ -433,3 +433,33 @@ void uncoru_parser_delete(void *self)
     free((void *) asts);
     free(self);
 }
+
+uncoru_ast_t * uncoru_parser_next(uncoru_parser_t *self)
+{
+    assert(self);
+
+    if (self->index >= self->size)
+        return NULL;
+
+    uncoru_ast_t *ast = self->asts[self->index];
+    if (!ast)
+        return NULL;
+
+    self->index += 1;
+
+    return ast;
+}
+
+uncoru_ast_t * uncoru_parser_peek_n(uncoru_parser_t *self, size_t n)
+{
+    assert(self);
+
+    if (self->index + n >= self->size)
+        return NULL;
+
+    uncoru_ast_t *ast = self->asts[self->index + n];
+    if (!ast)
+        return NULL;
+
+    return ast;
+}
