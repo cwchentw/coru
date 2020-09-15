@@ -90,49 +90,50 @@ uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
 
     ast->ast_t = ast_t;
 
-    if (UNCORU_AST_CODE == ast->ast_t) {
+    switch (ast->ast_t) {
+    case UNCORU_AST_CODE:
         ast->ast.code_t = _uncoru_ast_code_new();
         if (!(ast->ast.code_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_STRING == ast->ast_t) {
+        break;
+    case UNCORU_AST_STRING:
         ast->ast.string_t = _uncoru_ast_string_new();
         if (!(ast->ast.string_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_LINE_NUNBER == ast->ast_t) {
+        break;
+    case UNCORU_AST_LINE_NUNBER:
         ast->ast.line_number_t = _uncoru_ast_line_number_new();
         if (!(ast->ast.line_number_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_SPACE == ast->ast_t) {
+        break;
+    case UNCORU_AST_SPACE:
         ast->ast.space_t = _uncoru_ast_space_new();
         if (!(ast->ast.space_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_TAB == ast->ast_t) {
+        break;
+    case UNCORU_AST_TAB:
         ast->ast.tab_t = _uncoru_ast_tab_new();
         if (!(ast->ast.tab_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_BACKSLASH == ast->ast_t) {
+        break;
+    case UNCORU_AST_BACKSLASH:
         ast->ast.backslash_t = _uncoru_ast_backslash_new();
         if (!(ast->ast.backslash_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (UNCORU_AST_AMPERSAND == ast->ast_t) {
+        break;
+    case UNCORU_AST_AMPERSAND:
         ast->ast.ampersand_t = _uncoru_ast_ampersand_new();
         if (!(ast->ast.ampersand_t)) {
             free(ast);
