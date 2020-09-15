@@ -147,30 +147,42 @@ void coru_ast_delete(void *self)
 
     CORU_AST_TYPE ast_t = ((coru_ast_t *) self)->ast_t;
 
-    if (CORU_AST_CODE == ast_t) {
-        coru_ast_code_t *ast = \
-            ((coru_ast_t *) self)->ast.code_t;
-        _coru_ast_code_delete(ast);
-    }
-    else if (CORU_AST_TAB == ast_t) {
-        coru_ast_tab_t *ast = \
-            ((coru_ast_t *) self)->ast.tab_t;
-        _coru_ast_tab_delete(ast);
-    }
-    else if (CORU_AST_BACKSLASH == ast_t) {
-        coru_ast_backslash_t *ast = \
-            ((coru_ast_t *) self)->ast.backslash_t;
-        _coru_ast_backslash_delete(ast);
-    }
-    else if (CORU_AST_AMPERSAND == ast_t) {
-        coru_ast_ampersand_t *ast = \
-            ((coru_ast_t *) self)->ast.ampersand_t;
-        _coru_ast_ampersand_delete(ast);
-    }
-    else if (CORU_AST_STRING == ast_t) {
-        coru_ast_string_t *ast = \
-            ((coru_ast_t *) self)->ast.string_t;
-        _coru_ast_string_delete(ast);
+    switch (ast_t) {
+    case CORU_AST_CODE:
+        {
+            coru_ast_code_t *ast = \
+                ((coru_ast_t *) self)->ast.code_t;
+            _coru_ast_code_delete(ast);   
+        }
+        break;
+    case CORU_AST_TAB:
+        {
+            coru_ast_tab_t *ast = \
+                ((coru_ast_t *) self)->ast.tab_t;
+            _coru_ast_tab_delete(ast);
+        }
+        break;
+    case CORU_AST_BACKSLASH:
+        {
+            coru_ast_backslash_t *ast = \
+                ((coru_ast_t *) self)->ast.backslash_t;
+            _coru_ast_backslash_delete(ast);
+        }
+        break;
+    case CORU_AST_AMPERSAND:
+        {
+            coru_ast_ampersand_t *ast = \
+                ((coru_ast_t *) self)->ast.ampersand_t;
+            _coru_ast_ampersand_delete(ast);
+        }
+        break;
+    case CORU_AST_STRING:
+        {
+            coru_ast_string_t *ast = \
+                ((coru_ast_t *) self)->ast.string_t;
+            _coru_ast_string_delete(ast);
+        }
+        break;
     }
 
     free(self);
