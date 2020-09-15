@@ -66,40 +66,42 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
 
     ast->ast_t = ast_t;
 
-    if (CORU_AST_CODE == ast->ast_t) {
+    switch (ast->ast_t) {
+    case CORU_AST_CODE:
         ast->ast.code_t = _coru_ast_code_new();
         if (!(ast->ast.code_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (CORU_AST_TAB == ast->ast_t) {
+        break;
+    case CORU_AST_TAB:
         ast->ast.tab_t = _coru_ast_tab_new();
         if (!(ast->ast.tab_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (CORU_AST_BACKSLASH == ast->ast_t) {
+        break;
+    case CORU_AST_BACKSLASH:
         ast->ast.backslash_t = _coru_ast_backslash_new();
         if (!(ast->ast.backslash_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (CORU_AST_AMPERSAND == ast->ast_t) {
+        break;
+    case CORU_AST_AMPERSAND:
         ast->ast.ampersand_t = _coru_ast_ampersand_new();
         if (!(ast->ast.ampersand_t)) {
             free(ast);
             return NULL;
         }
-    }
-    else if (CORU_AST_STRING == ast->ast_t) {
+        break;
+    case CORU_AST_STRING:
         ast->ast.string_t = _coru_ast_string_new();
         if (!(ast->ast.string_t)) {
             free(ast);
             return NULL;
         }
+        break;
     }
 
     return ast;
