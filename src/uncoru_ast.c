@@ -42,6 +42,7 @@ static char * _uncoru_ast_ampersand_text(uncoru_ast_ampersand_t *self);
 static uncoru_ast_line_number_t * _uncoru_ast_line_number_new(void);
 static void _uncoru_ast_line_number_delete(void *self);
 static BOOL _uncoru_ast_line_number_add(uncoru_ast_line_number_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_line_number_text(uncoru_ast_line_number_t *self);
 
 static uncoru_ast_string_t * _uncoru_ast_string_new(void);
 static void _uncoru_ast_string_delete(void *self);
@@ -228,6 +229,8 @@ char * uncoru_ast_text(uncoru_ast_t *self)
 
     if (UNCORU_AST_CODE == self->ast_t)
         out = _uncoru_ast_code_text(self->ast.code_t);
+    else if (UNCORU_AST_LINE_NUNBER == self->ast_t)
+        out = _uncoru_ast_line_number_text(self->ast.line_number_t);
     else if (UNCORU_AST_SPACE == self->ast_t)
         out = _uncoru_ast_space_text(self->ast.space_t);
     else if (UNCORU_AST_TAB == self->ast_t)
@@ -717,6 +720,39 @@ static BOOL _uncoru_ast_line_number_expand(uncoru_ast_line_number_t *self)
     free(old_tokens);
 
     return TRUE;
+}
+
+static char * _uncoru_ast_line_number_text(uncoru_ast_line_number_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->tokens[0]));
+    if (!out)
+        return out;
+
+    {
+        size_t i;
+        for (i = 1; i < self->size; ++i) {
+            char *a = out;
+            char *b = string_allocate(uncoru_token_text(self->tokens[i]));
+            if (!b) {
+                free(a);
+                return NULL;
+            }
+
+            out = string_concat(a, b);
+            if (!out) {
+                free(a);
+                free(b);
+                return NULL;
+            }
+
+            free(a);
+            free(b);
+        }
+    }
+
+    return out;
 }
 
 
