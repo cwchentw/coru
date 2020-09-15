@@ -140,6 +140,52 @@ uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
     return ast;
 }
 
+void uncoru_ast_delete(void *self)
+{
+    if (!self)
+        return;
+
+    UNCORU_AST_TYPE ast_t = ((uncoru_ast_t *) self)->ast_t;
+
+    if (UNCORU_AST_CODE == ast_t) {
+        uncoru_ast_code_t *ast = \
+            ((uncoru_ast_t *) self)->ast.code_t;
+        _uncoru_ast_code_delete(ast);
+    }
+    else if (UNCORU_AST_STRING == ast_t) {
+        uncoru_ast_string_t *ast = \
+            ((uncoru_ast_t *) self)->ast.string_t;
+        _uncoru_ast_string_delete(ast);
+    }
+    else if (UNCORU_AST_LINE_NUNBER == ast_t) {
+        uncoru_ast_line_number_t *ast = \
+            ((uncoru_ast_t *) self)->ast.line_number_t;
+        _uncoru_ast_line_number_delete(ast);
+    }
+    else if (UNCORU_AST_SPACE == ast_t) {
+        uncoru_ast_space_t *ast = \
+            ((uncoru_ast_t *) self)->ast.space_t;
+        _uncoru_ast_space_delete(ast);
+    }
+    else if (UNCORU_AST_TAB == ast_t) {
+        uncoru_ast_tab_t *ast = \
+            ((uncoru_ast_t *) self)->ast.tab_t;
+        _uncoru_ast_tab_delete(ast);
+    }
+    else if (UNCORU_AST_BACKSLASH == ast_t) {
+        uncoru_ast_backslash_t *ast = \
+            ((uncoru_ast_t *) self)->ast.backslash_t;
+        _uncoru_ast_backslash_delete(ast);
+    }
+    else if (UNCORU_AST_AMPERSAND == ast_t) {
+        uncoru_ast_ampersand_t *ast = \
+            ((uncoru_ast_t *) self)->ast.ampersand_t;
+        _uncoru_ast_ampersand_delete(ast);
+    }
+
+    free(self);
+}
+
 BOOL uncoru_ast_add(uncoru_ast_t *self, uncoru_token_t *token)
 {
     assert(self);
@@ -190,51 +236,6 @@ char * uncoru_ast_text(uncoru_ast_t *self)
     return out;
 }
 
-void uncoru_ast_delete(void *self)
-{
-    if (!self)
-        return;
-
-    UNCORU_AST_TYPE ast_t = ((uncoru_ast_t *) self)->ast_t;
-
-    if (UNCORU_AST_CODE == ast_t) {
-        uncoru_ast_code_t *ast = \
-            ((uncoru_ast_t *) self)->ast.code_t;
-        _uncoru_ast_code_delete(ast);
-    }
-    else if (UNCORU_AST_STRING == ast_t) {
-        uncoru_ast_string_t *ast = \
-            ((uncoru_ast_t *) self)->ast.string_t;
-        _uncoru_ast_string_delete(ast);
-    }
-    else if (UNCORU_AST_LINE_NUNBER == ast_t) {
-        uncoru_ast_line_number_t *ast = \
-            ((uncoru_ast_t *) self)->ast.line_number_t;
-        _uncoru_ast_line_number_delete(ast);
-    }
-    else if (UNCORU_AST_SPACE == ast_t) {
-        uncoru_ast_space_t *ast = \
-            ((uncoru_ast_t *) self)->ast.space_t;
-        _uncoru_ast_space_delete(ast);
-    }
-    else if (UNCORU_AST_TAB == ast_t) {
-        uncoru_ast_tab_t *ast = \
-            ((uncoru_ast_t *) self)->ast.tab_t;
-        _uncoru_ast_tab_delete(ast);
-    }
-    else if (UNCORU_AST_BACKSLASH == ast_t) {
-        uncoru_ast_backslash_t *ast = \
-            ((uncoru_ast_t *) self)->ast.backslash_t;
-        _uncoru_ast_backslash_delete(ast);
-    }
-    else if (UNCORU_AST_AMPERSAND == ast_t) {
-        uncoru_ast_ampersand_t *ast = \
-            ((uncoru_ast_t *) self)->ast.ampersand_t;
-        _uncoru_ast_ampersand_delete(ast);
-    }
-
-    free(self);
-}
 
 struct uncoru_ast_code_t {
     size_t size;
@@ -272,6 +273,26 @@ static uncoru_ast_code_t * _uncoru_ast_code_new(void)
     }
 
     return ast;    
+}
+
+static void _uncoru_ast_code_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((uncoru_ast_code_t *) self)->capacity;
+    uncoru_token_t **tokens = ((uncoru_ast_code_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++) {
+            if (tokens[i])
+                uncoru_token_delete(tokens[i]);
+        }
+    }
+
+    free(tokens);
+    free(self);
 }
 
 static BOOL _uncoru_ast_code_expand(uncoru_ast_code_t *self);
@@ -321,26 +342,8 @@ static BOOL _uncoru_ast_code_expand(uncoru_ast_code_t *self)
     return TRUE;
 }
 
-static void _uncoru_ast_code_delete(void *self)
-{
-    if (!self)
-        return;
 
-    size_t size = ((uncoru_ast_code_t *) self)->capacity;
-    uncoru_token_t **tokens = ((uncoru_ast_code_t *) self)->tokens;
-
-    {
-        size_t i;
-        for (i = 0; i < size; i++) {
-            if (tokens[i])
-                uncoru_token_delete(tokens[i]);
-        }
-    }
-
-    free(tokens);
-    free(self);
-}
-
+/* Implement uncoru_ast_space_t */
 struct uncoru_ast_space_t {
     size_t size;
     size_t capacity;
@@ -364,6 +367,17 @@ static uncoru_ast_space_t * _uncoru_ast_space_new(void)
     return ast;
 }
 
+static void _uncoru_ast_space_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_space_t *) self)->token;
+
+    uncoru_token_delete(token);
+    free(self);
+}
+
 static BOOL _uncoru_ast_space_add(uncoru_ast_space_t *self, uncoru_token_t *token)
 {
     assert(self);
@@ -377,17 +391,6 @@ static BOOL _uncoru_ast_space_add(uncoru_ast_space_t *self, uncoru_token_t *toke
     return TRUE;
 }
 
-static void _uncoru_ast_space_delete(void *self)
-{
-    if (!self)
-        return;
-
-    uncoru_token_t *token = ((uncoru_ast_space_t *) self)->token;
-
-    uncoru_token_delete(token);
-    free(self);
-}
-
 static char * _uncoru_ast_space_text(uncoru_ast_space_t *self)
 {
     assert(self);
@@ -397,6 +400,8 @@ static char * _uncoru_ast_space_text(uncoru_ast_space_t *self)
     return out;
 }
 
+
+/* Implement uncoru_ast_tab_t */
 struct uncoru_ast_tab_t {
     size_t size;
     size_t capacity;
@@ -420,6 +425,17 @@ static uncoru_ast_tab_t * _uncoru_ast_tab_new(void)
     return ast;
 }
 
+static void _uncoru_ast_tab_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_tab_t *) self)->token;
+
+    uncoru_token_delete(token);
+    free(self);
+}
+
 static BOOL _uncoru_ast_tab_add(uncoru_ast_tab_t *self, uncoru_token_t *token)
 {
     assert(self);
@@ -433,17 +449,6 @@ static BOOL _uncoru_ast_tab_add(uncoru_ast_tab_t *self, uncoru_token_t *token)
     return TRUE;
 }
 
-static void _uncoru_ast_tab_delete(void *self)
-{
-    if (!self)
-        return;
-
-    uncoru_token_t *token = ((uncoru_ast_tab_t *) self)->token;
-
-    uncoru_token_delete(token);
-    free(self);
-}
-
 static char * _uncoru_ast_tab_text(uncoru_ast_tab_t *self)
 {
     assert(self);
@@ -453,6 +458,8 @@ static char * _uncoru_ast_tab_text(uncoru_ast_tab_t *self)
     return out;
 }
 
+
+/* Implement uncoru_ast_backslash_t */
 struct uncoru_ast_backslash_t {
     size_t size;
     size_t capacity;
@@ -476,6 +483,17 @@ static uncoru_ast_backslash_t * _uncoru_ast_backslash_new(void)
     return ast;
 }
 
+static void _uncoru_ast_backslash_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_backslash_t *) self)->token;
+
+    uncoru_token_delete(token);
+    free(self);
+}
+
 static BOOL _uncoru_ast_backslash_add(uncoru_ast_backslash_t *self, uncoru_token_t *token)
 {
     assert(self);
@@ -489,17 +507,6 @@ static BOOL _uncoru_ast_backslash_add(uncoru_ast_backslash_t *self, uncoru_token
     return TRUE;
 }
 
-static void _uncoru_ast_backslash_delete(void *self)
-{
-    if (!self)
-        return;
-
-    uncoru_token_t *token = ((uncoru_ast_backslash_t *) self)->token;
-
-    uncoru_token_delete(token);
-    free(self);
-}
-
 static char * _uncoru_ast_backslash_text(uncoru_ast_backslash_t *self)
 {
     assert(self);
@@ -509,6 +516,8 @@ static char * _uncoru_ast_backslash_text(uncoru_ast_backslash_t *self)
     return out;
 }
 
+
+/* Implement uncoru_ast_ampersand_t */
 struct uncoru_ast_ampersand_t {
     size_t size;
     size_t capacity;
@@ -532,6 +541,17 @@ static uncoru_ast_ampersand_t * _uncoru_ast_ampersand_new(void)
     return ast;
 }
 
+static void _uncoru_ast_ampersand_delete(void *self)
+{
+    if (!self)
+        return;
+
+    uncoru_token_t *token = ((uncoru_ast_ampersand_t *) self)->token;
+
+    uncoru_token_delete(token);
+    free(self);
+}
+
 static BOOL _uncoru_ast_ampersand_add(uncoru_ast_ampersand_t *self, uncoru_token_t *token)
 {
     assert(self);
@@ -545,17 +565,6 @@ static BOOL _uncoru_ast_ampersand_add(uncoru_ast_ampersand_t *self, uncoru_token
     return TRUE;
 }
 
-static void _uncoru_ast_ampersand_delete(void *self)
-{
-    if (!self)
-        return;
-
-    uncoru_token_t *token = ((uncoru_ast_ampersand_t *) self)->token;
-
-    uncoru_token_delete(token);
-    free(self);
-}
-
 static char * _uncoru_ast_ampersand_text(uncoru_ast_ampersand_t *self)
 {
     assert(self);
@@ -565,6 +574,8 @@ static char * _uncoru_ast_ampersand_text(uncoru_ast_ampersand_t *self)
     return out;
 }
 
+
+/* Implement uncoru_ast_line_number_t */
 struct uncoru_ast_line_number_t {
     size_t size;
     size_t capacity;
@@ -601,6 +612,25 @@ static uncoru_ast_line_number_t * _uncoru_ast_line_number_new(void)
     }
 
     return ast;
+}
+
+static void _uncoru_ast_line_number_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((uncoru_ast_line_number_t *) self)->capacity;
+    uncoru_token_t **tokens = ((uncoru_ast_line_number_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++)
+            if (tokens[i])
+                uncoru_token_delete(tokens[i]);
+    }
+
+    free(tokens);
+    free(self);
 }
 
 static BOOL _uncoru_ast_line_number_expand(uncoru_ast_line_number_t *self);
@@ -650,25 +680,8 @@ static BOOL _uncoru_ast_line_number_expand(uncoru_ast_line_number_t *self)
     return TRUE;
 }
 
-static void _uncoru_ast_line_number_delete(void *self)
-{
-    if (!self)
-        return;
 
-    size_t size = ((uncoru_ast_line_number_t *) self)->capacity;
-    uncoru_token_t **tokens = ((uncoru_ast_line_number_t *) self)->tokens;
-
-    {
-        size_t i;
-        for (i = 0; i < size; i++)
-            if (tokens[i])
-                uncoru_token_delete(tokens[i]);
-    }
-
-    free(tokens);
-    free(self);
-}
-
+/* Implement uncoru_ast_string_t */
 struct uncoru_ast_string_t {
     size_t size;
     size_t capacity;
@@ -705,6 +718,25 @@ static uncoru_ast_string_t * _uncoru_ast_string_new(void)
     }
 
     return ast;
+}
+
+static void _uncoru_ast_string_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((uncoru_ast_string_t *) self)->capacity;
+    uncoru_token_t **tokens = ((uncoru_ast_string_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++)
+            if (tokens[i])
+                uncoru_token_delete(tokens[i]);
+    }
+
+    free(tokens);
+    free(self);
 }
 
 static BOOL _uncoru_ast_string_expand(uncoru_ast_string_t *self);
@@ -752,23 +784,4 @@ static BOOL _uncoru_ast_string_expand(uncoru_ast_string_t *self)
     free(old_tokens);
 
     return TRUE;
-}
-
-static void _uncoru_ast_string_delete(void *self)
-{
-    if (!self)
-        return;
-
-    size_t size = ((uncoru_ast_string_t *) self)->capacity;
-    uncoru_token_t **tokens = ((uncoru_ast_string_t *) self)->tokens;
-
-    {
-        size_t i;
-        for (i = 0; i < size; i++)
-            if (tokens[i])
-                uncoru_token_delete(tokens[i]);
-    }
-
-    free(tokens);
-    free(self);
 }
