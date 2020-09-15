@@ -40,8 +40,6 @@
 #endif  /* __cplusplus */
 #endif
 
-typedef struct uncoru_stats_t uncoru_stats_t;
-
 /* Valid target language. */
 #ifndef _LANGUAGE_TYPE_IS_DEFINED
     typedef char language_t;
@@ -70,6 +68,11 @@ typedef struct uncoru_stats_t uncoru_stats_t;
 #define  LANGUAGE_SH       19
 #define  LANGUAGE_CMAKE    20
 #define  LANGUAGE_MAKE     21
+
+typedef struct uncoru_stats_t uncoru_stats_t;
+
+uncoru_stats_t * uncoru_stats_load_fs(FILE *stream);
+void uncoru_stats_delete(void *self);
 
 char ** uncoru_out_new();
 void uncoru_out_delete(void *self);
