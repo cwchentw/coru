@@ -165,6 +165,8 @@ BOOL coru_eval_eval(coru_eval_t *self,
         self->first_line = FALSE;
     }
 
+    /* FIXME: We remove a trailing newline.
+         But it wrongly consume the last character. */
     {
         size_t len = strlen(line);
 
