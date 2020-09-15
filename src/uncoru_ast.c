@@ -1,9 +1,10 @@
 #include <assert.h>
 #include <stdlib.h>
+#include "print.h"
+#include "cstring.h"
 #include "uncoru.h"
 #include "uncoru_ast.h"
 #include "uncoru_token.h"
-#include "print.h"
 
 typedef struct uncoru_ast_code_t uncoru_ast_code_t;
 typedef struct uncoru_ast_space_t uncoru_ast_space_t;
@@ -14,26 +15,37 @@ typedef struct uncoru_ast_line_number_t uncoru_ast_line_number_t;
 typedef struct uncoru_ast_string_t uncoru_ast_string_t;
 
 static uncoru_ast_code_t * _uncoru_ast_code_new(void);
-static BOOL _uncoru_ast_code_add(uncoru_ast_code_t *self, uncoru_token_t *token);
 static void _uncoru_ast_code_delete(void *self);
+static BOOL _uncoru_ast_code_add(uncoru_ast_code_t *self, uncoru_token_t *token);
+
 static uncoru_ast_space_t * _uncoru_ast_space_new(void);
-static BOOL _uncoru_ast_space_add(uncoru_ast_space_t *self, uncoru_token_t *token);
 static void _uncoru_ast_space_delete(void *self);
+static BOOL _uncoru_ast_space_add(uncoru_ast_space_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_space_text(uncoru_ast_space_t *self);
+
 static uncoru_ast_tab_t * _uncoru_ast_tab_new(void);
-static BOOL _uncoru_ast_tab_add(uncoru_ast_tab_t *self, uncoru_token_t *token);
 static void _uncoru_ast_tab_delete(void *self);
+static BOOL _uncoru_ast_tab_add(uncoru_ast_tab_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_tab_text(uncoru_ast_tab_t *self);
+
 static uncoru_ast_backslash_t * _uncoru_ast_backslash_new(void);
-static BOOL _uncoru_ast_backslash_add(uncoru_ast_backslash_t *self, uncoru_token_t *token);
 static void _uncoru_ast_backslash_delete(void *self);
+static BOOL _uncoru_ast_backslash_add(uncoru_ast_backslash_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_backslash_text(uncoru_ast_backslash_t *self);
+
 static uncoru_ast_ampersand_t * _uncoru_ast_ampersand_new(void);
-static BOOL _uncoru_ast_ampersand_add(uncoru_ast_ampersand_t *self, uncoru_token_t *token);
 static void _uncoru_ast_ampersand_delete(void *self);
+static BOOL _uncoru_ast_ampersand_add(uncoru_ast_ampersand_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_ampersand_text(uncoru_ast_ampersand_t *self);
+
 static uncoru_ast_line_number_t * _uncoru_ast_line_number_new(void);
-static BOOL _uncoru_ast_line_number_add(uncoru_ast_line_number_t *self, uncoru_token_t *token);
 static void _uncoru_ast_line_number_delete(void *self);
+static BOOL _uncoru_ast_line_number_add(uncoru_ast_line_number_t *self, uncoru_token_t *token);
+
 static uncoru_ast_string_t * _uncoru_ast_string_new(void);
-static BOOL _uncoru_ast_string_add(uncoru_ast_string_t *self, uncoru_token_t *token);
 static void _uncoru_ast_string_delete(void *self);
+static BOOL _uncoru_ast_string_add(uncoru_ast_string_t *self, uncoru_token_t *token);
+
 
 struct uncoru_ast_t {
     UNCORU_AST_TYPE ast_t;
@@ -158,6 +170,24 @@ UNCORU_AST_TYPE uncoru_ast_type(uncoru_ast_t *self)
     assert(self);
 
     return self->ast_t;
+}
+
+char * uncoru_ast_text(uncoru_ast_t *self)
+{
+    assert(self);
+
+    char *out = NULL;
+
+    if (UNCORU_AST_SPACE == self->ast_t)
+        out = _uncoru_ast_space_text(self->ast.space_t);
+    else if (UNCORU_AST_TAB == self->ast_t)
+        out = _uncoru_ast_tab_text(self->ast.tab_t);
+    else if (UNCORU_AST_BACKSLASH == self->ast_t)
+        out = _uncoru_ast_backslash_text(self->ast.backslash_t);
+    else if (UNCORU_AST_AMPERSAND == self->ast_t)
+        out = _uncoru_ast_ampersand_text(self->ast.ampersand_t);
+
+    return out;
 }
 
 void uncoru_ast_delete(void *self)
@@ -358,6 +388,15 @@ static void _uncoru_ast_space_delete(void *self)
     free(self);
 }
 
+static char * _uncoru_ast_space_text(uncoru_ast_space_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->token));
+
+    return out;
+}
+
 struct uncoru_ast_tab_t {
     size_t size;
     size_t capacity;
@@ -403,6 +442,15 @@ static void _uncoru_ast_tab_delete(void *self)
 
     uncoru_token_delete(token);
     free(self);
+}
+
+static char * _uncoru_ast_tab_text(uncoru_ast_tab_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->token));
+
+    return out;
 }
 
 struct uncoru_ast_backslash_t {
@@ -452,6 +500,15 @@ static void _uncoru_ast_backslash_delete(void *self)
     free(self);
 }
 
+static char * _uncoru_ast_backslash_text(uncoru_ast_backslash_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->token));
+
+    return out;
+}
+
 struct uncoru_ast_ampersand_t {
     size_t size;
     size_t capacity;
@@ -497,6 +554,15 @@ static void _uncoru_ast_ampersand_delete(void *self)
 
     uncoru_token_delete(token);
     free(self);
+}
+
+static char * _uncoru_ast_ampersand_text(uncoru_ast_ampersand_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->token));
+
+    return out;
 }
 
 struct uncoru_ast_line_number_t {
