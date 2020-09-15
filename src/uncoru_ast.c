@@ -151,10 +151,17 @@ void uncoru_ast_delete(void *self)
 
     UNCORU_AST_TYPE ast_t = ((uncoru_ast_t *) self)->ast_t;
 
+    switch (ast_t) {
+    case UNCORU_AST_CODE:
+        {
+            uncoru_ast_code_t *ast = \
+                ((uncoru_ast_t *) self)->ast.code_t;
+            _uncoru_ast_code_delete(ast);
+        }
+        break;
+    } 
     if (UNCORU_AST_CODE == ast_t) {
-        uncoru_ast_code_t *ast = \
-            ((uncoru_ast_t *) self)->ast.code_t;
-        _uncoru_ast_code_delete(ast);
+        
     }
     else if (UNCORU_AST_STRING == ast_t) {
         uncoru_ast_string_t *ast = \
