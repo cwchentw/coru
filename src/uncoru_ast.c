@@ -45,6 +45,7 @@ static BOOL _uncoru_ast_line_number_add(uncoru_ast_line_number_t *self, uncoru_t
 static uncoru_ast_string_t * _uncoru_ast_string_new(void);
 static void _uncoru_ast_string_delete(void *self);
 static BOOL _uncoru_ast_string_add(uncoru_ast_string_t *self, uncoru_token_t *token);
+static char * _uncoru_ast_string_text(uncoru_ast_string_t *self);
 
 
 struct uncoru_ast_t {
@@ -232,6 +233,8 @@ char * uncoru_ast_text(uncoru_ast_t *self)
         out = _uncoru_ast_backslash_text(self->ast.backslash_t);
     else if (UNCORU_AST_AMPERSAND == self->ast_t)
         out = _uncoru_ast_ampersand_text(self->ast.ampersand_t);
+    else if (UNCORU_AST_STRING == self->ast_t)
+        out = _uncoru_ast_string_text(self->ast.string_t);
 
     return out;
 }
@@ -784,4 +787,37 @@ static BOOL _uncoru_ast_string_expand(uncoru_ast_string_t *self)
     free(old_tokens);
 
     return TRUE;
+}
+
+static char * _uncoru_ast_string_text(uncoru_ast_string_t *self)
+{
+    assert(self);
+
+    char *out = string_allocate(uncoru_token_text(self->tokens[0]));
+    if (!out)
+        return out;
+
+    {
+        size_t i;
+        for (i = 1; i < self->size; ++i) {
+            char *a = out;
+            char *b = string_allocate(uncoru_token_text(self->tokens[i]));
+            if (!b) {
+                free(a);
+                return NULL;
+            }
+
+            out = string_concat(a, b);
+            if (!out) {
+                free(a);
+                free(b);
+                return NULL;
+            }
+
+            free(a);
+            free(b);
+        }
+    }
+
+    return out;
 }
