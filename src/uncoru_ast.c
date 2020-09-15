@@ -204,20 +204,29 @@ BOOL uncoru_ast_add(uncoru_ast_t *self, uncoru_token_t *token)
 
     BOOL added = FALSE;
 
-    if (UNCORU_AST_CODE == self->ast_t)
+    switch (self->ast_t) {
+    case UNCORU_AST_CODE:
         added = _uncoru_ast_code_add(self->ast.code_t, token);
-    else if (UNCORU_AST_STRING == self->ast_t)
+        break;
+    case UNCORU_AST_STRING:
         added = _uncoru_ast_string_add(self->ast.string_t, token);
-    else if (UNCORU_AST_LINE_NUNBER == self->ast_t)
+        break;
+    case UNCORU_AST_LINE_NUNBER:
         added = _uncoru_ast_line_number_add(self->ast.line_number_t, token);
-    else if (UNCORU_AST_SPACE == self->ast_t)
+        break;
+    case UNCORU_AST_SPACE:
         added = _uncoru_ast_space_add(self->ast.space_t, token);
-    else if (UNCORU_AST_TAB == self->ast_t)
+        break;
+    case UNCORU_AST_TAB:
         added = _uncoru_ast_tab_add(self->ast.tab_t, token);
-    else if (UNCORU_AST_BACKSLASH == self->ast_t)
+        break;
+    case UNCORU_AST_BACKSLASH:
         added = _uncoru_ast_backslash_add(self->ast.backslash_t, token);
-    else if (UNCORU_AST_AMPERSAND == self->ast_t)
+        break;
+    case UNCORU_AST_AMPERSAND:
         added = _uncoru_ast_ampersand_add(self->ast.ampersand_t, token);
+        break;
+    }
 
     return added;
 }
