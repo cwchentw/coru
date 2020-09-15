@@ -12,22 +12,27 @@ typedef struct coru_ast_ampersand_t coru_ast_ampersand_t;
 typedef struct coru_ast_string_t coru_ast_string_t;
 
 static coru_ast_code_t * _coru_ast_code_new(void);
-static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token);
 static void _coru_ast_code_delete(void *self);
+static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token);
+
 static coru_ast_tab_t * _coru_ast_tab_new(void);
-static BOOL _coru_ast_tab_add(coru_ast_tab_t *self, coru_token_t *token);
 static void _coru_ast_tab_delete(void *self);
+static BOOL _coru_ast_tab_add(coru_ast_tab_t *self, coru_token_t *token);
+
 static coru_ast_backslash_t * _coru_ast_backslash_new(void);
+static void _coru_ast_backslash_delete(void *self);
 static BOOL _coru_ast_backslash_add(
     coru_ast_backslash_t *self, coru_token_t *token);
-static void _coru_ast_backslash_delete(void *self);
+
 static coru_ast_ampersand_t * _coru_ast_ampersand_new(void);
+static void _coru_ast_ampersand_delete(void *self);
 static BOOL _coru_ast_ampersand_add(
     coru_ast_ampersand_t *self, coru_token_t *token);
-static void _coru_ast_ampersand_delete(void *self);
+
 static coru_ast_string_t * _coru_ast_string_new(void);
-static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token);
 static void _coru_ast_string_delete(void *self);
+static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token);
+
 
 struct coru_ast_t {
     CORU_AST_TYPE ast_t;
@@ -107,41 +112,6 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
     return ast;
 }
 
-BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
-{
-    assert(self);
-    assert(token);
-
-    BOOL added = FALSE;
-
-    switch (self->ast_t) {
-    case CORU_AST_CODE:
-        added = _coru_ast_code_add(self->ast.code_t, token);
-        break;
-    case CORU_AST_TAB:
-        added = _coru_ast_tab_add(self->ast.tab_t, token);
-        break;
-    case CORU_AST_BACKSLASH:
-        added = _coru_ast_backslash_add(self->ast.backslash_t, token);
-        break;
-    case CORU_AST_AMPERSAND:
-        added = _coru_ast_ampersand_add(self->ast.ampersand_t, token);
-        break;
-    case CORU_AST_STRING:
-        added = _coru_ast_string_add(self->ast.string_t, token);
-        break;
-    }
-
-    return added;
-}
-
-CORU_AST_TYPE coru_ast_type(coru_ast_t *self)
-{
-    assert(self);
-
-    return self->ast_t;
-}
-
 void coru_ast_delete(void *self)
 {
     if (!self)
@@ -190,6 +160,43 @@ void coru_ast_delete(void *self)
     free(self);
 }
 
+BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
+{
+    assert(self);
+    assert(token);
+
+    BOOL added = FALSE;
+
+    switch (self->ast_t) {
+    case CORU_AST_CODE:
+        added = _coru_ast_code_add(self->ast.code_t, token);
+        break;
+    case CORU_AST_TAB:
+        added = _coru_ast_tab_add(self->ast.tab_t, token);
+        break;
+    case CORU_AST_BACKSLASH:
+        added = _coru_ast_backslash_add(self->ast.backslash_t, token);
+        break;
+    case CORU_AST_AMPERSAND:
+        added = _coru_ast_ampersand_add(self->ast.ampersand_t, token);
+        break;
+    case CORU_AST_STRING:
+        added = _coru_ast_string_add(self->ast.string_t, token);
+        break;
+    }
+
+    return added;
+}
+
+CORU_AST_TYPE coru_ast_type(coru_ast_t *self)
+{
+    assert(self);
+
+    return self->ast_t;
+}
+
+
+/* Implement coru_ast_code_t */
 struct coru_ast_code_t {
     size_t size;
     size_t capacity;
@@ -226,6 +233,26 @@ static coru_ast_code_t * _coru_ast_code_new(void)
     }
 
     return ast;
+}
+
+static void _coru_ast_code_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((coru_ast_code_t *) self)->capacity;
+    coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++) {
+            if (tokens[i])
+                coru_token_delete(tokens[i]);
+        }
+    }
+
+    free(tokens);
+    free(self);
 }
 
 static BOOL _coru_ast_code_expand(coru_ast_code_t *self);
@@ -275,26 +302,8 @@ static BOOL _coru_ast_code_expand(coru_ast_code_t *self)
     return TRUE;
 }
 
-static void _coru_ast_code_delete(void *self)
-{
-    if (!self)
-        return;
 
-    size_t size = ((coru_ast_code_t *) self)->capacity;
-    coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
-
-    {
-        size_t i;
-        for (i = 0; i < size; i++) {
-            if (tokens[i])
-                coru_token_delete(tokens[i]);
-        }
-    }
-
-    free(tokens);
-    free(self);
-}
-
+/* Implement coru_ast_tab_t */
 struct coru_ast_tab_t {
     size_t size;
     size_t capacity;
@@ -318,6 +327,17 @@ static coru_ast_tab_t * _coru_ast_tab_new(void)
     return ast;
 }
 
+static void _coru_ast_tab_delete(void *self)
+{
+    if (!self)
+        return;
+
+    coru_token_t *token = ((coru_ast_tab_t *) self)->token;
+
+    coru_token_delete(token);
+    free(self);
+}
+
 static BOOL _coru_ast_tab_add(coru_ast_tab_t *self, coru_token_t *token)
 {
     assert(self);
@@ -331,17 +351,8 @@ static BOOL _coru_ast_tab_add(coru_ast_tab_t *self, coru_token_t *token)
     return TRUE;
 }
 
-static void _coru_ast_tab_delete(void *self)
-{
-    if (!self)
-        return;
 
-    coru_token_t *token = ((coru_ast_tab_t *) self)->token;
-
-    coru_token_delete(token);
-    free(self);
-}
-
+/* Implement coru_ast_backslash_t */
 struct coru_ast_backslash_t {
     size_t size;
     size_t capacity;
@@ -365,6 +376,17 @@ static coru_ast_backslash_t * _coru_ast_backslash_new(void)
     return ast;
 }
 
+static void _coru_ast_backslash_delete(void *self)
+{
+    if (!self)
+        return;
+
+    coru_token_t *token = ((coru_ast_backslash_t *) self)->token;
+
+    coru_token_delete(token);
+    free(self);
+}
+
 static BOOL _coru_ast_backslash_add(
     coru_ast_backslash_t *self, coru_token_t *token)
 {
@@ -377,17 +399,8 @@ static BOOL _coru_ast_backslash_add(
     return TRUE;
 }
 
-static void _coru_ast_backslash_delete(void *self)
-{
-    if (!self)
-        return;
 
-    coru_token_t *token = ((coru_ast_backslash_t *) self)->token;
-
-    coru_token_delete(token);
-    free(self);
-}
-
+/* Implement coru_ast_ampersand_t */
 struct coru_ast_ampersand_t {
     size_t size;
     size_t capacity;
@@ -411,6 +424,17 @@ static coru_ast_ampersand_t * _coru_ast_ampersand_new(void)
     return ast;
 }
 
+static void _coru_ast_ampersand_delete(void *self)
+{
+    if (!self)
+        return;
+
+    coru_token_t *token = ((coru_ast_ampersand_t *) self)->token;
+
+    coru_token_delete(token);
+    free(self);
+}
+
 static BOOL _coru_ast_ampersand_add(
     coru_ast_ampersand_t *self, coru_token_t *token)
 {
@@ -423,17 +447,8 @@ static BOOL _coru_ast_ampersand_add(
     return TRUE;
 }
 
-static void _coru_ast_ampersand_delete(void *self)
-{
-    if (!self)
-        return;
 
-    coru_token_t *token = ((coru_ast_ampersand_t *) self)->token;
-
-    coru_token_delete(token);
-    free(self);
-}
-
+/* Implement coru_ast_string_t */
 struct coru_ast_string_t {
     size_t size;
     size_t capacity;
@@ -470,6 +485,25 @@ static coru_ast_string_t * _coru_ast_string_new(void)
     }
 
     return ast;
+}
+
+static void _coru_ast_string_delete(void *self)
+{
+    if (!self)
+        return;
+
+    size_t size = ((coru_ast_code_t *) self)->capacity;
+    coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
+
+    {
+        size_t i;
+        for (i = 0; i < size; i++)
+            if (tokens[i])
+                coru_token_delete(tokens[i]);
+    }
+
+    free(tokens);
+    free(self);
 }
 
 static BOOL _coru_ast_string_expand(coru_ast_string_t *self);
@@ -517,23 +551,4 @@ static BOOL _coru_ast_string_expand(coru_ast_string_t *self)
     free(old_tokens);
 
     return TRUE;
-}
-
-static void _coru_ast_string_delete(void *self)
-{
-    if (!self)
-        return;
-
-    size_t size = ((coru_ast_code_t *) self)->capacity;
-    coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
-
-    {
-        size_t i;
-        for (i = 0; i < size; i++)
-            if (tokens[i])
-                coru_token_delete(tokens[i]);
-    }
-
-    free(tokens);
-    free(self);
 }
