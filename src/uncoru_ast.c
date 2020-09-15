@@ -227,20 +227,29 @@ char * uncoru_ast_text(uncoru_ast_t *self)
 
     char *out = NULL;
 
-    if (UNCORU_AST_CODE == self->ast_t)
+    switch (self->ast_t) {
+    case UNCORU_AST_CODE:
         out = _uncoru_ast_code_text(self->ast.code_t);
-    else if (UNCORU_AST_LINE_NUNBER == self->ast_t)
+        break;
+    case UNCORU_AST_LINE_NUNBER:
         out = _uncoru_ast_line_number_text(self->ast.line_number_t);
-    else if (UNCORU_AST_SPACE == self->ast_t)
+        break;
+    case UNCORU_AST_SPACE:
         out = _uncoru_ast_space_text(self->ast.space_t);
-    else if (UNCORU_AST_TAB == self->ast_t)
+        break;
+    case UNCORU_AST_TAB:
         out = _uncoru_ast_tab_text(self->ast.tab_t);
-    else if (UNCORU_AST_BACKSLASH == self->ast_t)
+        break;
+    case UNCORU_AST_BACKSLASH:
         out = _uncoru_ast_backslash_text(self->ast.backslash_t);
-    else if (UNCORU_AST_AMPERSAND == self->ast_t)
+        break;
+    case UNCORU_AST_AMPERSAND:
         out = _uncoru_ast_ampersand_text(self->ast.ampersand_t);
-    else if (UNCORU_AST_STRING == self->ast_t)
+        break;
+    case UNCORU_AST_STRING:
         out = _uncoru_ast_string_text(self->ast.string_t);
+        break;
+    }
 
     return out;
 }
