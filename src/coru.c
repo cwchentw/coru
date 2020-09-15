@@ -87,6 +87,9 @@ _coru_load(
         }
         else {
 RELOAD_LINE:
+            /* Remove the trailing newline. */
+            line[strcspn(line, "\n")] = 0;
+
             if (!coru_eval_eval(eval, stats, lang, is_all, line, out))
                 goto ERROR_CORU_LOAD;
         }
