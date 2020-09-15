@@ -7,7 +7,7 @@
 #include "coru_stats.h"
 #include "print.h"
 
-BOOL coru_run(int argc, char **argv, char **out);
+static BOOL coru_run(int argc, char **argv, char **out);
 
 int main(int argc, char *argv[])
 {
@@ -32,9 +32,9 @@ ERROR_CORU_CLI:
     return 1;
 }
 
-BOOL coru_run_load(coru_argument_t * arg, char **out);
+static BOOL coru_run_load(coru_argument_t * arg, char **out);
 
-BOOL coru_run(int argc, char **argv, char **out)
+static BOOL coru_run(int argc, char **argv, char **out)
 {
     coru_argument_t *arg = coru_argument_parse(argc, argv);
     if (!arg)
@@ -82,7 +82,7 @@ ERROR_CORU:
     return FALSE;
 }
 
-BOOL coru_run_load(coru_argument_t * arg, char **out)
+static BOOL coru_run_load(coru_argument_t * arg, char **out)
 {
     coru_stats_t *stats = NULL;
     FILE *fp = NULL;
