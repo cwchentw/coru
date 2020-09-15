@@ -5,6 +5,7 @@
 #include "language.h"
 #include "print.h"
 #include "syntax_data.h"
+#include "uncoru_ast.h"
 #include "uncoru_eval.h"
 #include "uncoru_lexer.h"
 #include "uncoru_parser.h"
@@ -110,6 +111,37 @@ BOOL uncoru_eval_eval(
         PUTERR("Failed to parse input");
         goto ERROR_UNCORU_EVAL;
     }
+
+    size_t sz = 0 + strlen(*out);
+
+    uncoru_ast_t *ast = uncoru_parser_peek_n(parser, 0);
+    while (ast) {
+        if (0) {
+            /* Currently, we ignore any line number. */
+        }
+        else {
+            /* Consume one token. */
+            ast = uncoru_parser_next(parser);
+
+            char *txt = uncoru_ast_text(ast);
+
+        #if DEBUG
+            if (txt)
+                PUTERR("Print text to output: -->%s<--", txt);
+        #endif
+
+            if (txt) {
+                strcpy((*out)+sz, txt);
+                sz += strlen(txt);
+
+                free(txt);
+            }
+
+            ast = uncoru_parser_peek_n(parser, 0);
+        }
+    }
+
+    (*out)[sz] = '\0';  /* Trailing zero. */
 
     uncoru_parser_delete(parser);
     uncoru_lexer_delete(lexer);
