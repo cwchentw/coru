@@ -116,10 +116,24 @@ BOOL uncoru_eval_eval(
 
     uncoru_ast_t *ast = uncoru_parser_peek_n(parser, 0);
     while (ast) {
-        if (0) {
-            /* Currently, we ignore any line number. */
+        if (UNCORU_AST_SPACE == uncoru_ast_type(ast)) {
+            uncoru_ast_t *astLineNumber = uncoru_parser_peek_n(parser, 1);
+
+            if (!astLineNumber)
+                goto PARSE_COMMON_AST;
+            else if (UNCORU_AST_LINE_NUNBER != uncoru_ast_type(astLineNumber))
+                goto PARSE_COMMON_AST;
+
+            /* Discard the space ast. */
+            uncoru_parser_next(parser);
+
+            /* Discard the line number ast. */
+            uncoru_parser_next(parser);
+
+            goto PARSE_LINE_NUMBER_AST;
         }
         else {
+        PARSE_COMMON_AST:
             /* Consume one token. */
             ast = uncoru_parser_next(parser);
 
@@ -136,9 +150,12 @@ BOOL uncoru_eval_eval(
 
                 free(txt);
             }
-
-            ast = uncoru_parser_peek_n(parser, 0);
         }
+
+    PARSE_LINE_NUMBER_AST:
+        /* Discard the space before the line number. */
+
+        ast = uncoru_parser_peek_n(parser, 0);
     }
 
     (*out)[sz] = '\0';  /* Trailing zero. */
