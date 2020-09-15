@@ -112,16 +112,23 @@ BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
 
     BOOL added = FALSE;
 
-    if (CORU_AST_CODE == self->ast_t)
+    switch (self->ast_t) {
+    case CORU_AST_CODE:
         added = _coru_ast_code_add(self->ast.code_t, token);
-    else if (CORU_AST_TAB == self->ast_t)
+        break;
+    case CORU_AST_TAB:
         added = _coru_ast_tab_add(self->ast.tab_t, token);
-    else if (CORU_AST_BACKSLASH == self->ast_t)
+        break;
+    case CORU_AST_BACKSLASH:
         added = _coru_ast_backslash_add(self->ast.backslash_t, token);
-    else if (CORU_AST_AMPERSAND == self->ast_t)
+        break;
+    case CORU_AST_AMPERSAND:
         added = _coru_ast_ampersand_add(self->ast.ampersand_t, token);
-    else if (CORU_AST_STRING == self->ast_t)
+        break;
+    case CORU_AST_STRING:
         added = _coru_ast_string_add(self->ast.string_t, token);
+        break;
+    }
 
     return added;
 }
