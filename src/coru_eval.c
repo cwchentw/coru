@@ -153,8 +153,15 @@ BOOL coru_eval_eval(coru_eval_t *self,
     /* Detect #! (shebang) on first line. */
     if (self->first_line) {
         if (string_starts_with(line, "#!")) {
+            /* Copy the original text. */
             size_t sz = strlen(line);
             strcpy((*out)+total_size, line);
+            total_size += sz;
+            (*out)[total_size] = '\0';
+
+            /* Add back an EOL. */
+            sz = strlen(END_OF_LINE);
+            strcpy((*out)+total_size, END_OF_LINE);
             total_size += sz;
             (*out)[total_size] = '\0';
 
