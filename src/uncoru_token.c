@@ -18,7 +18,8 @@ struct uncoru_token_t {
      || UNCORU_TOKEN_COMMENT_END == (t) \
      || UNCORU_TOKEN_SINGLE_QUOTE == (t) \
      || UNCORU_TOKEN_DOUBLE_QUOTE == (t) \
-     || UNCORU_TOKEN_BACKSLASH == (t))
+     || UNCORU_TOKEN_BACKSLASH == (t) \
+     || UNCORU_TOKEN_AMPERSAND == (t))
 
 uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text)
 {

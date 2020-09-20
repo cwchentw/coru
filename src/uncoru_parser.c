@@ -242,7 +242,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             token = uncoru_lexer_next(lexer);
 
             #if DEBUG
-                PUTERR("Transform BACKSLASH token: (%d) -->%s<--",
+                PUTERR("Transform AMPERSAND token: (%d) -->%s<--",
                     uncoru_token_type(token), uncoru_token_text(token));
             #endif
             ast = uncoru_ast_new(UNCORU_AST_AMPERSAND);

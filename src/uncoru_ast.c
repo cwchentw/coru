@@ -68,6 +68,7 @@ struct uncoru_ast_t {
         || UNCORU_AST_SPACE == (ast_t) \
         || UNCORU_AST_TAB == (ast_t) \
         || UNCORU_AST_BACKSLASH == (ast_t) \
+        || UNCORU_AST_AMPERSAND == (ast_t) \
         || UNCORU_AST_LINE_NUNBER == (ast_t) \
         || UNCORU_AST_STRING == (ast_t))
 
