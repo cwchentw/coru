@@ -119,6 +119,7 @@ char * uncoru_lexer_comment_end(uncoru_lexer_t *self)
      && TAB != (c) \
      && !isdigit(c) \
      && BACKSLASH != (c) \
+     && AMPERSAND != (c) \
      && SINGLE_QUOTE != (c) \
      && DOUBLE_QUOTE != (c))
 
