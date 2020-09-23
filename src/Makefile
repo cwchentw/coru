@@ -34,11 +34,18 @@ SRC_UNTARGET=uncoru_cli.c
 
 CL := cl icl
 
+ifeq ($(detected_OS),Windows)
 ifneq (,$(findstring $(CC),$(CL)))
 	TARGET_LIB_DYNAMIC=$(TARGET).dll
 	TARGET_LIB_STATIC=$(TARGET).lib
 	UNTARGET_LIB_DYNAMIC=$(UNTARGET).dll
 	UNTARGET_LIB_STATIC=$(UNTARGET).lib
+else
+	TARGET_LIB_DYNAMIC=lib$(TARGET).dll
+	TARGET_LIB_STATIC=lib$(TARGET).a
+	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).dll
+	UNTARGET_LIB_STATIC=lib$(UNTARGET).a
+endif
 else
 ifeq ($(detected_OS),Darwin)
 	TARGET_LIB_DYNAMIC=lib$(TARGET).dylib
