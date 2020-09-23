@@ -15,7 +15,7 @@
 #endif
 
 /* Custom boolean type. */
-#if _MSC_VER
+#if _WIN32
     #include <windows.h>
 #else
 #ifdef __cplusplus
