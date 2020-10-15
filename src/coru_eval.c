@@ -231,7 +231,9 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     /* Insert spaces. */
     size_t sz_space = width_new - strlen(line) - width_number
-        - strlen(END_OF_LINE) - 1 /* Trailing zero */;
+        - strlen(END_OF_LINE)
+        - 1 /* Reduce the indent. */
+        - 1 /* Trailing zero */;
 
     coru_ast_t *ast = coru_parser_next(parser);
     while (ast) {
