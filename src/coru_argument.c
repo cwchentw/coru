@@ -43,6 +43,9 @@ struct coru_argument_t {
 #define _is_golang(opt) \
     (0 == strcmp((opt), "-go") || 0 == strcmp((opt), "-golang") \
         || 0 == strcmp((opt), "--as-golang"))
+#define _is_rust(opt) \
+    (0 == strcmp((opt), "-rs") || 0 == strcmp((opt), "-rust") \
+        || 0 == strcmp((opt), "--as-rust"))
 #define _is_objc(opt) \
     (0 == strcmp((opt), "-objc") || 0 == strcmp((opt), "--as-objc"))
 #define _is_csh(opt) \
@@ -138,6 +141,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
         else if (_is_golang(opt)) {
             arg->lang = LANGUAGE_GO;
+            arg->index += 1;
+        }
+        else if (_is_rust(opt)) {
+            arg->lang = LANGUAGE_RUST;
             arg->index += 1;
         }
         else if (_is_objc(opt)) {
