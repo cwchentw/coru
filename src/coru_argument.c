@@ -36,6 +36,8 @@ struct coru_argument_t {
 #define _is_ruby(opt) \
     (0 == strcmp((opt), "-rb") || 0 == strcmp((opt), "-ruby") \
         || 0 == strcmp((opt), "--as-ruby"))
+#define _is_php(opt) \
+    (0 == strcmp((opt), "-php") || 0 == strcmp((opt), "--as-php"))
 #define _is_cmake(opt) \
     (0 == strcmp((opt), "-cmake") || 0 == strcmp((opt), "--as-cmake"))
 #define _is_make(opt) \
@@ -113,6 +115,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
         else if (_is_ruby(opt)) {
             arg->lang = LANGUAGE_RUBY;
+            arg->index += 1;
+        }
+        else if (_is_php(opt)) {
+            arg->lang = LANGUAGE_PHP;
             arg->index += 1;
         }
         else if (_is_cmake(opt)) {
