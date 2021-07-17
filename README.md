@@ -101,16 +101,16 @@ See [example](/example).
 * `--license` to show license info and exit
 * `-h` or `--help` to show help info and exit
 
-### Options for Target Language
-
-Run `coru -h` for more information.
-
 ### Options related to Line Numbers
 
 * `--non-empty` to add line numbers to only non-empty lines of target source (default)
 * `--all` to add line numbers to all lines of target source
 
 `coru` will always skip block comments because some language, like C, cannot parse nested block comments.
+
+### Options for Target Language
+
+Run `coru -h` for more information.
 
 ## Note
 
@@ -121,7 +121,7 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 ## Known Issues or Bugs
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
-* `coru` fails to handle the multiline strings in some languages
+* `coru` fails to handle multiline strings in some languages
 * `coru` cannot detect Heredoc
 * `coru` modifled *Makefile*s are unusable
 * `coru` fails to handle source with CJK characters
