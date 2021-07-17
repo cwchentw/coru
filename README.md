@@ -68,24 +68,35 @@ Here are currently supported programming languages:
 
 ## Usage of this Project
 
-Our default build task will generate
+To build executables of `coru` and `uncoru`, run the command:
 
-* The executable `coru`
-* The static library and the dynamic library of `coru`
-* The executable `uncoru`
-* The static library and the dynamic library of `uncoru`
+```shell
+$ make
+```
+
+To build their static libraries, run the command:
+
+```shell
+$ make static
+```
+
+To build their dynamic libraries, run the command:
+
+```shell
+$ make dynamic
+```
 
 ## Use `coru` as a Console Program
 
 Just feed your sample source file:
 
-```console
+```shell
 $ coru path/to/file.c
 ```
 
 Treat target source as C language:
 
-```console
+```shell
 $ coru -c path/to/source
 ```
 
