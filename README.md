@@ -1,6 +1,6 @@
 # coru
 
-`coru`, aka code ruler, add line numbers to source code in the form of its comments. Commented source code are mainly used as demonstrative code snippets.
+`coru`, aka code ruler, adds line numbers to source code in the form of its comments. Commented source code are mainly used as demonstrative code snippets.
 
 ## Warning
 
@@ -19,7 +19,7 @@ Some online tutorials add line numbers in the form of HTML elements on web pages
 
 In contrary, `coru` adds line numbers to source code as its comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
 
-By the way, `uncoru`, the sister program of `coru`, removes the line numbers in source modified by `coru` in case that you no longer require such metadata on code.
+By the way, `uncoru`, the sister program of `coru`, removes the line numbers in source modified by `coru` in case that you no longer require these metadata on code.
 
 ## System Requirements
 
@@ -66,18 +66,14 @@ Here are currently supported programming languages:
 * CMake config file (default to *CMakeLists.txt*)
 * Make config file (default to *Makefile*)
 
-For unsupported language, you may set custom character for single line comment. It should work as well.
-
 ## Usage of this Project
 
 Our default build task will generate
 
-* The executables of `coru` and `corucb`
+* The executable `coru`
 * The static library and the dynamic library of `coru`
-* The executables of `uncoru` and `uncorucb`
+* The executable `uncoru`
 * The static library and the dynamic library of `uncoru`
-
-Pending more information.
 
 ## Use `coru` as a Console Program
 
@@ -93,6 +89,10 @@ Treat target source as C language:
 $ coru -c path/to/source
 ```
 
+## Use `coru` as a Library
+
+See [example](/example).
+
 ## Options for `coru`
 
 ### General Options
@@ -103,13 +103,7 @@ $ coru -c path/to/source
 
 ### Options for Target Language
 
-* `-c`: Treat target source as C
-* `-cpp`, `-cxx`, `-c++`: Treat target source as C++
-* `-java`: Treat target source as Java
-* `-c#`, `-csharp`: Treat target source as C# (C sharp)
-* `-py`, `-python`: Treat target source as Python
-* `-cmake`: Treat target source as CMake configuration
-* `-make`: Treat target source as Make configuration
+Run `coru -h` for more information.
 
 ### Options related to Line Numbers
 
