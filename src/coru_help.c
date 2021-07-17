@@ -38,6 +38,8 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-ruby%s", END_OF_LINE);
     fprintf(stream, "    -php\t\tTreat target source as PHP%s", END_OF_LINE);
     fprintf(stream, "    --as-php%s", END_OF_LINE);
+    fprintf(stream, "    -js\t\t\tTreat target source as JavaScript%s", END_OF_LINE);
+    fprintf(stream, "    --as-js%s", END_OF_LINE);
     fprintf(stream, "    -cmake\t\tTreat target source as CMakeLists.txt%s", END_OF_LINE);
     fprintf(stream, "    --as-cmake%s", END_OF_LINE);
     fprintf(stream, "    -make\t\tTreat target source as Makefile%s", END_OF_LINE);
