@@ -30,9 +30,11 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    -c#  -csharp\tTreat target source as C# (C sharp)%s", END_OF_LINE);
     fprintf(stream, "    --as-c#%s", END_OF_LINE);
     fprintf(stream, "    --as-csharp%s", END_OF_LINE);
-    fprintf(stream, "    -py -python\t\tTreat target source as Python%s", END_OF_LINE);
+    fprintf(stream, "    -pl  -perl\t\tTreat target source as Perl%s", END_OF_LINE);
+    fprintf(stream, "    --as-perl%s", END_OF_LINE);
+    fprintf(stream, "    -py  -python\tTreat target source as Python%s", END_OF_LINE);
     fprintf(stream, "    --as-python%s", END_OF_LINE);
-    fprintf(stream, "    -rb -ruby\t\tTreat target source as Ruby%s", END_OF_LINE);
+    fprintf(stream, "    -rb  -ruby\t\tTreat target source as Ruby%s", END_OF_LINE);
     fprintf(stream, "    --as-ruby%s", END_OF_LINE);
     fprintf(stream, "    -cmake\t\tTreat target source as CMakeLists.txt%s", END_OF_LINE);
     fprintf(stream, "    --as-cmake%s", END_OF_LINE);
