@@ -40,6 +40,8 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-php%s", END_OF_LINE);
     fprintf(stream, "    -js\t\t\tTreat target source as JavaScript%s", END_OF_LINE);
     fprintf(stream, "    --as-js%s", END_OF_LINE);
+    fprintf(stream, "    -go  -golang\t\tTreat target source as Golang%s", END_OF_LINE);
+    fprintf(stream, "    --as-golang%s", END_OF_LINE);
     fprintf(stream, "    -objc\t\tTreat target source as Objective-C%s", END_OF_LINE);
     fprintf(stream, "    --as-objc%s", END_OF_LINE);
     fprintf(stream, "    -csh\t\tTreat target source as C Shell%s", END_OF_LINE);
