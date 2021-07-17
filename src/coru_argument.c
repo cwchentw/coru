@@ -44,6 +44,8 @@ struct coru_argument_t {
     (0 == strcmp((opt), "-objc") || 0 == strcmp((opt), "--as-objc"))
 #define _is_csh(opt) \
     (0 == strcmp((opt), "-csh") || 0 == strcmp((opt), "--as-csh"))
+#define _is_sh(opt) \
+    (0 == strcmp((opt), "-sh") || 0 == strcmp((opt), "--as-sh"))
 #define _is_cmake(opt) \
     (0 == strcmp((opt), "-cmake") || 0 == strcmp((opt), "--as-cmake"))
 #define _is_make(opt) \
@@ -137,6 +139,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
         else if (_is_csh(opt)) {
             arg->lang = LANGUAGE_CSH;
+            arg->index += 1;
+        }
+        else if (_is_sh(opt)) {
+            arg->lang = LANGUAGE_SH;
             arg->index += 1;
         }
         else if (_is_cmake(opt)) {

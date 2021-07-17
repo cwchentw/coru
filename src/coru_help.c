@@ -44,6 +44,8 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-objc%s", END_OF_LINE);
     fprintf(stream, "    -csh\t\tTreat target source as C Shell%s", END_OF_LINE);
     fprintf(stream, "    --as-csh%s", END_OF_LINE);
+    fprintf(stream, "    -sh\t\t\tTreat target source as Bourne Shell%s", END_OF_LINE);
+    fprintf(stream, "    --as-sh%s", END_OF_LINE);
     fprintf(stream, "    -cmake\t\tTreat target source as CMakeLists.txt%s", END_OF_LINE);
     fprintf(stream, "    --as-cmake%s", END_OF_LINE);
     fprintf(stream, "    -make\t\tTreat target source as Makefile%s", END_OF_LINE);
