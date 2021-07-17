@@ -48,6 +48,8 @@ struct coru_argument_t {
         || 0 == strcmp((opt), "--as-rust"))
 #define _is_objc(opt) \
     (0 == strcmp((opt), "-objc") || 0 == strcmp((opt), "--as-objc"))
+#define _is_swift(opt) \
+    (0 == strcmp((opt), "-swfit") || 0 == strcmp((opt), "--as-swift"))
 #define _is_csh(opt) \
     (0 == strcmp((opt), "-csh") || 0 == strcmp((opt), "--as-csh"))
 #define _is_sh(opt) \
@@ -149,6 +151,10 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
         }
         else if (_is_objc(opt)) {
             arg->lang = LANGUAGE_OBJC;
+            arg->index += 1;
+        }
+        else if (_is_swift(opt)) {
+            arg->lang = LANGUAGE_SWIFT;
             arg->index += 1;
         }
         else if (_is_csh(opt)) {

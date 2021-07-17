@@ -46,6 +46,8 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-rust%s", END_OF_LINE);
     fprintf(stream, "    -objc\t\tTreat target source as Objective-C%s", END_OF_LINE);
     fprintf(stream, "    --as-objc%s", END_OF_LINE);
+    fprintf(stream, "    -swift\t\tTreat target source as swift%s", END_OF_LINE);
+    fprintf(stream, "    --as-swift%s", END_OF_LINE);
     fprintf(stream, "    -csh\t\tTreat target source as C Shell%s", END_OF_LINE);
     fprintf(stream, "    --as-csh%s", END_OF_LINE);
     fprintf(stream, "    -sh\t\t\tTreat target source as Bourne Shell%s", END_OF_LINE);
