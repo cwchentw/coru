@@ -8,7 +8,7 @@
 
 ## `coru` and her Sister Programs
 
-* `coru` adds line numbers and, optionally, width numbers to source
+* `coru` adds line numbers to source
 * `uncoru` removes line numbers from source modified by `coru`
 
 ## Why `coru`?
