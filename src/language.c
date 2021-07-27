@@ -118,6 +118,9 @@ language_t detect_target_language(char *path)
     else if (string_is_equal(".swift", ext)) {
         lang = LANGUAGE_SWIFT;
     }
+    else if (string_is_equal(".ps1", ext)) {
+        lang = LANGUAGE_PS;
+    }
     else if (string_is_equal(".csh", ext)) {
         lang = LANGUAGE_CSH;
     }
@@ -284,6 +287,8 @@ char * language_to_string(language_t lang)
         return STRING_CSH;
     case LANGUAGE_SH:
         return STRING_SH;
+    case LANGUAGE_PS:
+        return STRING_PS;
     case LANGUAGE_CMAKE:
         return STRING_CMAKE;
     case LANGUAGE_MAKE:

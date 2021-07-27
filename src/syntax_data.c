@@ -34,6 +34,7 @@ hash_table_t * init_comment_single_start(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
+        STRING_PS,
         STRING_CMAKE,
         STRING_MAKE
     };
@@ -58,6 +59,7 @@ hash_table_t * init_comment_single_start(void)
         "/*",   /* Swift */
         "#",    /* C shell */
         "#",    /* Bourne shell */
+        "<#",   /* PowerShell */
         "#[[",  /* CMake */
         "#"     /* Make */
     };
@@ -109,6 +111,7 @@ hash_table_t * init_comment_single_end(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
+        STRING_PS,
         STRING_CMAKE,
         STRING_MAKE
     };
@@ -133,6 +136,7 @@ hash_table_t * init_comment_single_end(void)
         "*/",  /* Swift */
         "",    /* C shell */
         "",    /* Bourne shell */
+        "#>",  /* PowerShell */
         "]]",  /* CMake */
         ""     /* Make */
     };
@@ -184,6 +188,7 @@ hash_table_t * init_comment_multiple_start(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
+        STRING_PS,
         STRING_CMAKE,
         STRING_MAKE
     };
@@ -208,6 +213,7 @@ hash_table_t * init_comment_multiple_start(void)
         "/*",   /* Swift */
         "",     /* C shell */
         "",     /* Bourne shell */
+        "<#",   /* PowerShell */
         "#[[",  /* CMake */
         ""      /* Make */
     };
@@ -259,6 +265,7 @@ hash_table_t * init_comment_multiple_end(void)
         STRING_SWIFT,
         STRING_CSH,
         STRING_SH,
+        STRING_PS,
         STRING_CMAKE,
         STRING_MAKE
     };
@@ -283,6 +290,7 @@ hash_table_t * init_comment_multiple_end(void)
         "*/",  /* Swift */
         "",    /* C shell */
         "",    /* Bourne shell */
+        "#>",  /* PowerShell */
         "]]",  /* CMake */
         ""     /* Make */
     };

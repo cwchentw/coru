@@ -50,7 +50,8 @@ coru_parser_t * coru_parser_new(void)
      && CORU_TOKEN_DOUBLE_QUOTE != (t) \
      && CORU_TOKEN_TAB != (t) \
      && CORU_TOKEN_BACKSLASH != (t) \
-     && CORU_TOKEN_AMPERSAND != (t))
+     && CORU_TOKEN_AMPERSAND != (t) \
+     && CORU_TOKEN_BACKTICK != (t))
 
 static BOOL _coru_parser_expand(coru_parser_t *self);
 
@@ -195,6 +196,20 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
                     coru_token_type(token), coru_token_text(token));
             #endif
             ast = coru_ast_new(CORU_AST_AMPERSAND);
+            if (!ast)
+                return FALSE;
+
+            if (!coru_ast_add(ast, token))
+                return FALSE;
+
+            token = coru_lexer_next(lexer);
+        }
+        else if (token && CORU_TOKEN_BACKTICK == coru_token_type(token)) {
+            #if DEBUG
+                PUTERR("Transform backtoken token: (%d) -->%s<--",
+                    coru_token_type(token), coru_token_text(token));
+            #endif
+            ast = coru_ast_new(CORU_AST_BACKTICK);
             if (!ast)
                 return FALSE;
 

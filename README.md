@@ -63,6 +63,7 @@ Here are currently supported programming languages:
 * Rust
 * C shell or its derivatives
 * Bourne shell or its derivatives
+* PowerShell
 * CMake config file (default to *CMakeLists.txt*)
 * Make config file (default to *Makefile*)
 
@@ -139,4 +140,4 @@ We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clib
 
 ## Copyright
 
-Copyright (c) 2019-2020 Michelle Chen. Licensed under MIT.
+Copyright (c) 2019-2021 Michelle Chen. Licensed under MIT.

@@ -14,6 +14,7 @@
 #define SINGLE_QUOTE  '\''
 #define DOUBLE_QUOTE  '"'
 #define AMPERSAND     '&'
+#define BACKTICK      '`'
 
 struct coru_lexer_t {
     size_t size;
@@ -60,7 +61,8 @@ coru_lexer_t * coru_lexer_new(void)
       && (BACKSLASH != (c)) \
       && (SINGLE_QUOTE != (c)) \
       && (DOUBLE_QUOTE != (c)) \
-      && (AMPERSAND != (c)))
+      && (AMPERSAND != (c)) \
+      && (BACKTICK != (c)))
 
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
 
@@ -200,6 +202,24 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                     coru_token_new(CORU_TOKEN_AMPERSAND, ampersand);
                 if (!token) {
                     free(ampersand);
+                    return FALSE;
+                }
+
+                if (!_coru_lexer_push(self, token))
+                    return FALSE;
+            }
+            else if (BACKTICK == input[i]) {
+                char *backtick = string_allocate("`");
+                if (!backtick)
+                    return FALSE;
+            #if DEBUG
+                PUTERR("Backtick as token: -->%s<--", backtick);
+            #endif
+
+                coru_token_t *token = \
+                    coru_token_new(CORU_TOKEN_BACKTICK, backtick);
+                if (!token) {
+                    free(backtick);
                     return FALSE;
                 }
 

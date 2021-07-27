@@ -16,7 +16,8 @@ struct coru_token_t {
      || CORU_TOKEN_SINGLE_QUOTE == (t) \
      || CORU_TOKEN_DOUBLE_QUOTE == (t) \
      || CORU_TOKEN_BACKSLASH == (t) \
-     || CORU_TOKEN_AMPERSAND == (t))
+     || CORU_TOKEN_AMPERSAND == (t) \
+     || CORU_TOKEN_BACKTICK == (t))
 
 coru_token_t * coru_token_new(CORU_TOKEN_TYPE t, char *text)
 {

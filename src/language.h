@@ -26,6 +26,7 @@
 #define STRING_SWIFT   "Swift"
 #define STRING_CSH     "C Shell"
 #define STRING_SH      "Bourne Shell"
+#define STRING_PS      "PowerShell"
 #define STRING_CMAKE   "CMake"
 #define STRING_MAKE    "Make"
 

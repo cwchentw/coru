@@ -11,8 +11,9 @@ typedef unsigned char CORU_AST_TYPE;
 #define CORU_AST_CODE       0
 #define CORU_AST_TAB        1
 #define CORU_AST_BACKSLASH  2
-#define CORU_AST_AMPERSAND  3  /* For Fortran multiline string. */
-#define CORU_AST_STRING     4
+#define CORU_AST_AMPERSAND  3  /* Code wrapping for Fortran. */
+#define CORU_AST_BACKTICK   4  /* Code wrapping for PowerShell. */
+#define CORU_AST_STRING     5
 
 coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t);
 void coru_ast_delete(void *self);

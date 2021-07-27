@@ -9,6 +9,7 @@ typedef struct coru_ast_code_t coru_ast_code_t;
 typedef struct coru_ast_tab_t coru_ast_tab_t;
 typedef struct coru_ast_backslash_t coru_ast_backslash_t;
 typedef struct coru_ast_ampersand_t coru_ast_ampersand_t;
+typedef struct coru_ast_backtick_t coru_ast_backtick_t;
 typedef struct coru_ast_string_t coru_ast_string_t;
 
 static coru_ast_code_t * _coru_ast_code_new(void);
@@ -29,6 +30,11 @@ static void _coru_ast_ampersand_delete(void *self);
 static BOOL _coru_ast_ampersand_add(
     coru_ast_ampersand_t *self, coru_token_t *token);
 
+static coru_ast_backtick_t * _coru_ast_backtick_new(void);
+static void _coru_ast_backtick_delete(void *self);
+static BOOL _coru_ast_backtick_add(
+    coru_ast_backtick_t *self, coru_token_t *token);
+
 static coru_ast_string_t * _coru_ast_string_new(void);
 static void _coru_ast_string_delete(void *self);
 static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token);
@@ -41,6 +47,7 @@ struct coru_ast_t {
         coru_ast_tab_t *tab_t;
         coru_ast_backslash_t *backslash_t;
         coru_ast_ampersand_t *ampersand_t;
+        coru_ast_backtick_t *backtick_t;
         coru_ast_string_t *string_t;
     } ast;
 };
@@ -50,7 +57,8 @@ struct coru_ast_t {
         || CORU_AST_TAB == (ast_t) \
         || CORU_AST_BACKSLASH == (ast_t) \
         || CORU_AST_STRING == (ast_t) \
-        || CORU_AST_AMPERSAND == (ast_t))
+        || CORU_AST_AMPERSAND == (ast_t) \
+        || CORU_AST_BACKTICK == (ast_t))
 
 coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
 {
@@ -96,6 +104,13 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
     case CORU_AST_AMPERSAND:
         ast->ast.ampersand_t = _coru_ast_ampersand_new();
         if (!(ast->ast.ampersand_t)) {
+            free(ast);
+            return NULL;
+        }
+        break;
+    case CORU_AST_BACKTICK:
+        ast->ast.backtick_t = _coru_ast_backtick_new();
+        if (!(ast->ast.backtick_t)) {
             free(ast);
             return NULL;
         }
@@ -148,6 +163,13 @@ void coru_ast_delete(void *self)
             _coru_ast_ampersand_delete(ast);
         }
         break;
+    case CORU_AST_BACKTICK:
+        {
+            coru_ast_backtick_t *ast = \
+                ((coru_ast_t *) self)->ast.backtick_t;
+            _coru_ast_backtick_delete(ast);
+        }
+        break;
     case CORU_AST_STRING:
         {
             coru_ast_string_t *ast = \
@@ -179,6 +201,9 @@ BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
         break;
     case CORU_AST_AMPERSAND:
         added = _coru_ast_ampersand_add(self->ast.ampersand_t, token);
+        break;
+    case CORU_AST_BACKTICK:
+        added = _coru_ast_backtick_add(self->ast.backtick_t, token);
         break;
     case CORU_AST_STRING:
         added = _coru_ast_string_add(self->ast.string_t, token);
@@ -447,6 +472,52 @@ static BOOL _coru_ast_ampersand_add(
     return TRUE;
 }
 
+/* Implement coru_ast_backtick_t */
+struct coru_ast_backtick_t {
+    size_t size;
+    size_t capacity;
+    coru_token_t *token;
+};
+
+static coru_ast_backtick_t * _coru_ast_backtick_new(void)
+{
+    coru_ast_backtick_t *ast = \
+        (coru_ast_backtick_t *) malloc(sizeof(coru_ast_backtick_t));
+    if (!ast) {
+        PERROR("Failed to allocate memory for coru ast");
+        PERROR("Check available system memory");
+        return ast;
+    }
+
+    ast->size = 0;
+    ast->capacity = 1;
+    ast->token = NULL;
+
+    return ast;
+}
+
+static void _coru_ast_backtick_delete(void *self)
+{
+    if (!self)
+        return;
+
+    coru_token_t *token = ((coru_ast_backtick_t *) self)->token;
+
+    coru_token_delete(token);
+    free(self);
+}
+
+static BOOL _coru_ast_backtick_add(
+    coru_ast_backtick_t *self, coru_token_t *token)
+{
+    if (self->size >= self->capacity)
+        return FALSE;
+
+    self->token = token;
+    self->size += 1;
+
+    return TRUE;
+}
 
 /* Implement coru_ast_string_t */
 struct coru_ast_string_t {

@@ -66,8 +66,9 @@
 #define  LANGUAGE_SWIFT    17
 #define  LANGUAGE_CSH      18
 #define  LANGUAGE_SH       19
-#define  LANGUAGE_CMAKE    20
-#define  LANGUAGE_MAKE     21
+#define  LANGUAGE_PS       20
+#define  LANGUAGE_CMAKE    21
+#define  LANGUAGE_MAKE     22
 
 typedef struct uncoru_stats_t uncoru_stats_t;
 
