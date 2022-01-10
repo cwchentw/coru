@@ -65,7 +65,7 @@ Here are currently supported programming languages:
 * Bourne shell or its derivatives
 * PowerShell
 * CMake config file (default to *CMakeLists.txt*)
-* Make config file (default to *Makefile*)
+* <del>Make config file (default to *Makefile*)</del>
 
 ## Usage of this Project
 
@@ -103,7 +103,7 @@ $ coru -c path/to/source
 
 ## Use `coru` as a Library
 
-See [example](/example).
+See [examples](/examples).
 
 ## Options for `coru`
 
