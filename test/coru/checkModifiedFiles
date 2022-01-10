@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SOURCE_DIR=demo
+SOURCE_DIR=demo/coru
 TARGET_EXEC=hello
 
 if [ -e "$TARGET_EXEC" ];

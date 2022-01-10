@@ -38,9 +38,10 @@ check_tool_exists rustc "Rust";
 check_tool_exists swift "Swift";
 
 coru=./dist/coru
+demo_dir=demo/coru
 detect_c_by_extension ()
 {
-    local result="$($coru demo/hello.c | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.c | head -n 1)";
 
     if ! echo "$result" | fgrep "C" >/dev/null;
     then
@@ -53,7 +54,7 @@ detect_c_by_extension ()
 
 detect_cpp_by_extension ()
 {
-    local result="$($coru demo/hello.cpp | head -n1)";
+    local result="$($coru ${demo_dir}/hello.cpp | head -n1)";
 
     if ! echo "$result" | fgrep "C++" >/dev/null;
     then
@@ -66,7 +67,7 @@ detect_cpp_by_extension ()
 
 detect_java_by_extension ()
 {
-    local result="$($coru demo/com/example/HelloWorld.java | head -n1)";
+    local result="$($coru ${demo_dir}/com/example/HelloWorld.java | head -n1)";
 
     if ! echo "$result" | fgrep "Java" >/dev/null;
     then
@@ -79,7 +80,7 @@ detect_java_by_extension ()
 
 detect_csharp_by_extension ()
 {
-    local result="$($coru demo/HelloWorld.cs | head -n 1)";
+    local result="$($coru ${demo_dir}/HelloWorld.cs | head -n 1)";
 
     if ! echo "$result" | fgrep "C sharp" >/dev/null;
     then
@@ -92,7 +93,7 @@ detect_csharp_by_extension ()
 
 detect_bourne_shell_by_extension ()
 {
-    local result="$($coru demo/hello.sh | head -n1)";
+    local result="$($coru ${demo_dir}/hello.sh | head -n1)";
 
     if ! echo "$result" | fgrep "Bourne" >/dev/null;
     then
@@ -105,7 +106,7 @@ detect_bourne_shell_by_extension ()
 
 detect_bourne_shell_by_shebang ()
 {
-    local result="$($coru demo/helloInSh | head -n1)";
+    local result="$($coru ${demo_dir}/helloInSh | head -n1)";
 
     if ! echo "$result" | fgrep "Bourne" >/dev/null;
     then
@@ -118,7 +119,7 @@ detect_bourne_shell_by_shebang ()
 
 detect_c_shell_by_extension ()
 {
-    local result="$($coru demo/hello.csh | head -n1)";
+    local result="$($coru ${demo_dir}/hello.csh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
     then
@@ -131,7 +132,7 @@ detect_c_shell_by_extension ()
 
 detect_c_shell_by_shebang ()
 {
-    local result="$($coru demo/helloInCsh | head -n1)";
+    local result="$($coru ${demo_dir}/helloInCsh | head -n1)";
 
     if ! echo "$result" | fgrep "C Shell" >/dev/null;
     then
@@ -144,7 +145,7 @@ detect_c_shell_by_shebang ()
 
 detect_perl_by_extension ()
 {
-    local result="$($coru demo/hello.pl | head -n1)";
+    local result="$($coru ${demo_dir}/hello.pl | head -n1)";
 
     if ! echo "$result" | fgrep "Perl" >/dev/null;
     then
@@ -157,7 +158,7 @@ detect_perl_by_extension ()
 
 detect_perl_by_shebang ()
 {
-    local result="$($coru demo/helloInPerl | head -n1)";
+    local result="$($coru ${demo_dir}/helloInPerl | head -n1)";
 
     if ! echo "$result" | fgrep "Perl" >/dev/null;
     then
@@ -170,7 +171,7 @@ detect_perl_by_shebang ()
 
 detect_python_by_extension ()
 {
-    local result="$($coru demo/hello.py | head -n1)";
+    local result="$($coru ${demo_dir}/hello.py | head -n1)";
 
     if ! echo "$result" | fgrep "Python" >/dev/null;
     then
@@ -183,7 +184,7 @@ detect_python_by_extension ()
 
 detect_python_by_shebang ()
 {
-    local result="$($coru demo/helloInPython | head -n1)";
+    local result="$($coru ${demo_dir}/helloInPython | head -n1)";
 
     if ! echo "$result" | fgrep "Python" >/dev/null;
     then
@@ -196,7 +197,7 @@ detect_python_by_shebang ()
 
 detect_ruby_by_extension ()
 {
-    local result="$($coru demo/hello.rb | head -n1)";
+    local result="$($coru ${demo_dir}/hello.rb | head -n1)";
 
     if ! echo "$result" | fgrep "Ruby" >/dev/null;
     then
@@ -209,7 +210,7 @@ detect_ruby_by_extension ()
 
 detect_ruby_by_shebang ()
 {
-    local result="$($coru demo/helloInRuby | head -n1)";
+    local result="$($coru ${demo_dir}/helloInRuby | head -n1)";
 
     if ! echo "$result" | fgrep "Ruby" >/dev/null;
     then
@@ -222,7 +223,7 @@ detect_ruby_by_shebang ()
 
 detect_php_by_extension ()
 {
-    local result="$($coru demo/hello.php | head -n1)";
+    local result="$($coru ${demo_dir}/hello.php | head -n1)";
 
     if ! echo "$result" | fgrep "PHP" >/dev/null;
     then
@@ -235,7 +236,7 @@ detect_php_by_extension ()
 
 detect_php_by_shebang ()
 {
-    local result="$($coru demo/helloInPHP | head -n1)";
+    local result="$($coru ${demo_dir}/helloInPHP | head -n1)";
 
     if ! echo "$result" | fgrep "PHP" >/dev/null;
     then
@@ -248,7 +249,7 @@ detect_php_by_shebang ()
 
 detect_js_by_extension ()
 {
-    local result="$($coru demo/hello.js | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.js | head -n 1)";
 
     if ! echo "$result" | fgrep "JavaScript" >/dev/null;
     then
@@ -261,7 +262,7 @@ detect_js_by_extension ()
 
 detect_js_by_shebang ()
 {
-    local result="$($coru demo/helloInJS | head -n 1)";
+    local result="$($coru ${demo_dir}/helloInJS | head -n 1)";
 
     if ! echo "$result" | fgrep "JavaScript" >/dev/null;
     then
@@ -274,7 +275,7 @@ detect_js_by_shebang ()
 
 detect_golang_by_extension ()
 {
-    local result="$($coru demo/hello.go | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.go | head -n 1)";
 
     if ! echo "$result" | fgrep "Golang" >/dev/null;
     then
@@ -287,7 +288,7 @@ detect_golang_by_extension ()
 
 detect_rust_by_extension ()
 {
-    local result="$($coru demo/hello.rs | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.rs | head -n 1)";
 
     if ! echo "$result" | fgrep "Rust" >/dev/null;
     then
@@ -300,7 +301,7 @@ detect_rust_by_extension ()
 
 detect_objc_by_extension ()
 {
-    local result="$($coru demo/hello.m | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.m | head -n 1)";
 
     if ! echo "$result" | fgrep "Objective-C" >/dev/null;
     then
@@ -313,7 +314,7 @@ detect_objc_by_extension ()
 
 detect_objcpp_by_extension ()
 {
-    local result="$($coru demo/hello.mm | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.mm | head -n 1)";
 
     if ! echo "$result" | fgrep "Objective-C++" >/dev/null;
     then
@@ -326,7 +327,7 @@ detect_objcpp_by_extension ()
 
 detect_swift_by_extension ()
 {
-    local result="$($coru demo/hello.swift | head -n 1)";
+    local result="$($coru ${demo_dir}/hello.swift | head -n 1)";
 
     if ! echo "$result" | fgrep "Swift" >/dev/null;
     then
@@ -339,7 +340,7 @@ detect_swift_by_extension ()
 
 detect_swift_by_shebang ()
 {
-    local result="$($coru demo/helloInSwift | head -n 1)";
+    local result="$($coru ${demo_dir}/helloInSwift | head -n 1)";
 
     if ! echo "$result" | fgrep "Swift" >/dev/null;
     then
