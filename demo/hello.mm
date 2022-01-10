@@ -11,13 +11,17 @@ int main(void)
     NSAutoreleasePool *pool = \
         [[NSAutoreleasePool alloc] init];
     if (!pool) {
-        cerr << "Failed to allocate auto release pool" << endl;
-        cerr << "Check available system memory" << endl;
+        cerr << "Failed to allocate auto release pool"
+             << endl;
+        cerr << "Check available system memory"
+             << endl;
         return 1;
     }
 
     NSString *greet = \
-        [[[NSString alloc] initWithString: @"Hello World"] autorelease];
+        [[[NSString alloc]
+            initWithString: @"Hello World"]
+                autorelease];
     string s([greet UTF8String]);
 
     cout << s << endl;
