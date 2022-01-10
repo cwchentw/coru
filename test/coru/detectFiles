@@ -66,7 +66,7 @@ detect_cpp_by_extension ()
 
 detect_java_by_extension ()
 {
-    local result="$($coru demo/HelloWorld.java | head -n1)";
+    local result="$($coru demo/com/example/HelloWorld.java | head -n1)";
 
     if ! echo "$result" | fgrep "Java" >/dev/null;
     then

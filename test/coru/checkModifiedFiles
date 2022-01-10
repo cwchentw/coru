@@ -117,13 +117,23 @@ if ! command -v javac 2>/dev/null 1>&2;
 then
     echo "No JDK installed on your system" >&2;
 else
-    $coru "${SOURCE_DIR}/HelloWorld.java" > HelloWorld.java
-    javac HelloWorld.java
-    java HelloWorld >/dev/null || {
-        rm -f HelloWorld.java HelloWorld.class;
+    cwd=$(pwd)
+    temp_dir=$(mktemp -d)
+    mkdir -p "${temp_dir}/com/example"
+    $coru "${SOURCE_DIR}/com/example/HelloWorld.java" > "${temp_dir}/com/example/HelloWorld.java"
+    javac "${temp_dir}/com/example/HelloWorld.java"
+    cd "${temp_dir}" || (
+        echo "Unable to move to temporary directory" >&2;
+        exit 1;
+    )
+
+    java "com/example/HelloWorld" >/dev/null || {
+        #rm -f HelloWorld.java HelloWorld.class;
         exit 1;
     }
-    rm -f HelloWorld.java HelloWorld.class
+
+    cd "$cwd"
+    #rm -f HelloWorld.java HelloWorld.class
 fi
 
 exit 0;
