@@ -6,6 +6,21 @@
 
 `coru` and her sister program `uncoru` are still *experimental*. Back up your code before using either.
 
+## Project Status
+
+`coru` is usable and has been tested on several platforms. However, the current implementation still contains some known architectural flaws.
+
+These issues generally do **not affect the basic functionality of the tool**, but they may make the internal codebase harder to extend or maintain collaboratively without future refactoring.
+
+At the moment, the project should be considered:
+
+* usable for practical purposes
+* primarily maintained by the original author
+* open to bug reports and small improvements
+* subject to internal redesign or refactoring in future versions
+
+If you plan to build upon the codebase or contribute large changes, please be aware that some internal components may change in later revisions.
+
 ## `coru` and her Sister Programs
 
 * `coru` adds line numbers to source
@@ -65,7 +80,7 @@ Here are currently supported programming languages:
 * Bourne shell or its derivatives
 * PowerShell
 * CMake config file (default to *CMakeLists.txt*)
-* <del>Make config file (default to *Makefile*)</del>
+* ~~Make config file (default to *Makefile*)~~
 
 ## Usage of this Project
 
@@ -103,7 +118,7 @@ $ coru -c path/to/source
 
 ## Use `coru` as a Library
 
-See [examples](/examples).
+See `examples/`.
 
 ## Options for `coru`
 
@@ -128,16 +143,16 @@ Run `coru -h` for more information.
 
 `coru` and her sister program `uncoru` are never language linters. They assume their inputs are always correct, performing code conversion accordingly.
 
-We copy some utility code from [cwchentw/clibs](https://github.com/cwchentw/clibs).
+We copy some utility code from https://github.com/cwchentw/clibs.
 
 ## Known Issues or Bugs
 
 * We only tested primitively whether the code converted by `coru` are still valid or not
 * `coru` fails to handle multiline strings in some languages
 * `coru` cannot detect Heredoc
-* `coru` modifled *Makefile*s are unusable
+* `coru` modified *Makefile*s are unusable
 * `coru` fails to handle source with CJK characters
 
 ## Copyright
 
-Copyright (c) 2019-2021 Michelle Chen. Licensed under MIT.
+Copyright (c) 2019–2021 ByteBard. Licensed under MIT.
