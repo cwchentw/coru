@@ -1,158 +1,178 @@
 # coru
 
-`coru`, aka code ruler, adds line numbers to source code in the form of its comments. Commented source code are mainly used as demonstrative code snippets.
+`coru`, short for **code ruler**, adds line numbers to source code in the form of comments.  
+The resulting code remains valid source code and can still be compiled or executed normally.
 
-## Warning
-
-`coru` and her sister program `uncoru` are still *experimental*. Back up your code before using either.
+Such commented source files are primarily intended for use in **programming tutorials and demonstrative code snippets**, where line numbers help readers follow explanations more easily.
 
 ## Project Status
 
-`coru` is usable and has been tested on several platforms. However, the current implementation still contains some known architectural flaws.
+`coru` is usable and has been tested on several platforms.
 
-These issues generally do **not affect the basic functionality of the tool**, but they may make the internal codebase harder to extend or maintain collaboratively without future refactoring.
+The current implementation contains some known architectural limitations. These issues generally **do not affect the basic functionality of the tool**, but they may make the internal codebase harder to extend or maintain collaboratively without future refactoring.
 
-At the moment, the project should be considered:
+At the moment, the project can be described as:
 
-* usable for practical purposes
-* primarily maintained by the original author
-* open to bug reports and small improvements
-* subject to internal redesign or refactoring in future versions
+- usable for practical purposes
+- primarily maintained by the original author
+- open to bug reports and small improvements
+- potentially subject to internal refactoring in future versions
 
-If you plan to build upon the codebase or contribute large changes, please be aware that some internal components may change in later revisions.
+If you plan to build upon the codebase or contribute large changes, please note that some internal components may change in later revisions.
 
-## `coru` and her Sister Programs
+## coru and its Companion Program
 
-* `coru` adds line numbers to source
-* `uncoru` removes line numbers from source modified by `coru`
+The `coru` toolset consists of two small utilities:
 
-## Why `coru`?
+- **coru** – adds line numbers to source code
+- **uncoru** – removes line numbers previously added by `coru`
 
-When we write programming tutorials, demonstrative code snippets are essential. Nevertheless, it is uneasy for beginners to trace the code if no helpful information is provided. Line numbers represent conventional means to guide learners to trace code.
+These tools allow source code to move freely between **teaching materials** and **normal development environments**.
 
-Some online tutorials add line numbers in the form of HTML elements on web pages, which is common practices among programming teaching sites. However, these metadata are limited to web pages only. If we want to reuse the demo code in another material, the metadata of the code on web pages are lost.
+## Why coru?
 
-In contrary, `coru` adds line numbers to source code as its comments. The commented code still works as that without any line number. Furthermore, the commented code can be utilized multiple times, in any format of teaching materials.
+When writing programming tutorials, demonstrative code snippets are essential. However, beginners often find it difficult to follow explanations when no clear reference points are provided.
 
-By the way, `uncoru`, the sister program of `coru`, removes the line numbers in source modified by `coru` in case that you no longer require these metadata on code.
+Line numbers are a traditional way to guide readers through code:
+
+> “See line 12”, “modify line 27”, etc.
+
+Many online tutorials add line numbers using HTML elements on web pages. While convenient, those line numbers exist **only in the rendered page**.
+
+Once the code is reused in other materials — such as:
+
+- another article
+- a slide deck
+- a PDF
+- a book
+
+the line number metadata are lost.
+
+`coru` takes a different approach. It embeds line numbers directly into the source code as **comments**.
+
+This provides several advantages:
+
+- the code remains valid and runnable
+- the numbered code can be reused in **any format of teaching material**
+- the same snippet works across **web pages, books, slides, and documents**
+
+If line numbers are no longer needed, the companion program `uncoru` can remove them and restore the original clean source.
 
 ## System Requirements
 
-* A C compiler that supports ANSI C
-* GNU Make
+- A C compiler that supports ANSI C
+- GNU Make
 
-To use GNU Make on non-Linux Unix or Unix-like systems, use `gmake`. To use GNU Make on Windows, use `mingw32-make`.
+To use GNU Make on non-Linux Unix or Unix-like systems, use `gmake`.  
+To use GNU Make on Windows, use `mingw32-make`.
 
-We compile and run `coru` with GCC, Clang, Visual C++ and Intel C++ Compiler.
+`coru` has been compiled and run using:
 
-We test `coru` against several Unix or Unix-like systems:
+- GCC
+- Clang
+- Visual C++
+- Intel C++ Compiler
 
-* Ubuntu 20.04 LTS
-* Fedora 35
-* openSUSE Leap 15.3
-* FreeBSD 13.0
+The tool has been tested on several Unix or Unix-like systems:
 
-Besides, we check `coru` manually on Windows 10 as well.
+- Ubuntu 20.04 LTS
+- Fedora 35
+- openSUSE Leap 15.3
+- FreeBSD 13.0
 
-It should work on any platform that provides a decent C compiler.
+It has also been manually tested on Windows 10.
+
+In general, `coru` should work on any platform that provides a reasonably conforming C compiler.
 
 ## Supported Languages
 
-Here are currently supported programming languages:
+Currently supported programming languages include:
 
-* C
-* C++
-* Object Pascal and Delphi
-* Modern Fortran
-* Common Lisp
-* Java
-* C#
-* Perl
-* Python
-* Ruby
-* PHP
-* JavaScript
-* Objective-C and Objective-C++
-* Swift
-* Golang
-* Rust
-* C shell or its derivatives
-* Bourne shell or its derivatives
-* PowerShell
-* CMake config file (default to *CMakeLists.txt*)
-* ~~Make config file (default to *Makefile*)~~
+- C
+- C++
+- Object Pascal / Delphi
+- Modern Fortran
+- Common Lisp
+- Java
+- C#
+- Perl
+- Python
+- Ruby
+- PHP
+- JavaScript
+- Objective-C / Objective-C++
+- Swift
+- Go
+- Rust
+- C shell and derivatives
+- Bourne shell and derivatives
+- PowerShell
+- CMake configuration files (default: *CMakeLists.txt*)
+- ~~Make configuration files (default: *Makefile*)~~
 
-## Usage of this Project
+## Building
 
-To build executables of `coru` and `uncoru`, run the command:
+To build the executables of `coru` and `uncoru`:
 
-```shell
-$ make
-```
+make
 
-To build their static libraries, run the command:
+To build static libraries:
 
-```shell
-$ make static
-```
+make static
 
-To build their dynamic libraries, run the command:
+To build dynamic libraries:
 
-```shell
-$ make dynamic
-```
+make dynamic
 
-## Use `coru` as a Console Program
+## Using coru as a Console Program
 
-Just feed your sample source file:
+Simply pass a source file:
 
-```shell
-$ coru path/to/file.c
-```
+coru path/to/file.c
 
-Treat target source as C language:
+Force the target source to be treated as C:
 
-```shell
-$ coru -c path/to/source
-```
+coru -c path/to/source
 
-## Use `coru` as a Library
+## Using coru as a Library
 
-See `examples/`.
+See the `examples/` directory for usage examples.
 
-## Options for `coru`
+## Options for coru
 
 ### General Options
 
-* `-v` or `--version` to show version info and exit
-* `--license` to show license info and exit
-* `-h` or `--help` to show help info and exit
+- `-v` or `--version` — show version information and exit
+- `--license` — show license information and exit
+- `-h` or `--help` — show help information and exit
 
-### Options related to Line Numbers
+### Line Number Options
 
-* `--non-empty` to add line numbers to only non-empty lines of target source (default)
-* `--all` to add line numbers to all lines of target source
+- `--non-empty` — add line numbers only to non-empty lines (default)
+- `--all` — add line numbers to all lines
 
-`coru` will always skip block comments because some language, like C, cannot parse nested block comments.
+`coru` always skips block comments because some languages, such as C, cannot parse nested block comments.
 
-### Options for Target Language
+### Target Language Options
 
-Run `coru -h` for more information.
+Run `coru -h` for more details.
 
-## Note
+## Notes
 
-`coru` and her sister program `uncoru` are never language linters. They assume their inputs are always correct, performing code conversion accordingly.
+`coru` and `uncoru` are **not language linters**. They assume the input source code is syntactically valid and perform text-based transformations accordingly.
 
-We copy some utility code from https://github.com/cwchentw/clibs.
+Some utility code is derived from:
+https://github.com/cwchentw/clibs
 
-## Known Issues or Bugs
+## Known Issues
 
-* We only tested primitively whether the code converted by `coru` are still valid or not
-* `coru` fails to handle multiline strings in some languages
-* `coru` cannot detect Heredoc
-* `coru` modified *Makefile*s are unusable
-* `coru` fails to handle source with CJK characters
+- Only limited testing has been performed to ensure that code modified by `coru` remains valid
+- Multiline strings in some languages may not be handled correctly
+- Heredoc syntax is not detected
+- `Makefile`s modified by `coru` may become unusable
+- Source files containing CJK characters may not be processed correctly
 
 ## Copyright
 
-Copyright (c) 2019–2021 ByteBard. Licensed under MIT.
+Copyright (c) 2019–2021 ByteBard  
+Licensed under the MIT License.
