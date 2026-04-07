@@ -121,6 +121,12 @@ else
 	CFLAGS+=-I ..$(SEP)$(INCLUDE_DIR)
 endif
 
+EXTRA_CFLAGS ?=
+EXTRA_LDFLAGS ?=
+
+CFLAGS += $(EXTRA_CFLAGS)
+LDFLAGS += $(EXTRA_LDFLAGS)
+
 
 .PHONY: all test debug exec static dynamic clean_objs clean
 
