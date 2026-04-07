@@ -563,8 +563,8 @@ static void _coru_ast_string_delete(void *self)
     if (!self)
         return;
 
-    size_t size = ((coru_ast_code_t *) self)->capacity;
-    coru_token_t **tokens = ((coru_ast_code_t *) self)->tokens;
+    size_t size = ((coru_ast_string_t *) self)->capacity;
+    coru_token_t **tokens = ((coru_ast_string_t *) self)->tokens;
 
     {
         size_t i;
