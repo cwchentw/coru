@@ -13,7 +13,7 @@
         #define FALSE  false
         #define TRUE   true
         #define _BOOL_IS_DEFINED
-    #endif  /* BOOL */
+    #endif
 #else
     #if __STDC_VERSION__ < 199901L
         #ifndef _BOOL_IS_DEFINED
@@ -21,7 +21,7 @@
             #define FALSE  0
             #define TRUE   1
             #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
+        #endif
     #else
         #ifndef _BOOL_IS_DEFINED
             #include <stdbool.h>
@@ -29,9 +29,9 @@
             #define FALSE  false
             #define TRUE   true
             #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #endif  /* C89 */
-#endif  /* __cplusplus */
+        #endif
+    #endif
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -41,10 +41,10 @@ extern "C" {
 typedef struct hash_table_t hash_table_t;
 
 hash_table_t * hash_table_new(void);
-BOOL hash_table_add(hash_table_t *self, char *key, char *value);
-char * hash_table_get(hash_table_t *self, char *key);
-BOOL hash_table_remove(hash_table_t *self, char *key);
-void hash_table_delete(void *self);
+BOOL hash_table_add(hash_table_t *self, const char *key, const char *value);
+const char * hash_table_get(hash_table_t *self, const char *key);
+BOOL hash_table_remove(hash_table_t *self, const char *key);
+void hash_table_delete(hash_table_t *self);
 
 #ifdef __cplusplus
 }

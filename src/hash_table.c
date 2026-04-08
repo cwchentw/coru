@@ -12,26 +12,36 @@ struct hash_table_t {
 };
 
 struct key_value_pair_t {
-    char *key;
-    char *value;
+    const char *key;
+    const char *value;
     key_value_pair_t *next;
+};
+
+static unsigned long _hash(const char *string);
+static key_value_pair_t * _pair_new(const char *key, const char *value);
+static BOOL _hash_table_expand(hash_table_t *self);
+static BOOL _rehash(hash_table_t *self, size_t capacity);
+static BOOL _shrink(hash_table_t *self);
+
+#define _PRIME_SIZE 14
+static const size_t primes[_PRIME_SIZE] = {
+    11, 23, 47, 97, 197, 397, 797, 1597,
+    3203, 6421, 12853, 25717, 51437, 102877
 };
 
 hash_table_t * hash_table_new(void)
 {
     hash_table_t *table = (hash_table_t *) malloc(sizeof(hash_table_t));
     if (!table)
-        return table;
+        return NULL;
 
     table->size = 0;
-    table->capacity = 11;  /* Sensible initial capacity for a hash table. */
-    table->pairs = \
-        (key_value_pair_t **) \
+    table->capacity = primes[0];
+    table->pairs = (key_value_pair_t **)
         malloc(table->capacity * sizeof(key_value_pair_t *));
-    if (!(table->pairs)) {
+    if (!table->pairs) {
         free(table);
-        table = NULL;
-        return table;
+        return NULL;
     }
 
     {
@@ -43,66 +53,23 @@ hash_table_t * hash_table_new(void)
     return table;
 }
 
-static unsigned long _hash(char *string);
-static key_value_pair_t * _pair_new(char *key, char *value);
-static BOOL _hash_table_expand(hash_table_t *self);
-
-#define _PRMIE_SIZE  14
-static size_t primes[_PRMIE_SIZE] = {11, 23, 47, 97, 197, 397, 797, 1597, 3203,
-    6421, 12853, 25717, 51437, 102877};
-
-BOOL hash_table_add(hash_table_t *self, char *key, char *value)
-{
-    assert(self);
-    assert(key && 0 != strcmp("", key));
-
-    if (!_hash_table_expand(self))
-        return FALSE;
-
-    unsigned long code = _hash(key);
-    size_t index = code % self->capacity;
-
-    key_value_pair_t *p = NULL;
-    key_value_pair_t *q = self->pairs[index];
-    if (!q) {
-        self->pairs[index] = _pair_new(key, value);
-        if (!(self->pairs[index]))
-            return FALSE;
-    }
-    else {
-        while (q) {
-            p = q;
-            q = q->next;
-        }
-
-        p->next = _pair_new(key, value);
-        if (!(p->next))
-            return FALSE;
-    }
-
-    self->size += 1;
-
-    return TRUE;
-}
-
-static unsigned long _hash(char *string)
+static unsigned long _hash(const char *string)
 {
     unsigned long code = 5381;
-
     size_t i;
-    for (i = 0; i < strlen(string); i++)
-        code = (code << 5) + code + string[i];
+
+    for (i = 0; string[i] != '\0'; i++)
+        code = ((code << 5) + code) + (unsigned char) string[i];
 
     return code;
 }
 
-
-static key_value_pair_t * _pair_new(char *key, char *value)
+static key_value_pair_t * _pair_new(const char *key, const char *value)
 {
-    key_value_pair_t *pair = \
+    key_value_pair_t *pair =
         (key_value_pair_t *) malloc(sizeof(key_value_pair_t));
     if (!pair)
-        return pair;
+        return NULL;
 
     pair->key = key;
     pair->value = value;
@@ -111,22 +78,26 @@ static key_value_pair_t * _pair_new(char *key, char *value)
     return pair;
 }
 
-static BOOL _rehash(hash_table_t *self, size_t capacity);
-
 static BOOL _hash_table_expand(hash_table_t *self)
 {
-    size_t threshold = self->capacity * 3 / 4;
-
-    if (self->size <= threshold)
-        return TRUE;
-
-    if (self->capacity >= primes[_PRMIE_SIZE-1])
-        return TRUE;
-
+    size_t threshold;
     size_t index = 0;
+    size_t capacity;
+
+    if (!self)
+        return FALSE;
+
+    threshold = self->capacity * 3 / 4;
+
+    if (self->size + 1 <= threshold)
+        return TRUE;
+
+    if (self->capacity >= primes[_PRIME_SIZE - 1])
+        return TRUE;
+
     {
         size_t i;
-        for (i = 0; i < _PRMIE_SIZE; i++) {
+        for (i = 0; i < _PRIME_SIZE; i++) {
             if (primes[i] > self->capacity) {
                 index = i;
                 break;
@@ -134,167 +105,143 @@ static BOOL _hash_table_expand(hash_table_t *self)
         }
     }
 
-    size_t capacity = primes[index];
-
+    capacity = primes[index];
     return _rehash(self, capacity);
+}
+
+BOOL hash_table_add(hash_table_t *self, const char *key, const char *value)
+{
+    unsigned long code;
+    size_t index;
+    key_value_pair_t *q;
+
+    assert(self);
+    assert(key && 0 != strcmp("", key));
+
+    if (!self || !key || *key == '\0')
+        return FALSE;
+
+    if (!_hash_table_expand(self))
+        return FALSE;
+
+    code = _hash(key);
+    index = code % self->capacity;
+
+    /* Duplicate key: overwrite existing value. */
+    q = self->pairs[index];
+    while (q) {
+        if (0 == strcmp(q->key, key)) {
+            q->value = value;
+            return TRUE;
+        }
+        q = q->next;
+    }
+
+    /* Insert at head: simpler and O(1). */
+    q = _pair_new(key, value);
+    if (!q)
+        return FALSE;
+
+    q->next = self->pairs[index];
+    self->pairs[index] = q;
+    self->size += 1;
+
+    return TRUE;
 }
 
 static BOOL _rehash(hash_table_t *self, size_t capacity)
 {
-    key_value_pair_t **old_pairs = self->pairs;
-    key_value_pair_t **new_pairs = \
-        (key_value_pair_t **) \
+    key_value_pair_t **new_pairs;
+    size_t old_capacity;
+    size_t i;
+
+    if (!self)
+        return FALSE;
+
+    new_pairs = (key_value_pair_t **)
         malloc(capacity * sizeof(key_value_pair_t *));
     if (!new_pairs)
-        goto ERROR_REHASH;
+        return FALSE;
 
-    {
-        size_t i;
-        for (i = 0; i < capacity; i++)
-            new_pairs[i] = NULL;
-    }
+    for (i = 0; i < capacity; i++)
+        new_pairs[i] = NULL;
 
-    {
-        size_t i;
-        for (i = 0; i < self->capacity; i++) {
-            key_value_pair_t *p = old_pairs[i];
+    old_capacity = self->capacity;
 
-            while (p) {
-                unsigned long code = _hash(p->key);
-                size_t index = code % capacity;
+    for (i = 0; i < old_capacity; i++) {
+        key_value_pair_t *p = self->pairs[i];
 
-                key_value_pair_t *x = NULL;
-                key_value_pair_t *y = new_pairs[index];
+        while (p) {
+            key_value_pair_t *next = p->next;
+            size_t index = _hash(p->key) % capacity;
 
-                if (!y) {
-                    new_pairs[index] = _pair_new(p->key, p->value);
-                    if (!(new_pairs[index]))
-                        goto ERROR_REHASH;
-                }
-                else {
-                    while (y) {
-                        x = y;
-                        y = y->next;
-                    }
-
-                    x->next = _pair_new(p->key, p->value);
-                    if (!(x->next))
-                        goto ERROR_REHASH;
-                }
-
-                p = p->next;
-            }
+            p->next = new_pairs[index];
+            new_pairs[index] = p;
+            p = next;
         }
     }
 
-    size_t old_capacity = self->capacity;
-    self->capacity = capacity;
+    free(self->pairs);
     self->pairs = new_pairs;
-
-    {
-        size_t i;
-        for (i = 0; i < old_capacity; i++) {
-            key_value_pair_t *p = NULL;
-            key_value_pair_t *q = old_pairs[i];
-
-            while (q) {
-                p = q;
-                q = q->next;
-                free(p);
-            }
-        }
-    }
-
-    free(old_pairs);
+    self->capacity = capacity;
 
     return TRUE;
-
-ERROR_REHASH:
-    if (new_pairs) {
-        {
-            size_t i;
-            for (i = 0; i < capacity; i++) {
-                key_value_pair_t *p = NULL;
-                key_value_pair_t *q = new_pairs[i];
-
-                while (q) {
-                    p = q;
-                    q = q->next;
-                    free(p);
-                }
-            }
-        }
-
-        free(new_pairs);
-    }
-
-    return FALSE;
 }
 
-char * hash_table_get(hash_table_t *self, char *key)
+const char * hash_table_get(hash_table_t *self, const char *key)
 {
+    unsigned long code;
+    size_t index;
+    key_value_pair_t *q;
+
     assert(self);
     assert(key && 0 != strcmp("", key));
 
-    unsigned long code = _hash(key);
-    size_t index = code % self->capacity;
-
-    key_value_pair_t *q = self->pairs[index];
-
-    if (!q) {
+    if (!self || !key || *key == '\0')
         return NULL;
-    }
+
+    code = _hash(key);
+    index = code % self->capacity;
+    q = self->pairs[index];
 
     while (q) {
-        key_value_pair_t *p = q;
+        if (0 == strcmp(q->key, key))
+            return q->value;
         q = q->next;
-
-        if (0 == strcmp(p->key, key)) {
-            return p->value;
-        }
     }
 
     return NULL;
 }
 
-static BOOL _shrink(hash_table_t *self);
-
-BOOL hash_table_remove(hash_table_t *self, char *key)
+BOOL hash_table_remove(hash_table_t *self, const char *key)
 {
+    unsigned long code;
+    size_t index;
+    key_value_pair_t *p = NULL;
+    key_value_pair_t *q;
+
     assert(self);
     assert(key && 0 != strcmp("", key));
 
-    if (!_shrink(self))
+    if (!self || !key || *key == '\0')
         return FALSE;
 
-    unsigned long code = _hash(key);
-    size_t index = code % self->capacity;
-
-    key_value_pair_t *p = NULL;
-    key_value_pair_t *q = self->pairs[index];
-
-    if (!q)
-        return FALSE;
+    code = _hash(key);
+    index = code % self->capacity;
+    q = self->pairs[index];
 
     while (q) {
         if (0 == strcmp(key, q->key)) {
-            if (!p) {
-                if (!(q->next)) {
-                    free(self->pairs[index]);
-                    self->pairs[index] = NULL;
-                }
-                else {
-                    self->pairs[index]->next = q->next;
-                    free(q);
-                }
-
-            }
-            else {
+            if (!p)
+                self->pairs[index] = q->next;
+            else
                 p->next = q->next;
-                free(q);
-            }
 
+            free(q);
             self->size -= 1;
+
+            if (!_shrink(self))
+                return FALSE;
 
             return TRUE;
         }
@@ -308,7 +255,14 @@ BOOL hash_table_remove(hash_table_t *self, char *key)
 
 static BOOL _shrink(hash_table_t *self)
 {
-    size_t threshold = self->capacity / 4;
+    size_t threshold;
+    size_t index = 0;
+    size_t capacity;
+
+    if (!self)
+        return FALSE;
+
+    threshold = self->capacity / 4;
 
     if (self->size >= threshold)
         return TRUE;
@@ -316,44 +270,42 @@ static BOOL _shrink(hash_table_t *self)
     if (self->capacity <= primes[0])
         return TRUE;
 
-    size_t index = 0;
     {
         size_t i;
-        for (i = 1; i < _PRMIE_SIZE; i++) {
-            if (self->capacity >= primes[i]) {
+        for (i = 1; i < _PRIME_SIZE; i++) {
+            if (self->capacity == primes[i]) {
                 index = i - 1;
                 break;
             }
         }
     }
 
-    size_t capacity = primes[index];
+    capacity = primes[index];
+
+    if (capacity == self->capacity)
+        return TRUE;
 
     return _rehash(self, capacity);
 }
 
-void hash_table_delete(void *self)
+void hash_table_delete(hash_table_t *self)
 {
+    size_t i;
+
     if (!self)
         return;
 
-    key_value_pair_t **pairs = ((hash_table_t *) self)->pairs;
-    size_t capacity = ((hash_table_t *) self)->capacity;
+    for (i = 0; i < self->capacity; i++) {
+        key_value_pair_t *p = NULL;
+        key_value_pair_t *q = self->pairs[i];
 
-    {
-        size_t i;
-        for (i = 0; i < capacity; i++) {
-            key_value_pair_t *p = NULL;
-            key_value_pair_t *q = pairs[i];
-
-            while (q) {
-                p = q;
-                q = q->next;
-                free((void *) p);
-            }
+        while (q) {
+            p = q;
+            q = q->next;
+            free(p);
         }
     }
 
-    free(((hash_table_t *) self)->pairs);
+    free(self->pairs);
     free(self);
 }
