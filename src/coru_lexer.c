@@ -64,6 +64,10 @@ coru_lexer_t * coru_lexer_new(void)
       && (AMPERSAND != (c)) \
       && (BACKTICK != (c)))
 
+/* Trade-off: define "code" as a complement set of special characters.
+ * Simple and fast, but tightly couples tokenization to known delimiters. */
+
+
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
 
 BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
@@ -75,12 +79,14 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 #endif
     {
         size_t i;
-        /* Scan the input with a finite automata. */
+        /* Trade-off: hand-written lexer instead of formal lexer generator.
+         * Easier to control for small DSL, but more imperative and less declarative. */
         for (i = 0; i < strlen(input); i++) {
             if (SPACE == input[i]) {
                 size_t j;
 
-                /* Scan greedily. */
+                /* Intent: group consecutive spaces into a single token */
+                /* Trade-off: greedy scanning reduces token count, but loses fine-grained structure */
                 for (j = i; j < strlen(input); j++) {
                     /* Go one step over last valid position. */
                     if (SPACE != input[j])
@@ -229,7 +235,8 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
             else if (IS_CODE(input[i])) {
                 size_t j;
 
-                /* Scan greedily. */
+                /* Intent: treat continuous non-special characters as a code fragment */
+                /* Trade-off: no further parsing inside code tokens at this stage */
                 for (j = i; j < strlen(input); j++) {
                     /* Go one step over last valid position. */
                     if (!IS_CODE(input[j]))
@@ -268,6 +275,8 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
             #if DEBUG
                 PUTERR("Left char: -->%c<--", input[i]);
             #endif
+                /* Trade-off: unknown characters are ignored instead of producing errors.
+                 * Keeps lexer permissive, but may hide malformed input. */
                 /* Pass. */
             }
         }
@@ -286,6 +295,8 @@ static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token)
     if (!_coru_lexer_expand(self))
         return FALSE;
 
+    /* Trade-off: store tokens in a dynamic array (simple buffer model)
+     * instead of streaming or iterator-based lexing. */
     self->tokens[self->size] = token;
     self->size += 1;
 
@@ -341,6 +352,8 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
 
     self->index += 1;
 
+    /* Trade-off: return a copy of token to isolate ownership.
+     * Safer, but adds allocation overhead. */
     coru_token_t *copied = coru_token_copy(token);
     if (!copied)
         return NULL;
