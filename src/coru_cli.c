@@ -36,11 +36,12 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out);
 
 static BOOL coru_run(int argc, char **argv, char **out)
 {
-    coru_argument_t *arg = coru_argument_parse(argc, argv);
-    if (!arg)
+    coru_argument_t arg;
+
+    if (coru_argument_parse(&arg, argc, argv))
         goto ERROR_CORU;
 
-    CORU_COMMAND cmd = coru_argument_command(arg);
+    CORU_COMMAND cmd = coru_argument_command(&arg);
 
     if (is_coru_command_equal(cmd, CORU_COMMAND_VERSION)) {
         coru_help_version();
@@ -56,7 +57,7 @@ static BOOL coru_run(int argc, char **argv, char **out)
         goto ERROR_CORU;
     }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_LOAD)) {
-        if (!coru_run_load(arg, out)) {
+        if (!coru_run_load(&arg, out)) {
             PUTERR("Failed to load target file");
             goto ERROR_CORU;
         }
@@ -71,14 +72,9 @@ static BOOL coru_run(int argc, char **argv, char **out)
         goto ERROR_CORU;
     }
 
-    coru_argument_delete(arg);
-
     return TRUE;
 
 ERROR_CORU:
-    if (arg)
-        coru_argument_delete(arg);
-
     return FALSE;
 }
 

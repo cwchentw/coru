@@ -6,16 +6,6 @@
 #include "language.h"
 #include "print.h"
 
-struct coru_argument_t {
-    int argc;
-    char **argv;
-    int index;
-    BOOL is_all;
-    language_t lang;
-    CORU_COMMAND cmd;
-    char *path;
-};
-
 #define _is_c(opt) \
     (0 == strcmp((opt), "-c") || 0 == strcmp((opt), "--as-c"))
 #define _is_cpp(opt) \
@@ -59,15 +49,9 @@ struct coru_argument_t {
 #define _is_make(opt) \
     (0 == strcmp((opt), "-make") || 0 == strcmp((opt), "--as-make"))
 
-coru_argument_t * coru_argument_parse(int argc, char **argv)
+int coru_argument_parse(coru_argument_t *arg, int argc, char **argv)
 {
-    coru_argument_t *arg = \
-        (coru_argument_t *) malloc(sizeof(coru_argument_t));
-    if (!arg) {
-        PUTERR("Failed to allocate memory for argument object");
-        PUTERR("Check available system memory");
-        return arg;
-    }
+    if (!arg) return -1;
 
     arg->argc = argc;
     arg->argv = argv;
@@ -79,7 +63,7 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
 
     if (argc < 2) {
         arg->cmd = CORU_COMMAND_TOO_FEW;
-        return arg;
+        return -1;
     }
 
     while (arg->index < arg->argc) {
@@ -195,40 +179,25 @@ coru_argument_t * coru_argument_parse(int argc, char **argv)
     else if (arg->path && strstr(arg->path, "CMakeLists.txt") && LANGUAGE_UNKNOWN == arg->lang)
         arg->lang = LANGUAGE_CMAKE;
 
-    return arg;
+    return 0;
 }
 
-void coru_argument_delete(void *self)
+BOOL coru_argument_is_all(const coru_argument_t *self)
 {
-    assert(self);
-
-    free(self);
-}
-
-BOOL coru_argument_is_all(coru_argument_t *self)
-{
-    assert(self);
-
     return self->is_all;
 }
 
-language_t coru_argument_language(coru_argument_t *self)
+language_t coru_argument_language(const coru_argument_t *self)
 {
-    assert(self);
-
     return self->lang;
 }
 
-CORU_COMMAND coru_argument_command(coru_argument_t *self)
+CORU_COMMAND coru_argument_command(const coru_argument_t *self)
 {
-    assert(self);
-
     return self->cmd;
 }
 
-char * coru_argument_path(coru_argument_t *self)
+char * coru_argument_path(const coru_argument_t *self)
 {
-    assert(self);
-
     return self->path;
 }
