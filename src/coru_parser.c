@@ -5,22 +5,9 @@
 #include "coru_token.h"
 #include "print.h"
 
-struct coru_parser_t {
-    size_t size;
-    size_t capacity;
-    size_t index;
-    coru_ast_t **asts;
-};
-
-coru_parser_t * coru_parser_new(void)
+int coru_parser_new(coru_parser_t *parser)
 {
-    coru_parser_t *parser = \
-        (coru_parser_t *) malloc(sizeof(coru_parser_t));
-    if (!parser) {
-        PUTERR("Failed to allocate memory for Coru Parser");
-        PUTERR("Check available system memory");
-        return parser;
-    }
+    if (!parser) return -1;
 
     parser->size = 0;
     parser->capacity = 16;
@@ -32,8 +19,7 @@ coru_parser_t * coru_parser_new(void)
     if (!(parser->asts)) {
         PUTERR("Failed to allocate memory for internal ast array of Coru Parser");
         PUTERR("Check available system memory");
-        free(parser);
-        return NULL;
+        return -1;
     }
 
     {
@@ -42,7 +28,7 @@ coru_parser_t * coru_parser_new(void)
             parser->asts[i] = NULL;
     }
 
-    return parser;
+    return 0;
 }
 
 #define IS_CODE_TOKEN(t) \
@@ -57,9 +43,6 @@ static BOOL _coru_parser_expand(coru_parser_t *self);
 
 BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
 {
-    assert(self);
-    assert(lexer);
-
     coru_token_t *token = coru_lexer_next(lexer);
     /* Scan the tokens with a finite automata. */
     while (token) {
@@ -296,8 +279,6 @@ static BOOL _coru_parser_expand(coru_parser_t *self)
 
 coru_ast_t * coru_parser_next(coru_parser_t *self)
 {
-    assert(self);
-
     if (self->index >= self->size)
         return NULL;
 
@@ -310,12 +291,9 @@ coru_ast_t * coru_parser_next(coru_parser_t *self)
     return ast;
 }
 
-void coru_parser_delete(void *self)
+void coru_parser_delete(coru_parser_t *self)
 {
-    if (!self)
-        return;
-
-    coru_ast_t **asts = ((coru_parser_t *) self)->asts;
+    coru_ast_t **asts = self->asts;
 
     {
         size_t size = ((coru_parser_t *) self)->capacity;
@@ -327,5 +305,4 @@ void coru_parser_delete(void *self)
     }
 
     free(asts);
-    free(self);
 }

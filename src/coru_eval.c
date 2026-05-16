@@ -59,7 +59,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     char *multi_end = NULL;
 
     coru_lexer_t lexer;
-    coru_parser_t *parser = NULL;
+    coru_parser_t parser;
 
     if (!comment_single_start) {
         comment_single_start = init_comment_single_start();
@@ -219,11 +219,10 @@ BOOL coru_eval_eval(coru_eval_t *self,
         goto ERROR_CORU_EVAL;
     }
 
-    parser = coru_parser_new();
-    if (!parser)
+    if (coru_parser_new(&parser))
         goto ERROR_CORU_EVAL;
 
-    if (!coru_parser_parse(parser, &lexer)) {
+    if (!coru_parser_parse(&parser, &lexer)) {
         PUTERR("Failed to parse input");
         goto ERROR_CORU_EVAL;
     }
@@ -234,7 +233,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
         - 1 /* Reduce the indent. */
         - 1 /* Trailing zero */;
 
-    coru_ast_t *ast = coru_parser_next(parser);
+    coru_ast_t *ast = coru_parser_next(&parser);
     while (ast) {
         /* Code wrapping for Fortran. */
         if (CORU_AST_AMPERSAND == coru_ast_type(ast)
@@ -271,7 +270,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
             sz_space -= 7;
         }
 
-        ast = coru_parser_next(parser);
+        ast = coru_parser_next(&parser);
     }
 
     {
@@ -380,15 +379,13 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
 END_CORU_EVAL:
-    coru_parser_delete(parser);
+    coru_parser_delete(&parser);
     coru_lexer_delete(&lexer);
 
     return TRUE;
 
 ERROR_CORU_EVAL:
-    if (parser)
-        coru_parser_delete(parser);
-
+    coru_parser_delete(&parser);
     coru_lexer_delete(&lexer);
 
     return FALSE;
