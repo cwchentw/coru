@@ -58,7 +58,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     char *multi_start = NULL;
     char *multi_end = NULL;
 
-    coru_lexer_t *lexer = NULL;
+    coru_lexer_t lexer;
     coru_parser_t *parser = NULL;
 
     if (!comment_single_start) {
@@ -211,11 +211,10 @@ BOOL coru_eval_eval(coru_eval_t *self,
         return TRUE;
     }
 
-    lexer = coru_lexer_new();
-    if (!lexer)
+    if (coru_lexer_new(&lexer))
         goto ERROR_CORU_EVAL;
 
-    if (!coru_lexer_lex(lexer, line)) {
+    if (!coru_lexer_lex(&lexer, line)) {
         PUTERR("Failed to lex input");
         goto ERROR_CORU_EVAL;
     }
@@ -224,7 +223,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     if (!parser)
         goto ERROR_CORU_EVAL;
 
-    if (!coru_parser_parse(parser, lexer)) {
+    if (!coru_parser_parse(parser, &lexer)) {
         PUTERR("Failed to parse input");
         goto ERROR_CORU_EVAL;
     }
@@ -382,7 +381,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
 END_CORU_EVAL:
     coru_parser_delete(parser);
-    coru_lexer_delete(lexer);
+    coru_lexer_delete(&lexer);
 
     return TRUE;
 
@@ -390,8 +389,7 @@ ERROR_CORU_EVAL:
     if (parser)
         coru_parser_delete(parser);
 
-    if (lexer)
-        coru_lexer_delete(lexer);
+    coru_lexer_delete(&lexer);
 
     return FALSE;
 }

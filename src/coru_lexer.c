@@ -16,21 +16,9 @@
 #define AMPERSAND     '&'
 #define BACKTICK      '`'
 
-struct coru_lexer_t {
-    size_t size;
-    size_t capacity;
-    size_t index;
-    coru_token_t **tokens;
-};
-
-coru_lexer_t * coru_lexer_new(void)
+int coru_lexer_new(coru_lexer_t *lexer)
 {
-    coru_lexer_t *lexer = (coru_lexer_t *) malloc(sizeof(coru_lexer_t));
-    if (!lexer) {
-        PUTERR("Failed to allocate memory for coru lexer object");
-        PUTERR("Check available system memory");
-        return lexer;
-    }
+    if (!lexer) return -1;
 
     lexer->size = 0;
     lexer->capacity = 2;
@@ -41,9 +29,7 @@ coru_lexer_t * coru_lexer_new(void)
     if (!(lexer->tokens)) {
         PUTERR("Failed to allocate memory for tokens in coru lexer");
         PUTERR("Check available system memory");
-        free(lexer);
-        lexer = NULL;
-        return lexer;
+        return -1;
     }
 
     {
@@ -52,7 +38,7 @@ coru_lexer_t * coru_lexer_new(void)
             lexer->tokens[i] = NULL;
     }
 
-    return lexer;
+    return 0;
 }
 
 #define IS_CODE(c) \
@@ -72,8 +58,6 @@ static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
 
 BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 {
-    assert(self);
-
 #if DEBUG
     PUTERR("Source to scan: -->%s<--", input);
 #endif
@@ -289,7 +273,6 @@ static BOOL _coru_lexer_expand(coru_lexer_t *self);
 
 static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token)
 {
-    assert(self);
     assert(token);
 
     if (!_coru_lexer_expand(self))
@@ -361,12 +344,9 @@ coru_token_t * coru_lexer_next(coru_lexer_t *self)
     return copied;
 }
 
-void coru_lexer_delete(void *self)
+void coru_lexer_delete(coru_lexer_t *self)
 {
-    if (!self)
-        return;
-
-    coru_token_t **tokens = ((coru_lexer_t *) self)->tokens;
+    coru_token_t **tokens = self->tokens;
 
     {
         size_t size = ((coru_lexer_t *) self)->capacity;
@@ -378,5 +358,4 @@ void coru_lexer_delete(void *self)
     }
 
     free(tokens);
-    free(self);
 }

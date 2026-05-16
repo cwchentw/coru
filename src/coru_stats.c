@@ -91,14 +91,13 @@ static coru_stats_t * coru_stats_new()
 
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line)
 {
-    coru_lexer_t *lexer = NULL;
+    coru_lexer_t lexer;
     coru_parser_t *parser = NULL;
 
-    lexer = coru_lexer_new();
-    if (!lexer)
+    if (coru_lexer_new(&lexer))
         goto ERROR_CORU_STATS;
 
-    if (!coru_lexer_lex(lexer, line)) {
+    if (!coru_lexer_lex(&lexer, line)) {
         PUTERR("Failed to lex input");
         goto ERROR_CORU_STATS;
     }
@@ -107,7 +106,7 @@ static BOOL _coru_stats_eval(coru_stats_t *self, char *line)
     if (!parser)
         goto ERROR_CORU_STATS;
 
-    if (!coru_parser_parse(parser, lexer)) {
+    if (!coru_parser_parse(parser, &lexer)) {
         PUTERR("Failed to parse input");
         goto ERROR_CORU_STATS;
     }
@@ -129,7 +128,7 @@ static BOOL _coru_stats_eval(coru_stats_t *self, char *line)
     coru_stats_set_height(self, coru_stats_height(self) + 1);
 
     coru_parser_delete(parser);
-    coru_lexer_delete(lexer);
+    coru_lexer_delete(&lexer);
 
     return TRUE;
 
@@ -137,8 +136,7 @@ ERROR_CORU_STATS:
     if (parser)
         coru_parser_delete(parser);
 
-    if (lexer)
-        coru_lexer_delete(lexer);
+    coru_lexer_delete(&lexer);
 
     return FALSE;
 }
