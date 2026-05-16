@@ -25,6 +25,8 @@ void coru_help_help(FILE *stream)
     fprintf(stream, "    --as-cpp%s", END_OF_LINE);
     fprintf(stream, "    --as-cxx%s", END_OF_LINE);
     fprintf(stream, "    --as-c++%s", END_OF_LINE);
+    fprintf(stream, "    -pas\t\tTreat target source as Pascal%s", END_OF_LINE);
+    fprintf(stream, "    --as-pascal%s", END_OF_LINE);
     fprintf(stream, "    -java\t\tTreat target source as Java%s", END_OF_LINE);
     fprintf(stream, "    --as-java%s", END_OF_LINE);
     fprintf(stream, "    -c#  -csharp\tTreat target source as C# (C sharp)%s", END_OF_LINE);

@@ -12,6 +12,8 @@
     (0 == strcmp((opt), "-cpp") || 0 == strcmp((opt), "-cxx") \
         || 0 == strcmp((opt), "-c++") || 0 == strcmp((opt), "--as-cpp") \
         || 0 == strcmp((opt), "--as-cxx") || 0 == strcmp((opt), "--as-c++"))
+#define _is_pascal(opt) \
+    (0 == strcmp((opt), "-pas") || 0 == strcmp((opt), "--as-pascal"))
 #define _is_java(opt) \
     (0 == strcmp((opt), "-java") || 0 == strcmp((opt), "--as-java"))
 #define _is_csharp(opt) \
@@ -95,6 +97,10 @@ int coru_argument_parse(coru_argument_t *arg, int argc, char **argv)
         }
         else if (_is_cpp(opt)) {
             arg->lang = LANGUAGE_CPP;
+            arg->index += 1;
+        }
+        else if (_is_pascal(opt)) {
+            arg->lang = LANGUAGE_PASCAL;
             arg->index += 1;
         }
         else if (_is_java(opt)) {

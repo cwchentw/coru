@@ -42,6 +42,9 @@ static BOOL _coru_ast_string_add(coru_ast_string_t *self, coru_token_t *token);
 
 struct coru_ast_t {
     CORU_AST_TYPE ast_t;
+
+    /* Trade-off: use a tagged union for node types instead of a uniform tree.
+     * Simpler and explicit, but less flexible than a generic AST structure. */
     union {
         coru_ast_code_t *code_t;
         coru_ast_tab_t *tab_t;
@@ -79,6 +82,9 @@ coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
 
     ast->ast_t = ast_t;
 
+    /* Trade-off: construct specialized node types upfront instead of a
+     * generic node + children model. Keeps logic simple but couples
+     * structure tightly to known transformation cases. */
     switch (ast->ast_t) {
     case CORU_AST_CODE:
         ast->ast.code_t = _coru_ast_code_new();
@@ -189,6 +195,8 @@ BOOL coru_ast_add(coru_ast_t *self, coru_token_t *token)
 
     BOOL added = FALSE;
 
+    /* Trade-off: dispatch by node type rather than using a visitor pattern.
+     * Easier to follow for small DSL, but not easily extensible. */
     switch (self->ast_t) {
     case CORU_AST_CODE:
         added = _coru_ast_code_add(self->ast.code_t, token);
@@ -227,6 +235,10 @@ struct coru_ast_code_t {
     size_t capacity;
     coru_token_t **tokens;
 };
+
+/* Trade-off: store raw tokens instead of building a higher-level structure.
+ * This keeps parsing lightweight, but shifts responsibility to later stages. */
+
 
 static coru_ast_code_t * _coru_ast_code_new(void)
 {
@@ -287,6 +299,7 @@ static BOOL _coru_ast_code_add(coru_ast_code_t *self, coru_token_t *token)
     if (!_coru_ast_code_expand(self))
         return FALSE;
 
+    /* Intent: preserve original token sequence for later transformation */
     self->tokens[self->size] = token;
     self->size += 1;
 
@@ -334,6 +347,10 @@ struct coru_ast_tab_t {
     size_t capacity;
     coru_token_t *token;
 };
+
+/* Trade-off: represent single-token nodes with fixed capacity instead of
+ * unifying all nodes into a list structure. Reduces overhead but duplicates logic. */
+
 
 static coru_ast_tab_t * _coru_ast_tab_new(void)
 {
@@ -525,6 +542,10 @@ struct coru_ast_string_t {
     size_t capacity;
     coru_token_t **tokens;
 };
+
+/* Trade-off: treat string as a token container instead of parsing its internal
+ * structure. Simpler, but limits semantic awareness inside strings. */
+
 
 static coru_ast_string_t * _coru_ast_string_new(void)
 {
