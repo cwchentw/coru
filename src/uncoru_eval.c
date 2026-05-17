@@ -53,7 +53,7 @@ BOOL uncoru_eval_eval(
 
     char *comment_start = NULL;
     char *comment_end = NULL;
-    uncoru_lexer_t *lexer = NULL;
+    uncoru_lexer_t lexer;
     uncoru_parser_t *parser = NULL;
 
     if (!comment_single_start) {
@@ -86,28 +86,27 @@ BOOL uncoru_eval_eval(
         (*out)[0] = '\0';
     }
 
-    lexer = uncoru_lexer_new();
-    if (!lexer)
+    if (uncoru_lexer_new(&lexer))
         goto ERROR_UNCORU_EVAL;
 
-    uncoru_lexer_set_comment_start(lexer, comment_start);
+    uncoru_lexer_set_comment_start(&lexer, comment_start);
 #if DEBUG
     PUTERR("The start comment: -->%s<--", uncoru_lexer_comment_start(lexer));
 #endif
 
-    uncoru_lexer_set_comment_end(lexer, comment_end);
+    uncoru_lexer_set_comment_end(&lexer, comment_end);
 #if DEBUG
     PUTERR("The end comment: -->%s<--", uncoru_lexer_comment_end(lexer));
 #endif
 
-    if (!uncoru_lexer_lex(lexer, line))
+    if (!uncoru_lexer_lex(&lexer, line))
         goto ERROR_UNCORU_EVAL;
 
     parser = uncoru_parser_new();
     if (!parser)
         goto ERROR_UNCORU_EVAL;
 
-    if (!uncoru_parser_parse(parser, lexer)) {
+    if (!uncoru_parser_parse(parser, &lexer)) {
         PUTERR("Failed to parse input");
         goto ERROR_UNCORU_EVAL;
     }
@@ -161,7 +160,7 @@ BOOL uncoru_eval_eval(
     (*out)[sz] = '\0';  /* Trailing zero. */
 
     uncoru_parser_delete(parser);
-    uncoru_lexer_delete(lexer);
+    uncoru_lexer_delete(&lexer);
 
     return TRUE;
 
@@ -169,8 +168,7 @@ ERROR_UNCORU_EVAL:
     if (parser)
         uncoru_parser_delete(parser);
 
-    if (lexer)
-        uncoru_lexer_delete(lexer);
+    uncoru_lexer_delete(&lexer);
 
     return FALSE;
 }

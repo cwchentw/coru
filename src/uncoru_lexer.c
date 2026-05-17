@@ -7,24 +7,9 @@
 #include "uncoru_lexer.h"
 #include "uncoru_token.h"
 
-struct uncoru_lexer_t {
-    size_t size;
-    size_t capacity;
-    size_t index;
-    uncoru_token_t **tokens;
-    char *comment_start;
-    char *comment_end;
-};
-
-uncoru_lexer_t * uncoru_lexer_new(void)
+int uncoru_lexer_new(uncoru_lexer_t * lexer)
 {
-    uncoru_lexer_t *lexer = \
-        (uncoru_lexer_t *) malloc(sizeof(uncoru_lexer_t));
-    if (!lexer) {
-        PUTERR("Failed to allocate memory for uncoru lexer object");
-        PUTERR("Check available system memory");
-        return lexer;
-    }
+    if (!lexer) return -1;
 
     lexer->size = 0;
     lexer->capacity = 16;
@@ -36,7 +21,7 @@ uncoru_lexer_t * uncoru_lexer_new(void)
         PUTERR("Failed to allocate the tokens of uncoru lexer");
         PUTERR("Check available system memory");
         free(lexer);
-        return NULL;
+        return -1;
     }
 
     {
@@ -48,15 +33,13 @@ uncoru_lexer_t * uncoru_lexer_new(void)
     lexer->comment_start = NULL;
     lexer->comment_end = NULL;
 
-    return lexer;
+    return 0;
 }
 
-void uncoru_lexer_delete(void *self)
+void uncoru_lexer_delete(uncoru_lexer_t *self)
 {
-    assert(self);
-
-    size_t capacity = ((uncoru_lexer_t *) self)->capacity;
-    uncoru_token_t **tokens = ((uncoru_lexer_t *) self)->tokens;
+    size_t capacity = self->capacity;
+    uncoru_token_t **tokens = self->tokens;
     {
         size_t i;
         for (i = 0; i < capacity; i++) {
@@ -66,7 +49,6 @@ void uncoru_lexer_delete(void *self)
     }
 
     free((void *) tokens);
-    free(self);
 }
 
 void uncoru_lexer_set_comment_start(uncoru_lexer_t *self, char *comment)

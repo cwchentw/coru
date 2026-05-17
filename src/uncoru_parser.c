@@ -60,7 +60,6 @@ static BOOL _uncoru_parser_expand(uncoru_parser_t *self);
 BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
 {
     assert(self);
-    assert(lexer);
 
     uncoru_token_t *token = uncoru_lexer_peek_n(lexer, 0);
     while (token) {
