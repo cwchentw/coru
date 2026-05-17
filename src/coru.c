@@ -5,7 +5,6 @@
 #include "coru.h"
 #include "coru_eval.h"
 #include "coru_stats.h"
-#include "hash_table.h"
 #include "language.h"
 #include "print.h"
 #include "syntax_data.h"

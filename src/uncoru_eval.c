@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hash_table.h"
 #include "language.h"
 #include "print.h"
 #include "syntax_data.h"

@@ -8,7 +8,6 @@
 #include "coru_parser.h"
 #include "coru_stats.h"
 #include "cstring.h"
-#include "hash_table.h"
 #include "language.h"
 #include "print.h"
 #include "syntax_data.h"
