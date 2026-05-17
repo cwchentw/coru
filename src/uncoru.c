@@ -90,11 +90,7 @@ uncoru_load_fs(
 {
     char *line = NULL;
     char *more_line = NULL;
-    uncoru_eval_t *eval = NULL;
-
-    eval = uncoru_eval_new();
-    if (!eval)
-        goto ERROR_UNCORU_LOAD;
+    uncoru_eval_t eval;
 
     size_t sz_line = 150;  /* Sensible line width. */
     line = (char *) malloc(sz_line * sizeof(char));
@@ -124,7 +120,7 @@ uncoru_load_fs(
         }
         else {
         LOAD_LINE:
-            if (!uncoru_eval_eval(eval, stats, lang, line, out))
+            if (!uncoru_eval_eval(&eval, stats, lang, line, out))
                 goto ERROR_UNCORU_LOAD;
         }
     }
@@ -132,7 +128,6 @@ uncoru_load_fs(
     free(line);
     hash_table_delete(comment_single_end);
     hash_table_delete(comment_single_start);
-    uncoru_eval_delete(eval);
 
     return TRUE;
 
@@ -145,9 +140,6 @@ ERROR_UNCORU_LOAD:
 
     if (comment_single_start)
         hash_table_delete(comment_single_start);
-
-    if (eval)
-        uncoru_eval_delete(eval);
 
     return FALSE;
 }

@@ -11,35 +11,6 @@
 #include "uncoru_parser.h"
 #include "uncoru_stats.h"
 
-struct uncoru_eval_t {
-    /* Refactor it later. */
-    BOOL first_line;
-    BOOL mstart;
-    BOOL mend;
-    size_t multi;
-    size_t line_number;
-};
-
-uncoru_eval_t * uncoru_eval_new(void)
-{
-    uncoru_eval_t *eval = \
-        (uncoru_eval_t *) malloc(sizeof(uncoru_eval_t));
-    if (!eval) {
-        PUTERR("Failed to allocate memory for uncoru eval object");
-        PUTERR("Check available system memory");
-        return eval;
-    }
-
-    return eval;
-}
-
-void uncoru_eval_delete(void *self)
-{
-    assert(self);
-
-    free(self);
-}
-
 extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 

@@ -4,10 +4,15 @@
 #include "uncoru.h"
 #include "uncoru_stats.h"
 
-typedef struct uncoru_eval_t uncoru_eval_t;
+typedef struct uncoru_eval_t {
+    /* Refactor it later. */
+    BOOL first_line;
+    BOOL mstart;
+    BOOL mend;
+    size_t multi;
+    size_t line_number;
+} uncoru_eval_t;
 
-uncoru_eval_t * uncoru_eval_new(void);
-void uncoru_eval_delete(void *self);
 BOOL uncoru_eval_eval(
     uncoru_eval_t *self,
     uncoru_stats_t *stats,
