@@ -1,7 +1,11 @@
 #ifndef CORU_H
 #define CORU_H
 
-#include <stdio.h>
+#ifdef __cplusplus
+    #include <cstdio>
+#else
+    #include <stdio.h>
+#endif
 
 /* Valid target language. */
 #ifndef _LANGUAGE_TYPE_IS_DEFINED
