@@ -52,7 +52,7 @@ _coru_load(
 {
     char *line = NULL;
     char *more_line = NULL;
-    coru_eval_t *eval = NULL;
+    coru_eval_t eval;
 
     size_t line_size = 150;  /* Sensible line width. */
     line = (char *) malloc(line_size * sizeof(char));
@@ -63,8 +63,7 @@ _coru_load(
 
     line[0] = '\0';
 
-    eval = coru_eval_new();
-    if (!eval)
+    if (coru_eval_new(&eval))
         goto ERROR_CORU_LOAD;
 
     while (fgets(line, line_size, stream)) {
@@ -90,12 +89,11 @@ RELOAD_LINE:
             /* Remove the trailing newline. */
             line[strcspn(line, "\n")] = 0;
 
-            if (!coru_eval_eval(eval, stats, lang, is_all, line, out))
+            if (!coru_eval_eval(&eval, stats, lang, is_all, line, out))
                 goto ERROR_CORU_LOAD;
         }
     }
 
-    coru_eval_delete(eval);
     free(line);
 
     if (comment_multiple_end)
@@ -113,9 +111,6 @@ RELOAD_LINE:
     return TRUE;
 
 ERROR_CORU_LOAD:
-    if (eval)
-        coru_eval_delete(eval);
-
     if (line)
         free(line);
 

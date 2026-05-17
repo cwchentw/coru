@@ -3,10 +3,15 @@
 
 #include "coru.h"
 
-typedef struct coru_eval_t coru_eval_t;
+typedef struct coru_eval_t {
+    BOOL first_line;
+    BOOL mstart;
+    BOOL mend;
+    size_t multi;
+    size_t line_number;
+} coru_eval_t;
 
-coru_eval_t * coru_eval_new(void);
-void coru_eval_delete(void *self);
+int coru_eval_new(coru_eval_t *eval);
 BOOL coru_eval_eval(
     coru_eval_t *self,
     coru_stats_t *stats,

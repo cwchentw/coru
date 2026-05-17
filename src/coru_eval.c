@@ -13,23 +13,9 @@
 #include "print.h"
 #include "syntax_data.h"
 
-struct coru_eval_t {
-    BOOL first_line;
-    BOOL mstart;
-    BOOL mend;
-    size_t multi;
-    size_t line_number;
-};
-
-coru_eval_t * coru_eval_new(void)
+int coru_eval_new(coru_eval_t *eval)
 {
-    coru_eval_t *eval = \
-        (coru_eval_t *) malloc(sizeof(coru_eval_t));
-    if (!eval) {
-        PUTERR("Failed to allocate memory for coru eval object");
-        PUTERR("Check available system memory");
-        return eval;
-    }
+    if (!eval) return -1;
 
     eval->first_line = TRUE;
     eval->mstart = FALSE;
@@ -37,7 +23,7 @@ coru_eval_t * coru_eval_new(void)
     eval->multi = 0;
     eval->line_number = 0;
 
-    return eval;
+    return 0;
 }
 
 extern hash_table_t *comment_single_start;
@@ -51,8 +37,6 @@ BOOL coru_eval_eval(coru_eval_t *self,
     BOOL is_all,
     char *line, char **out)
 {
-    assert(self);
-
     char *single_start = NULL;
     char *single_end = NULL;
     char *multi_start = NULL;
@@ -389,12 +373,4 @@ ERROR_CORU_EVAL:
     coru_lexer_delete(&lexer);
 
     return FALSE;
-}
-
-void coru_eval_delete(void *self)
-{
-    if (!self)
-        return;
-
-    free(self);
 }
