@@ -7,34 +7,18 @@
 #include "coru_stats.h"
 #include "print.h"
 
-static BOOL coru_run(int argc, char **argv, char **out);
+static BOOL coru_run(int argc, char **argv);
 
 int main(int argc, char *argv[])
 {
-    char **out = coru_out_new();
-    if (!out)
-        goto ERROR_CORU_CLI;
-
-    if (!coru_run(argc, argv, out))
-        goto ERROR_CORU_CLI;
-
-    if (*out)
-        PRINT("%s", *out);
-
-    coru_out_delete((void *) out);
+    if (!coru_run(argc, argv)) return 1;
 
     return 0;
-
-ERROR_CORU_CLI:
-    if (out)
-        coru_out_delete((void *) out);
-
-    return 1;
 }
 
-static BOOL coru_run_load(coru_argument_t * arg, char **out);
+static BOOL coru_run_load(coru_argument_t * arg);
 
-static BOOL coru_run(int argc, char **argv, char **out)
+static BOOL coru_run(int argc, char **argv)
 {
     coru_argument_t arg;
 
@@ -57,7 +41,7 @@ static BOOL coru_run(int argc, char **argv, char **out)
         goto ERROR_CORU;
     }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_LOAD)) {
-        if (!coru_run_load(&arg, out)) {
+        if (!coru_run_load(&arg)) {
             PUTERR("Failed to load target file");
             goto ERROR_CORU;
         }
@@ -78,9 +62,8 @@ ERROR_CORU:
     return FALSE;
 }
 
-static BOOL coru_run_load(coru_argument_t * arg, char **out)
+static BOOL coru_run_load(coru_argument_t * arg)
 {
-    coru_stats_t *stats = NULL;
     FILE *fp = NULL;
 
 #if _MSC_VER
@@ -132,13 +115,6 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
     }
 #endif
 
-
-    stats = coru_stats_load_fs(fp);
-    if (!stats)
-        goto ERROR_LOAD;
-
-    rewind(fp);
-
 #if DEBUG
     PUTS("Source width: %lu", coru_stats_width(stats));
     PUTS("Source height: %lu", coru_stats_height(stats));
@@ -147,20 +123,24 @@ static BOOL coru_run_load(coru_argument_t * arg, char **out)
 
     BOOL is_all = coru_argument_is_all(arg);
 
+    coru_doc_t *doc = NULL;
     if (is_all) {
-        if (!coru_load_all_fs(fp, out, stats, lang)) {
+        doc = coru_doc_load_all_fs(fp, lang);
+        if (!doc) {
             goto ERROR_LOAD;
         }
     }
     else {
-        if (!coru_load_non_empty_fs(fp, out, stats, lang)) {
+        doc = coru_doc_load_non_empty_fs(fp, lang);
+        if (!doc) {
             goto ERROR_LOAD;
         }
     }
 
-    /* Free system resources. */
+    PRINT("%s", coru_doc_string(doc));
+
     fclose(fp);
-    coru_stats_delete((void *) stats);
+    coru_doc_delete(doc);
 
     return TRUE;
 
@@ -168,8 +148,8 @@ ERROR_LOAD:
     if (fp)
         fclose(fp);
 
-    if (stats)
-        coru_stats_delete((void *) stats);
+    if (doc)
+        coru_doc_delete(doc);
 
     return FALSE;
 }

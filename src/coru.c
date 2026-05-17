@@ -9,6 +9,12 @@
 #include "language.h"
 #include "print.h"
 
+struct coru_doc_t {
+    char *raw_text;
+    coru_stats_t *stats;
+    language_t lang;
+};
+
 static BOOL
 _coru_load(
     FILE *stream,
@@ -17,7 +23,7 @@ _coru_load(
     BOOL is_all,
     char **out);
 
-BOOL
+static BOOL
 coru_load_all_fs(
     FILE *stream,
     char **out,
@@ -27,7 +33,7 @@ coru_load_all_fs(
     return _coru_load(stream, stats, lang, TRUE, out);
 }
 
-BOOL
+static BOOL
 coru_load_non_empty_fs(
     FILE *stream,
     char **out,
@@ -41,6 +47,93 @@ extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 extern hash_table_t *comment_multiple_start;
 extern hash_table_t *comment_multiple_end;
+
+coru_doc_t *coru_doc_load_all_fs(FILE *stream, language_t lang)
+{
+    coru_doc_t *doc = malloc(sizeof(coru_doc_t));
+    if (!doc) return NULL;
+
+    doc->lang = lang;
+
+    doc->stats = coru_stats_load_fs(stream);
+
+    if (!(doc->stats))
+        goto ERROR_CORU_DOC_LOAD_ALL_FS;
+
+    rewind(stream);
+
+    doc->raw_text = NULL;
+
+    if(!coru_load_all_fs(stream, &doc->raw_text, doc->stats, lang))
+        goto ERROR_CORU_DOC_LOAD_ALL_FS;
+
+    return doc;
+
+ERROR_CORU_DOC_LOAD_ALL_FS:
+    if (doc->raw_text)
+        free(doc->raw_text);
+
+    if (doc->stats)
+        coru_stats_delete(doc->stats);
+
+    if (doc)
+        free(doc);
+
+    return NULL;
+}
+
+coru_doc_t *coru_doc_load_non_empty_fs(FILE *stream, language_t lang)
+{
+    coru_doc_t *doc = malloc(sizeof(coru_doc_t));
+    if (!doc) return NULL;
+
+    doc->lang = lang;
+
+    doc->stats = coru_stats_load_fs(stream);
+    if (!(doc->stats))
+        goto ERROR_CORU_DOC_LOAD_NON_EMPTY_FS;
+
+    rewind(stream);
+
+    doc->raw_text = NULL;
+
+    if (!coru_load_non_empty_fs(stream, &doc->raw_text, doc->stats, lang))
+        goto ERROR_CORU_DOC_LOAD_NON_EMPTY_FS;
+
+    return doc;
+
+ERROR_CORU_DOC_LOAD_NON_EMPTY_FS:
+    if (doc->raw_text)
+        free(doc->raw_text);
+
+    if (doc->stats)
+        coru_stats_delete(doc->stats);
+
+    if (doc)
+        free(doc);
+
+    return NULL;
+}
+
+const char * coru_doc_string(const coru_doc_t *self)
+{
+    return self ? self->raw_text : NULL;
+}
+
+void coru_doc_delete(coru_doc_t *self)
+{
+    if (self) {
+        if (self->raw_text) {
+            free(self->raw_text);
+        }
+
+        if (self->stats) {
+            coru_stats_delete(self->stats);
+        }
+
+        free(self);
+    }
+}
 
 static BOOL
 _coru_load(

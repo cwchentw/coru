@@ -2,6 +2,7 @@
 #define CORU_EVAL_H
 
 #include "coru.h"
+#include "coru_stats.h"
 
 typedef struct coru_eval_t {
     BOOL first_line;

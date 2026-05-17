@@ -8,11 +8,6 @@
 #include "coru_token.h"
 #include "print.h"
 
-struct coru_stats_t {
-    size_t width;
-    size_t height;
-};
-
 static coru_stats_t * coru_stats_new(void);
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line);
 
@@ -138,7 +133,7 @@ ERROR_CORU_STATS:
     return FALSE;
 }
 
-void coru_stats_delete(void *self)
+void coru_stats_delete(coru_stats_t *self)
 {
     assert(self);
 

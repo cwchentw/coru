@@ -74,16 +74,12 @@
 extern "C" {
 #endif
 
-typedef struct coru_stats_t coru_stats_t;
+typedef struct coru_doc_t coru_doc_t;
 
-coru_stats_t * coru_stats_load_fs(FILE *stream);
-void coru_stats_delete(void *self);
-
-char ** coru_out_new();
-void coru_out_delete(void *self);
-
-BOOL coru_load_all_fs(FILE *stream, char **out, coru_stats_t *stats, language_t lang);
-BOOL coru_load_non_empty_fs(FILE *stream, char **out, coru_stats_t *stats, language_t lang);
+coru_doc_t * coru_doc_load_all_fs(FILE *stream, language_t lang);
+coru_doc_t * coru_doc_load_non_empty_fs(FILE *stream, language_t lang);
+const char * coru_doc_string(const coru_doc_t *self);
+void coru_doc_delete(coru_doc_t *self);
 
 #ifdef __cplusplus
 }
