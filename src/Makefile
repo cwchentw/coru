@@ -65,24 +65,20 @@ endif
 endif
 
 ifneq (,$(findstring $(CC),$(CL)))
-	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
-		coru_out.obj coru_stats.obj \
+	OBJS=cstring.obj language.obj hash_table.obj syntax_data.obj coru_stats.obj \
 		coru_token.obj coru_lexer.obj coru_ast.obj coru_parser.obj \
 		coru_eval.obj coru.obj
 	EXEC_OBJS=coru_argument.obj coru_help.obj coru_cli.obj
-	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj \
-		uncoru_out.obj uncoru_stats.obj \
+	UNOBJS=cstring.obj language.obj hash_table.obj syntax_data.obj uncoru_stats.obj \
 		uncoru_token.obj uncoru_lexer.obj uncoru_ast.obj uncoru_parser.obj \
 		uncoru_eval.obj uncoru.obj
 	EXEC_UNOBJS=uncoru_argument.obj uncoru_help.obj uncoru_cli.obj
 else
-	OBJS=cstring.o language.o hash_table.o syntax_data.o \
-		coru_out.o coru_stats.o \
+	OBJS=cstring.o language.o hash_table.o syntax_data.o coru_stats.o \
 		coru_token.o coru_lexer.o coru_ast.o coru_parser.o \
 		coru_eval.o coru.o
 	EXEC_OBJS=coru_argument.o coru_help.o coru_cli.o
-	UNOBJS=cstring.o language.o hash_table.o syntax_data.o \
-		uncoru_out.o uncoru_stats.o \
+	UNOBJS=cstring.o language.o hash_table.o syntax_data.o uncoru_stats.o \
 		uncoru_token.o uncoru_lexer.o uncoru_ast.o uncoru_parser.o \
 		uncoru_eval.o uncoru.o
 	EXEC_UNOBJS=uncoru_argument.o uncoru_help.o uncoru_cli.o
