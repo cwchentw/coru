@@ -54,7 +54,7 @@ BOOL uncoru_eval_eval(
     char *comment_start = NULL;
     char *comment_end = NULL;
     uncoru_lexer_t lexer;
-    uncoru_parser_t *parser = NULL;
+    uncoru_parser_t parser;
 
     if (!comment_single_start) {
         comment_single_start = init_comment_single_start();
@@ -102,21 +102,20 @@ BOOL uncoru_eval_eval(
     if (!uncoru_lexer_lex(&lexer, line))
         goto ERROR_UNCORU_EVAL;
 
-    parser = uncoru_parser_new();
-    if (!parser)
+    if (uncoru_parser_new(&parser))
         goto ERROR_UNCORU_EVAL;
 
-    if (!uncoru_parser_parse(parser, &lexer)) {
+    if (!uncoru_parser_parse(&parser, &lexer)) {
         PUTERR("Failed to parse input");
         goto ERROR_UNCORU_EVAL;
     }
 
     size_t sz = 0 + strlen(*out);
 
-    uncoru_ast_t *ast = uncoru_parser_peek_n(parser, 0);
+    uncoru_ast_t *ast = uncoru_parser_peek_n(&parser, 0);
     while (ast) {
         if (UNCORU_AST_SPACE == uncoru_ast_type(ast)) {
-            uncoru_ast_t *astLineNumber = uncoru_parser_peek_n(parser, 1);
+            uncoru_ast_t *astLineNumber = uncoru_parser_peek_n(&parser, 1);
 
             if (!astLineNumber)
                 goto PARSE_COMMON_AST;
@@ -124,17 +123,17 @@ BOOL uncoru_eval_eval(
                 goto PARSE_COMMON_AST;
 
             /* Discard the space ast. */
-            uncoru_parser_next(parser);
+            uncoru_parser_next(&parser);
 
             /* Discard the line number ast. */
-            uncoru_parser_next(parser);
+            uncoru_parser_next(&parser);
 
             goto PARSE_LINE_NUMBER_AST;
         }
         else {
         PARSE_COMMON_AST:
             /* Consume one token. */
-            ast = uncoru_parser_next(parser);
+            ast = uncoru_parser_next(&parser);
 
             char *txt = uncoru_ast_text(ast);
 
@@ -154,20 +153,18 @@ BOOL uncoru_eval_eval(
     PARSE_LINE_NUMBER_AST:
         /* Discard the space before the line number. */
 
-        ast = uncoru_parser_peek_n(parser, 0);
+        ast = uncoru_parser_peek_n(&parser, 0);
     }
 
     (*out)[sz] = '\0';  /* Trailing zero. */
 
-    uncoru_parser_delete(parser);
+    uncoru_parser_delete(&parser);
     uncoru_lexer_delete(&lexer);
 
     return TRUE;
 
 ERROR_UNCORU_EVAL:
-    if (parser)
-        uncoru_parser_delete(parser);
-
+    uncoru_parser_delete(&parser);
     uncoru_lexer_delete(&lexer);
 
     return FALSE;

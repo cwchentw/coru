@@ -7,22 +7,9 @@
 #include "uncoru_lexer.h"
 #include "uncoru_parser.h"
 
-struct uncoru_parser_t {
-    size_t size;
-    size_t capacity;
-    size_t index;
-    uncoru_ast_t **asts;
-};
-
-uncoru_parser_t * uncoru_parser_new()
+int uncoru_parser_new(uncoru_parser_t *parser)
 {
-    uncoru_parser_t *parser = \
-        (uncoru_parser_t *) malloc(sizeof(uncoru_parser_t));
-    if (!parser) {
-        PUTERR("Failed to allocate memory for Uncoru Parser");
-        PUTERR("Check available system memory");
-        return parser;
-    }
+    if (!parser) return -1;
 
     parser->size = 0;
     parser->capacity = 16;
@@ -35,7 +22,7 @@ uncoru_parser_t * uncoru_parser_new()
         PUTERR("Failed to allocate memory for internal ast array of Coru Parser");
         PUTERR("Check available system memory");
         free(parser);
-        return NULL;
+        return -1;
     }
 
     {
@@ -44,7 +31,7 @@ uncoru_parser_t * uncoru_parser_new()
             parser->asts[i] = NULL;
     }
 
-    return parser;
+    return 0;
 }
 
 #define IS_CODE_TOKEN(t) \
@@ -415,13 +402,10 @@ static BOOL _uncoru_parser_expand(uncoru_parser_t *self)
     return TRUE;
 }
 
-void uncoru_parser_delete(void *self)
+void uncoru_parser_delete(uncoru_parser_t *self)
 {
-    if (!self)
-        return;
-
-    size_t capacity = ((uncoru_parser_t *) self)->capacity;
-    uncoru_ast_t **asts = ((uncoru_parser_t *) self)->asts;
+    size_t capacity = self->capacity;
+    uncoru_ast_t **asts = self->asts;
     {
         size_t i;
         for (i = 0; i < capacity; i++) {
@@ -431,7 +415,6 @@ void uncoru_parser_delete(void *self)
     }
 
     free((void *) asts);
-    free(self);
 }
 
 uncoru_ast_t * uncoru_parser_next(uncoru_parser_t *self)
