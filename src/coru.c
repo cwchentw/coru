@@ -44,8 +44,6 @@ coru_load_non_empty_fs(
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
-extern hash_table_t *comment_multiple_end;
-
 coru_doc_t *coru_doc_load_all_fs(FILE *stream, language_t lang)
 {
     coru_doc_t *doc = malloc(sizeof(coru_doc_t));
@@ -187,17 +185,11 @@ RELOAD_LINE:
 
     free(line);
 
-    if (comment_multiple_end)
-        hash_table_delete(comment_multiple_end);
-
     return TRUE;
 
 ERROR_CORU_LOAD:
     if (line)
         free(line);
-
-    if (comment_multiple_end)
-        hash_table_delete(comment_multiple_end);
 
     return FALSE;
 }

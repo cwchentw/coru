@@ -26,8 +26,6 @@ int coru_eval_new(coru_eval_t *eval)
     return 0;
 }
 
-extern hash_table_t *comment_multiple_end;
-
 BOOL coru_eval_eval(coru_eval_t *self,
     coru_stats_t *stats,
     language_t lang,
@@ -41,12 +39,6 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     coru_lexer_t lexer;
     coru_parser_t parser;
-
-    if (!comment_multiple_end) {
-        comment_multiple_end = init_comment_multiple_end();
-        if (!comment_multiple_end)
-            goto ERROR_CORU_EVAL;
-    }
 
     const char *lang_string = language_to_string(lang);
 
@@ -62,7 +54,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     if (!multi_start)
         goto ERROR_CORU_EVAL;
 
-    multi_end = hash_table_get(comment_multiple_end, lang_string);
+    multi_end = multiple_end_string(lang_string);
     if (!multi_end)
         goto ERROR_CORU_EVAL;
 
