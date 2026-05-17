@@ -14,8 +14,6 @@
 #include "uncoru_stats.h"
 
 
-extern hash_table_t *comment_single_end;
-
 struct uncoru_doc_t {
     char *raw_text;
     uncoru_stats_t *stats;
@@ -125,16 +123,12 @@ uncoru_load_fs(
     }
 
     free(line);
-    hash_table_delete(comment_single_end);
 
     return TRUE;
 
 ERROR_UNCORU_LOAD:
     if (line)
         free(line);
-
-    if (comment_single_end)
-        hash_table_delete(comment_single_end);
 
     return FALSE;
 }
