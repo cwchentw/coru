@@ -11,7 +11,6 @@
 #include "uncoru_parser.h"
 #include "uncoru_stats.h"
 
-extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 
 BOOL uncoru_eval_eval(
@@ -27,12 +26,6 @@ BOOL uncoru_eval_eval(
     uncoru_lexer_t lexer;
     uncoru_parser_t parser;
 
-    if (!comment_single_start) {
-        comment_single_start = init_comment_single_start();
-        if (!comment_single_start)
-            goto ERROR_UNCORU_EVAL;
-    }
-
     if (!comment_single_end) {
         comment_single_end = init_comment_single_end();
         if (!comment_single_end)
@@ -41,8 +34,7 @@ BOOL uncoru_eval_eval(
 
     char *lang_string = language_to_string(lang);
 
-    comment_start = \
-        hash_table_get(comment_single_start, lang_string);
+    comment_start = single_start_string(lang_string);
 
     comment_end = \
         hash_table_get(comment_single_end, lang_string);
