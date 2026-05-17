@@ -1,6 +1,7 @@
 #ifndef UNCORU_PARSER_H
 #define UNCORU_PARSER_H
 
+#include "boolean.h"
 #include "uncoru.h"
 #include "uncoru_ast.h"
 #include "uncoru_lexer.h"

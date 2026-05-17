@@ -1,6 +1,7 @@
 #ifndef UNCORU_AST_H
 #define UNCORU_AST_H
 
+#include "boolean.h"
 #include "uncoru.h"
 #include "uncoru_token.h"
 

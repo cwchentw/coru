@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "boolean.h"
 #include "print.h"
 #include "uncoru.h"
 #include "uncoru_stats.h"

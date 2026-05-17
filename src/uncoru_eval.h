@@ -2,6 +2,7 @@
 #define UNCORU_EVAL_H
 
 #include "uncoru.h"
+#include "uncoru_stats.h"
 
 typedef struct uncoru_eval_t uncoru_eval_t;
 

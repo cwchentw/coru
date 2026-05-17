@@ -17,7 +17,71 @@
 extern hash_table_t *comment_single_start;
 extern hash_table_t *comment_single_end;
 
-BOOL
+struct uncoru_doc_t {
+    char *raw_text;
+    uncoru_stats_t *stats;
+    language_t lang;
+};
+
+static BOOL
+uncoru_load_fs(
+    FILE *stream,
+    char **out,
+    uncoru_stats_t *stats,
+    language_t lang);
+
+uncoru_doc_t * uncoru_doc_load_fs(FILE *stream, language_t lang)
+{
+    uncoru_doc_t *doc = (uncoru_doc_t *) malloc(sizeof(uncoru_doc_t));
+    if (!doc) return NULL;
+
+    doc->lang = lang;
+
+    doc->stats = uncoru_stats_load_fs(stream);
+    if (!(doc->stats))
+        goto ERROR_UNCORU_DOC_LOAD_FS;
+
+    rewind(stream);
+
+    doc->raw_text = NULL;
+
+    if (!uncoru_load_fs(stream, &doc->raw_text, doc->stats, lang))
+        goto ERROR_UNCORU_DOC_LOAD_FS;
+
+    return doc;
+
+ERROR_UNCORU_DOC_LOAD_FS:
+    if (doc->raw_text)
+        free(doc->raw_text);
+
+    if (doc->stats)
+        uncoru_stats_delete(doc->stats);
+
+    if (doc)
+        free(doc);
+
+    return NULL;
+}
+
+const char * uncoru_doc_string(uncoru_doc_t *doc)
+{
+    return doc ? doc->raw_text : NULL;
+}
+
+void uncoru_doc_delete(uncoru_doc_t *doc)
+{
+    if (doc) {
+        if (doc->raw_text)
+            free(doc->raw_text);
+
+        if (doc->stats)
+            uncoru_stats_delete(doc->stats);
+
+        free(doc);
+    }
+}
+
+static BOOL
 uncoru_load_fs(
     FILE *stream,
     char **out,

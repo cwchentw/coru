@@ -1,43 +1,10 @@
 #ifndef UNCORU_H
 #define UNCORU_H
 
-#ifdef _WIN32
-    #include <windows.h>
-#endif
-
 #ifdef __cplusplus
     #include <cstdio>
 #else
     #include <stdio.h>
-#endif
-
-/* Custom boolean type */
-#ifndef _WIN32
-#ifdef __cplusplus
-    #ifndef _BOOL_IS_DEFINED
-        typedef bool BOOL;
-        #define FALSE  false
-        #define TRUE   true
-        #define _BOOL_IS_DEFINED
-    #endif  /* BOOL */
-#else
-    #if __STDC_VERSION__ < 199901L
-        #ifndef _BOOL_IS_DEFINED
-            typedef char BOOL;
-            #define FALSE  0
-            #define TRUE   1
-            #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #else
-        #ifndef _BOOL_IS_DEFINED
-            #include <stdbool.h>
-            typedef bool BOOL;
-            #define FALSE  false
-            #define TRUE   true
-            #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #endif  /* C89 */
-#endif  /* __cplusplus */
 #endif
 
 /* Valid target language. */
@@ -70,14 +37,18 @@
 #define  LANGUAGE_CMAKE    21
 #define  LANGUAGE_MAKE     22
 
-typedef struct uncoru_stats_t uncoru_stats_t;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-uncoru_stats_t * uncoru_stats_load_fs(FILE *stream);
-void uncoru_stats_delete(void *self);
+typedef struct uncoru_doc_t uncoru_doc_t;
 
-char ** uncoru_out_new();
-void uncoru_out_delete(void *self);
+uncoru_doc_t * uncoru_doc_load_fs(FILE *stream, language_t lang);
+const char * uncoru_doc_string(uncoru_doc_t *doc);
+void uncoru_doc_delete(uncoru_doc_t *doc);
 
-BOOL uncoru_load_fs(FILE *stream, char **out, uncoru_stats_t *stats, language_t lang);
+#ifdef __cplusplus
+}  /* exetern "c" */
+#endif
 
 #endif  /* UNCORU_H */

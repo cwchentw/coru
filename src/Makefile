@@ -207,11 +207,11 @@ ifneq (,$(findstring $(CC),$(CL)))
 else
 ifneq (,$(filter $(WASM),$(CC)))
 	$(CC) -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
-		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) \
+		$(UNOBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) \
 		-s EXPORTED_RUNTIME_METHODS="['ccall', 'cwrap']" -s WASM=1
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
-		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+		$(UNOBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
 endif
 endif
 

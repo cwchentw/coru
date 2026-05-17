@@ -1,9 +1,9 @@
 #ifndef UNCORU_LEXER_H
 #define UNCORU_LEXER_H
 
+#include "boolean.h"
 #include "uncoru.h"
 #include "uncoru_token.h"
-
 
 typedef struct uncoru_lexer_t uncoru_lexer_t;
 

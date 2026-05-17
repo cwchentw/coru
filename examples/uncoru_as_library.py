@@ -9,15 +9,11 @@ ffi = FFI()
 # Load the declaration of coru.
 # Due to the limitation introduced by cffi,
 #  we use vanilla data type instead of our original macro.
-ffi.cdef("""typedef struct uncoru_stats_t uncoru_stats_t;
+ffi.cdef("""typedef struct uncoru_doc_t uncoru_doc_t;
 
-uncoru_stats_t * uncoru_stats_load_fs(FILE *stream);
-void uncoru_stats_delete(void *self);
-
-char ** uncoru_out_new();
-void uncoru_out_delete(void *self);
-
-unsigned char uncoru_load_fs(FILE *stream, char **out, uncoru_stats_t *stats, unsigned char lang);
+uncoru_doc_t * uncoru_doc_load_fs(FILE *stream, unsigned char lang);
+const char * uncoru_doc_string(uncoru_doc_t *doc);
+void uncoru_doc_delete(uncoru_doc_t *doc);
 """)
 
 # Open the compiled dynamic library.
@@ -53,33 +49,24 @@ tmp.seek(0)
 # Cast the temp file as a C file stream.
 fs = ffi.cast("FILE *", tmp)
 
-stats = uncoru.uncoru_stats_load_fs(fs)
-
-# Rewind the same file again.
-tmp.seek(0)
-
-# Create a coru out object as the output.
-out = uncoru.uncoru_out_new()
-
 # Due to the limitation introduced by cffi,
 #  we hardcode the language code here, which is Python.
 lang = ffi.cast("unsigned char", 9)
 
-# Run coru from Python.
-st = uncoru.uncoru_load_fs(fs, out, stats, lang)
+# Run uncoru from Python.
+doc = uncoru.uncoru_doc_load_fs(fs, lang)
+
+# Retrieve the raw C string.
+s = uncoru.uncoru_doc_string(doc)
 
 # Print out the result within Python.
-if st != 0:
-    print(ffi.string(out[0]).decode("utf-8"), end="")
+print(ffi.string(s).decode("utf-8"), end="")
 
 # Close the temp file.
 tmp.close()
 
-# Release the coru out object.
-uncoru.uncoru_out_delete(out)
-
-# Release the coru stats object.
-uncoru.uncoru_stats_delete(stats)
+# Release the uncoru doc object.
+uncoru.uncoru_doc_delete(doc)
 
 # Close coru.
 ffi.dlclose(uncoru)

@@ -8,37 +8,18 @@
 #include "uncoru_metadata.h"
 #include "uncoru_stats.h"
 
-static BOOL uncoru_run(int argc, char **argv, char **out);
+static BOOL uncoru_run(int argc, char **argv);
 
 int main(int argc, char *argv[])
 {
-    char **out = uncoru_out_new();
-    if (!out) {
-        PUTERR("Failed to allocate memory for output");
-        PUTERR("Check available system memory");
-        return 1;
-    }
-
-    if (!uncoru_run(argc, argv, out))
-        goto ERROR_UNCORU;
-
-    if (*out)
-        PRINT("%s", *out);
-
-    uncoru_out_delete((void *) out);
+    if (!uncoru_run(argc, argv)) return 1;
 
     return 0;
-
-ERROR_UNCORU:
-    if (out)
-        uncoru_out_delete((void *) out);
-
-    return 1;
 }
 
-static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out);
+static BOOL uncoru_run_load(uncoru_argument_t *arg);
 
-static BOOL uncoru_run(int argc, char **argv, char **out)
+static BOOL uncoru_run(int argc, char **argv)
 {
     uncoru_argument_t *arg = uncoru_argument_parse(argc, argv);
     if (!arg)
@@ -60,7 +41,7 @@ static BOOL uncoru_run(int argc, char **argv, char **out)
         goto ERROR_UNCORU;
     }
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_LOAD)) {
-        if (!uncoru_run_load(arg, out)) {
+        if (!uncoru_run_load(arg)) {
             PUTERR("Failed to load target file");
             goto ERROR_UNCORU;
         }
@@ -86,10 +67,10 @@ ERROR_UNCORU:
     return FALSE;
 }
 
-static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
+static BOOL uncoru_run_load(uncoru_argument_t *arg)
 {
     FILE *fp = NULL;
-    uncoru_stats_t *stats = NULL;
+    uncoru_doc_t *doc = NULL;
 
     language_t lang = \
         detect_target_language(uncoru_argument_path(arg));
@@ -103,30 +84,23 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg, char **out)
         goto ERROR_LOAD;
 #endif
 
-    stats = uncoru_stats_load_fs(fp);
-    if (!stats)
-        goto ERROR_LOAD;
-#if DEBUG
-    PUTS("Source width: %lu", uncoru_stats_width(stats));
-    PUTS("Source height: %lu", uncoru_stats_height(stats));
-#endif
-
-    rewind(fp);
-
-    if (!uncoru_load_fs(fp, out, stats, lang))
+    doc = uncoru_doc_load_fs(fp, lang);
+    if (!doc)
         goto ERROR_LOAD;
 
-    uncoru_stats_delete(stats);
+    PRINT("%s", uncoru_doc_string(doc));
+
     fclose(fp);
+    uncoru_doc_delete(doc);
 
     return TRUE;
 
 ERROR_LOAD:
-    if (stats)
-        uncoru_stats_delete(stats);
-
     if (fp)
         fclose(fp);
+
+    if (doc)
+        uncoru_doc_delete(doc);
 
     return FALSE;
 }

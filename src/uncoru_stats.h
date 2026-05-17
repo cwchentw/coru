@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include "uncoru.h"
 
+typedef struct uncoru_stats_t uncoru_stats_t;
+
+uncoru_stats_t * uncoru_stats_load_fs(FILE *stream);
+void uncoru_stats_delete(void *self);
 size_t uncoru_stats_width(uncoru_stats_t *self);
 size_t uncoru_stats_height(uncoru_stats_t *self);
 void uncoru_stats_set_width(uncoru_stats_t *self, size_t width);
