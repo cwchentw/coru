@@ -33,6 +33,7 @@ endif
 SRC_UNTARGET=uncoru_cli.c
 
 CL := cl icl
+WASM := emcc
 
 ifeq ($(detected_OS),Windows)
 ifneq (,$(findstring $(CC),$(CL)))
@@ -51,8 +52,13 @@ ifeq ($(detected_OS),Darwin)
 	TARGET_LIB_DYNAMIC=lib$(TARGET).dylib
 	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).dylib
 else
+ifneq (,$(filter $(WASM),$(CC)))
+	TARGET_LIB_DYNAMIC=lib$(TARGET).wasm
+	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).wasm
+else
 	TARGET_LIB_DYNAMIC=lib$(TARGET).so
 	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).so
+endif
 endif
 	TARGET_LIB_STATIC=lib$(TARGET).a
 	UNTARGET_LIB_STATIC=lib$(UNTARGET).a
@@ -82,10 +88,10 @@ else
 	EXEC_UNOBJS=uncoru_argument.o uncoru_help.o uncoru_cli.o
 endif
 
-COMPILER_GCC := cc gcc clang icc
+COMPILER_GCC := cc gcc clang icc emcc
 
 ifneq (,$(filter $(COMPILER_GCC),$(CC)))
-	CFLAGS=-Wall -Wextra -std=c89
+	CFLAGS=-Wall -Wextra
 	SRC_TO_OBJ=-c $<
 	OBJ_TO_EXEC=-o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_EXEC)
 	OBJ_TO_UNEXEC=-o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_EXEC)
@@ -182,8 +188,13 @@ $(TARGET_LIB_DYNAMIC): $(OBJS)
 ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS)
 else
+ifneq (,$(filter $(WASM),$(CC)))
+	$(CC) -sSIDE_MODULE -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
 		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 endif
 
 %.obj: %.c
@@ -193,8 +204,13 @@ $(UNTARGET_LIB_DYNAMIC): $(UNOBJS)
 ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS)
 else
+ifneq (,$(filter $(WASM),$(CC)))
+	$(CC) -sSIDE_MODULE -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
-		$(UNOBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+endif
 endif
 
 %.o: %.c
