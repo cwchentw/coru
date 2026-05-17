@@ -26,7 +26,6 @@ int coru_eval_new(coru_eval_t *eval)
     return 0;
 }
 
-extern hash_table_t *comment_multiple_start;
 extern hash_table_t *comment_multiple_end;
 
 BOOL coru_eval_eval(coru_eval_t *self,
@@ -42,12 +41,6 @@ BOOL coru_eval_eval(coru_eval_t *self,
 
     coru_lexer_t lexer;
     coru_parser_t parser;
-
-    if (!comment_multiple_start) {
-        comment_multiple_start = init_comment_multiple_start();
-        if (!comment_multiple_start)
-            goto ERROR_CORU_EVAL;
-    }
 
     if (!comment_multiple_end) {
         comment_multiple_end = init_comment_multiple_end();
@@ -65,7 +58,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     if (!single_end)
         goto ERROR_CORU_EVAL;
 
-    multi_start = hash_table_get(comment_multiple_start, lang_string);
+    multi_start = multiple_start_string(lang_string);
     if (!multi_start)
         goto ERROR_CORU_EVAL;
 

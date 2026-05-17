@@ -44,7 +44,6 @@ coru_load_non_empty_fs(
     return _coru_load(stream, stats, lang, FALSE, out);
 }
 
-extern hash_table_t *comment_multiple_start;
 extern hash_table_t *comment_multiple_end;
 
 coru_doc_t *coru_doc_load_all_fs(FILE *stream, language_t lang)
@@ -191,9 +190,6 @@ RELOAD_LINE:
     if (comment_multiple_end)
         hash_table_delete(comment_multiple_end);
 
-    if (comment_multiple_start)
-        hash_table_delete(comment_multiple_start);
-
     return TRUE;
 
 ERROR_CORU_LOAD:
@@ -202,9 +198,6 @@ ERROR_CORU_LOAD:
 
     if (comment_multiple_end)
         hash_table_delete(comment_multiple_end);
-
-    if (comment_multiple_start)
-        hash_table_delete(comment_multiple_start);
 
     return FALSE;
 }
