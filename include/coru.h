@@ -1,44 +1,7 @@
 #ifndef CORU_H
 #define CORU_H
 
-#ifdef _WIN32
-    #include <windows.h>
-#endif
-
-#ifdef __cplusplus
-    #include <cstdio>
-#else
-    #include <stdio.h>
-#endif
-
-/* Custom boolean type */
-#ifndef _WIN32
-#ifdef __cplusplus
-    #ifndef _BOOL_IS_DEFINED
-        typedef bool BOOL;
-        #define FALSE  false
-        #define TRUE   true
-        #define _BOOL_IS_DEFINED
-    #endif  /* BOOL */
-#else
-    #if __STDC_VERSION__ < 199901L
-        #ifndef _BOOL_IS_DEFINED
-            typedef unsigned char BOOL;
-            #define FALSE  0
-            #define TRUE   1
-            #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #else
-        #ifndef _BOOL_IS_DEFINED
-            #include <stdbool.h>
-            typedef bool BOOL;
-            #define FALSE  false
-            #define TRUE   true
-            #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #endif  /* C89 */
-#endif  /* __cplusplus */
-#endif
+#include <stdio.h>
 
 /* Valid target language. */
 #ifndef _LANGUAGE_TYPE_IS_DEFINED

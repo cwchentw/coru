@@ -1,6 +1,7 @@
 #ifndef CORU_PARSER_H
 #define CORU_PARSER_H
 
+#include "boolean.h"
 #include "coru.h"
 #include "coru_ast.h"
 #include "coru_lexer.h"

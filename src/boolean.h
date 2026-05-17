@@ -1,5 +1,13 @@
-#ifndef HASH_TABLE_H
-#define HASH_TABLE_H
+/** @file       boolean.h
+ *  @brief      Custom Boolean type for C (portable & self-contained)
+ *  @author     ByteBard
+ *  @copyright  MIT
+ *
+ *  Note: Win32 API provides its own BOOL type. This header is not intended for use in Win32 API programming.
+ */
+
+#ifndef CLIBS_BOOLEAN_H
+#define CLIBS_BOOLEAN_H
 
 /* Custom boolean type. */
 #ifndef _WINDOWS_
@@ -30,20 +38,4 @@
 #endif
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct hash_table_t hash_table_t;
-
-hash_table_t * hash_table_new(void);
-BOOL hash_table_add(hash_table_t *self, const char *key, const char *value);
-const char * hash_table_get(hash_table_t *self, const char *key);
-BOOL hash_table_remove(hash_table_t *self, const char *key);
-void hash_table_delete(hash_table_t *self);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif  /* HASH_TABLE_H */
+#endif  /* CLIBS_BOOLEAN_H */

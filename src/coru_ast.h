@@ -1,6 +1,7 @@
 #ifndef CORU_AST_H
 #define CORU_AST_H
 
+#include "boolean.h"
 #include "coru.h"
 #include "coru_token.h"
 

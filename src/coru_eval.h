@@ -1,6 +1,7 @@
 #ifndef CORU_EVAL_H
 #define CORU_EVAL_H
 
+#include "boolean.h"
 #include "coru.h"
 #include "coru_stats.h"
 

@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "syntax_data.h"
+#include "boolean.h"
 #include "coru.h"
 #include "coru_eval.h"
 #include "coru_stats.h"
 #include "hash_table.h"
 #include "language.h"
 #include "print.h"
+#include "syntax_data.h"
 
 struct coru_doc_t {
     char *raw_text;
