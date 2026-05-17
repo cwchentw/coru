@@ -53,8 +53,8 @@ ifeq ($(detected_OS),Darwin)
 	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).dylib
 else
 ifneq (,$(filter $(WASM),$(CC)))
-	TARGET_LIB_DYNAMIC=lib$(TARGET).wasm
-	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).wasm
+	TARGET_LIB_DYNAMIC=lib$(TARGET).js
+	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).js
 else
 	TARGET_LIB_DYNAMIC=lib$(TARGET).so
 	UNTARGET_LIB_DYNAMIC=lib$(UNTARGET).so
@@ -189,8 +189,9 @@ ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) $(OBJS)
 else
 ifneq (,$(filter $(WASM),$(CC)))
-	$(CC) -sSIDE_MODULE -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
-		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) \
+		-s EXPORTED_RUNTIME_METHODS="['ccall', 'cwrap']" -s WASM=1
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(TARGET_LIB_DYNAMIC) \
 		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
@@ -205,8 +206,9 @@ ifneq (,$(findstring $(CC),$(CL)))
 	link /DLL /OUT:..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) $(UNOBJS)
 else
 ifneq (,$(filter $(WASM),$(CC)))
-	$(CC) -sSIDE_MODULE -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
-		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
+	$(CC) -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
+		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) \
+		-s EXPORTED_RUNTIME_METHODS="['ccall', 'cwrap']" -s WASM=1
 else
 	$(CC) -shared -o ..$(SEP)$(DIST_DIR)$(SEP)$(UNTARGET_LIB_DYNAMIC) \
 		$(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS)
