@@ -1,0 +1,44 @@
+#!/bin/sh
+
+JOIN ()
+{
+    RESULT=""
+    for S in $@; do
+      RESULT="${RESULT}${RESULT:+ }${S}"
+    done
+    echo "$RESULT"
+}
+
+SMOKE_RUN ()
+{
+    echo "[Smoke] $(JOIN $@)"
+    "$@"
+}
+
+TEST_RUN ()
+{
+    "$@" > /dev/null 2>&1
+    if [ "$?" -eq 0 ]; then
+        echo "[Success] $(JOIN $@)"
+    else
+        echo "[Fail] $(JOIN $@)" >&2
+    fi
+}
+
+if ! command -v valgrind > /dev/null 2>&1; then
+    echo "No Valgrind on the system" >&2
+    exit 1
+fi
+
+CWD=$(cd "$(dirname "$0")" && pwd)
+
+BIN_DIR="${CWD}/dist"
+DEMO_DIR="${CWD}/demo"
+
+CORU="${BIN_DIR}/coru"
+UNCORU="${BIN_DIR}/uncoru"
+
+SMOKE_RUN "$CORU" "${DEMO_DIR}/coru/hello.cpp"
+TEST_RUN valgrind "$CORU" -pas "${DEMO_DIR}/coru/HelloWorld.lpr"
+SMOKE_RUN "$UNCORU" "${DEMO_DIR}/uncoru/hello.cpp"
+TEST_RUN valgrind "$UNCORU" "${DEMO_DIR}/uncoru/hello.cpp"
