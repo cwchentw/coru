@@ -1,8 +1,8 @@
-{$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
+{$ifdef FPC} {$mode DELPHIUNICODE} {$endif}
 
-{$apptype CONSOLE}
+{$ifdef WINDOWS} {$apptype CONSOLE} {$endif}
 
-program MainProgram;
+program HelloWorld;
 
 begin
   Writeln('Hello World');
