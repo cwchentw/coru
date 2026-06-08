@@ -41,10 +41,6 @@ static BOOL coru_run(int argc, char **argv)
         PUTERR("No input file");
         goto ERROR_CORU;
     }
-    else if (is_language_equal(LANGUAGE_UNKNOWN, coru_argument_language(&arg))) {
-        PUTERR("Source with unknown language");
-        goto ERROR_CORU;
-    }
     else if (is_coru_command_equal(cmd, CORU_COMMAND_LOAD)) {
         if (!coru_run_load(&arg)) {
             PUTERR("Failed to load target file");
@@ -94,6 +90,9 @@ static BOOL coru_run_load(coru_argument_t * arg)
            fopen() statement. */
         lang = detect_target_language(coru_argument_path(arg));
     }
+
+    if (is_language_equal(LANGUAGE_UNKNOWN, lang))
+        goto ERROR_LOAD;
 
 #if DEBUG
     if (is_language_equal(lang, LANGUAGE_UNKNOWN)) {

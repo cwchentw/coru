@@ -40,10 +40,6 @@ static BOOL uncoru_run(int argc, char **argv)
         PUTERR("No input file");
         goto ERROR_UNCORU;
     }
-    else if (is_language_equal(LANGUAGE_UNKNOWN, uncoru_argument_language(arg))) {
-        PUTERR("Source with unknown language");
-        goto ERROR_UNCORU;
-    }
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_LOAD)) {
         if (!uncoru_run_load(arg)) {
             PUTERR("Failed to load target file");
@@ -86,6 +82,9 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg)
            fopen() statement. */
         lang = detect_target_language(uncoru_argument_path(arg));
     }
+
+    if (is_language_equal(LANGUAGE_UNKNOWN, lang))
+        goto ERROR_LOAD;
 
 #if _MSC_VER
     if (0 != fopen_s(&fp, uncoru_argument_path(arg), "r"))
