@@ -132,38 +132,3 @@ ERROR_CORU_STATS:
 
     return FALSE;
 }
-
-void coru_stats_delete(coru_stats_t *self)
-{
-    assert(self);
-
-    free(self);
-}
-
-size_t coru_stats_width(coru_stats_t *self)
-{
-    assert(self);
-
-    return self->width;
-}
-
-size_t coru_stats_height(coru_stats_t *self)
-{
-    assert(self);
-
-    return self->height;
-}
-
-void coru_stats_set_width(coru_stats_t *self, size_t width)
-{
-    assert(self);
-
-    self->width = width;
-}
-
-void coru_stats_set_height(coru_stats_t *self, size_t height)
-{
-    assert(self);
-
-    self->height = height;
-}
