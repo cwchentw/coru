@@ -51,34 +51,6 @@ void uncoru_lexer_delete(uncoru_lexer_t *self)
     free((void *) tokens);
 }
 
-void uncoru_lexer_set_comment_start(uncoru_lexer_t *self, char *comment)
-{
-    assert(self);
-
-    self->comment_start = comment;
-}
-
-void uncoru_lexer_set_comment_end(uncoru_lexer_t *self, char *comment)
-{
-    assert(self);
-
-    self->comment_end = comment;
-}
-
-char * uncoru_lexer_comment_start(uncoru_lexer_t *self)
-{
-    assert(self);
-
-    return self->comment_start;
-}
-
-char * uncoru_lexer_comment_end(uncoru_lexer_t *self)
-{
-    assert(self);
-
-    return self->comment_end;
-}
-
 /* Predefined characters in uncoru lexer. */
 #define SPACE         ' '
 #define TAB           '\t'
