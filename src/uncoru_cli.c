@@ -71,9 +71,17 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg)
 {
     FILE *fp = NULL;
     uncoru_doc_t *doc = NULL;
+    language_t lang;
 
-    language_t lang = \
-        detect_target_language(uncoru_argument_path(arg));
+    if (LANGUAGE_UNKNOWN != uncoru_argument_language(arg)) {
+        lang =  uncoru_argument_language(arg);
+    }
+    else {
+        /* detect_target_language() may detect target language by
+           opening target source. Hence, we put the statement before
+           fopen() statement. */
+        lang = detect_target_language(uncoru_argument_path(arg));
+    }
 
 #if _MSC_VER
     if (0 != fopen_s(&fp, uncoru_argument_path(arg), "r"))

@@ -3,16 +3,12 @@
 #include <string.h>
 #include "uncoru_argument.h"
 #include "uncoru_command.h"
+#include "language.h"
+#include "as_language.h"
 #include "print.h"
 
 
-struct uncoru_argument_t {
-    int argc;
-    char **argv;
-    int index;
-    UNCORU_COMMAND cmd;
-    char *path;
-};
+
 
 uncoru_argument_t * uncoru_argument_parse(int argc, char *argv[])
 {
@@ -50,6 +46,7 @@ uncoru_argument_t * uncoru_argument_parse(int argc, char *argv[])
             arg->cmd = UNCORU_COMMAND_HELP;
             break;
         }
+        as_language(arg, opt)  /* A set of language selection else if block */
         else if ('-' == opt[0]) {
             arg->cmd = UNCORU_COMMAND_UNKNOWN;
             break;
