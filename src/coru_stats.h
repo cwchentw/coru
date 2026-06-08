@@ -6,6 +6,10 @@
 #include "coru.h"
 
 typedef struct coru_stats_t {
+    /* TODO: Separate memory byte size from visual display width.
+       Currently, 'width' couples memory bytes (for buffer writing) and 
+       column cells (for layout alignment). This breaks UTF-8 support
+       since multibyte characters (e.g., CJK) have bytes != display cells. */
     size_t width;
     size_t height;
 } coru_stats_t;
