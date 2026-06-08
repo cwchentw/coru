@@ -241,11 +241,6 @@ ERROR_LANGUAGE:
     return LANGUAGE_UNKNOWN;
 }
 
-BOOL is_language_equal(language_t a, language_t b)
-{
-    return a == b;
-}
-
 char * language_to_string(language_t lang)
 {
     switch (lang) {

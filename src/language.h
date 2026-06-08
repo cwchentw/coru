@@ -32,7 +32,8 @@
 #define STRING_MAKE    "Make"
 
 language_t detect_target_language(char *path);
-BOOL is_language_equal(language_t a, language_t b);
 char * language_to_string(language_t lang);
+
+#define is_language_equal(a, b) ((a) == (b))
 
 #endif  /* CORU_LANGUAGE_H */
