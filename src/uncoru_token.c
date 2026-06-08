@@ -4,11 +4,6 @@
 #include "print.h"
 #include "uncoru_token.h"
 
-struct uncoru_token_t {
-    UNCORU_TOKEN_TYPE token_t;
-    char *text;
-};
-
 #define IS_VALID_TOKEN_TYPE(t) \
     (UNCORU_TOKEN_CODE == (t) \
      || UNCORU_TOKEN_SPACE == (t) \
@@ -66,18 +61,4 @@ uncoru_token_t * uncoru_token_copy(uncoru_token_t *self)
     }
 
     return token;
-}
-
-UNCORU_TOKEN_TYPE uncoru_token_type(uncoru_token_t *self)
-{
-    assert(self);
-
-    return self->token_t;
-}
-
-char * uncoru_token_text(uncoru_token_t *self)
-{
-    assert(self);
-
-    return self->text;
 }

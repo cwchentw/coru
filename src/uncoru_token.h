@@ -14,12 +14,16 @@ typedef unsigned char UNCORU_TOKEN_TYPE;
 #define  UNCORU_TOKEN_COMMENT_END    8  /* The end text of comment. */
 #define  UNCORU_TOKEN_INTEGER        9  /* Integer. */
 
-typedef struct uncoru_token_t uncoru_token_t;
+typedef struct uncoru_token_t {
+    UNCORU_TOKEN_TYPE token_t;
+    char *text;
+} uncoru_token_t;
 
 uncoru_token_t * uncoru_token_new(UNCORU_TOKEN_TYPE type, char *text);
 void uncoru_token_delete(void *self);
 uncoru_token_t * uncoru_token_copy(uncoru_token_t *self);
-UNCORU_TOKEN_TYPE uncoru_token_type(uncoru_token_t *self);
-char * uncoru_token_text(uncoru_token_t *self);
+
+#define uncoru_token_type(self) ((self)->token_t)
+#define uncoru_token_text(self) ((self)->text)
 
 #endif  /* UNCORU_TOKEN_H */
