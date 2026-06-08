@@ -170,7 +170,6 @@ https://github.com/cwchentw/clibs
 - Multiline strings in some languages may not be handled correctly
 - Heredoc syntax is not detected
 - `Makefile`s modified by `coru` may become unusable
-- Source files containing CJK characters may not be processed correctly
 
 ## Copyright
 

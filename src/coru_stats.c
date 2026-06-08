@@ -7,6 +7,7 @@
 #include "coru_stats.h"
 #include "coru_token.h"
 #include "print.h"
+#include "utf8_utils.h"
 
 static coru_stats_t * coru_stats_new(void);
 static BOOL _coru_stats_eval(coru_stats_t *self, char *line);
@@ -79,6 +80,7 @@ static coru_stats_t * coru_stats_new()
     }
 
     stats->width = 0;
+    stats->display_width = 0;
     stats->height = 0;
 
     return stats;
@@ -106,6 +108,7 @@ static BOOL _coru_stats_eval(coru_stats_t *self, char *line)
     }
 
     size_t sz_line = strlen(line);
+    size_t sz_display = get_visual_width(line);
 
     coru_ast_t *ast = coru_parser_next(&parser);
     while (ast) {
@@ -117,6 +120,10 @@ static BOOL _coru_stats_eval(coru_stats_t *self, char *line)
 
     if (sz_line > coru_stats_width(self)) {
         coru_stats_set_width(self, sz_line);
+    }
+
+    if (sz_display > coru_stats_display_width(self)) {
+        coru_stats_set_display_width(self, sz_display);
     }
 
     coru_stats_set_height(self, coru_stats_height(self) + 1);

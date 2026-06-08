@@ -11,6 +11,7 @@
 #include "language.h"
 #include "print.h"
 #include "syntax_data.h"
+#include "utf8_utils.h"
 
 int coru_eval_new(coru_eval_t *eval)
 {
@@ -182,10 +183,9 @@ BOOL coru_eval_eval(coru_eval_t *self,
     }
 
     /* Insert spaces. */
-    size_t sz_space = width_new - strlen(line) - width_number
-        - strlen(END_OF_LINE)
-        - 1 /* Reduce the indent. */
-        - 1 /* Trailing zero */;
+    size_t sz_space = coru_stats_display_width(stats)
+                        - get_visual_width(line)
+                        - 1 /* Trailing zero. */;
 
     coru_ast_t *ast = coru_parser_next(&parser);
     while (ast) {
