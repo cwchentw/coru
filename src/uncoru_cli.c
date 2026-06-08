@@ -40,6 +40,10 @@ static BOOL uncoru_run(int argc, char **argv)
         PUTERR("No input file");
         goto ERROR_UNCORU;
     }
+    else if (is_language_equal(LANGUAGE_UNKNOWN, uncoru_argument_language(arg))) {
+        PUTERR("Source with unknown language");
+        goto ERROR_UNCORU;
+    }
     else if (is_uncoru_command_equal(cmd, UNCORU_COMMAND_LOAD)) {
         if (!uncoru_run_load(arg)) {
             PUTERR("Failed to load target file");
