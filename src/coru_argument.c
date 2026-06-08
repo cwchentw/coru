@@ -187,23 +187,3 @@ int coru_argument_parse(coru_argument_t *arg, int argc, char **argv)
 
     return 0;
 }
-
-BOOL coru_argument_is_all(const coru_argument_t *self)
-{
-    return self->is_all;
-}
-
-language_t coru_argument_language(const coru_argument_t *self)
-{
-    return self->lang;
-}
-
-CORU_COMMAND coru_argument_command(const coru_argument_t *self)
-{
-    return self->cmd;
-}
-
-char * coru_argument_path(const coru_argument_t *self)
-{
-    return self->path;
-}
