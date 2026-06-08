@@ -66,24 +66,6 @@ If line numbers are no longer needed, the companion program `uncoru` can remove 
 To use GNU Make on non-Linux Unix or Unix-like systems, use `gmake`.  
 To use GNU Make on Windows, use `mingw32-make`.
 
-`coru` has been compiled and run using:
-
-- GCC
-- Clang
-- Visual C++
-- Intel C++ Compiler
-
-The tool has been tested on several Unix or Unix-like systems:
-
-- Ubuntu 20.04 LTS
-- Fedora 35
-- openSUSE Leap 15.3
-- FreeBSD 13.0
-
-It has also been manually tested on Windows 10.
-
-In general, `coru` should work on any platform that provides a reasonably conforming C compiler.
-
 ## Supported Languages
 
 Currently supported programming languages include:
@@ -114,25 +96,35 @@ Currently supported programming languages include:
 
 To build the executables of `coru` and `uncoru`:
 
-make
+```shell
+$ make
+```
 
 To build static libraries:
 
-make static
+```shell
+$ make static
+```
 
 To build dynamic libraries:
 
-make dynamic
+```shell
+$ make dynamic
+```
 
 ## Using coru as a Console Program
 
 Simply pass a source file:
 
-coru path/to/file.c
+```shell
+$ coru path/to/file.c
+```
 
 Force the target source to be treated as C:
 
-coru -c path/to/source
+```shell
+$ coru -c path/to/source
+```
 
 ## Using coru as a Library
 
@@ -173,5 +165,4 @@ https://github.com/cwchentw/clibs
 
 ## Copyright
 
-Copyright (c) 2019–2021 ByteBard  
-Licensed under the MIT License.
+Copyright (c) 2019–2026 ByteBard. Licensed under the MIT License.
