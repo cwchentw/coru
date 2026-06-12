@@ -10,8 +10,8 @@ typedef struct uncoru_lexer_t {
     size_t capacity;
     size_t index;
     uncoru_token_t **tokens;
-    char *comment_start;
-    char *comment_end;
+    const char *comment_start;
+    const char *comment_end;
 } uncoru_lexer_t;
 
 int uncoru_lexer_new(uncoru_lexer_t *lexer);

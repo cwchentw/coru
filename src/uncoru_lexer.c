@@ -312,7 +312,6 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
             }
             else if (IS_CODE(input[i])) {
             SCAN_CODE:
-                1;  /* Trick for label. */
                 size_t j;
 
                 for (j = i; j < strlen(input); j++) {

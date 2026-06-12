@@ -32,10 +32,10 @@ BOOL coru_eval_eval(coru_eval_t *self,
     BOOL is_all,
     char *line, char **out)
 {
-    char *single_start = NULL;
-    char *single_end = NULL;
-    char *multi_start = NULL;
-    char *multi_end = NULL;
+    const char *single_start;
+    const char *single_end;
+    const char *multi_start;
+    const char *multi_end;
 
     coru_lexer_t lexer;
     coru_parser_t parser;

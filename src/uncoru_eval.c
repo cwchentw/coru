@@ -18,8 +18,8 @@ BOOL uncoru_eval_eval(
 {
     assert(self);
 
-    char *comment_start = NULL;
-    char *comment_end = NULL;
+    const char *comment_start;
+    const char *comment_end;
     uncoru_lexer_t lexer;
     uncoru_parser_t parser;
 
