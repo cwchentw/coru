@@ -154,7 +154,7 @@ _coru_load(
     if (coru_eval_new(&eval))
         goto ERROR_CORU_LOAD;
 
-    while (fgets(line, line_size, stream)) {
+    while (fgets(line, (int) line_size, stream)) {
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;

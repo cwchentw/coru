@@ -23,7 +23,7 @@ BOOL uncoru_eval_eval(
     uncoru_lexer_t lexer;
     uncoru_parser_t parser;
 
-    char *lang_string = language_to_string(lang);
+    const char *lang_string = language_to_string(lang);
 
     comment_start = single_start_string(lang_string);
     if (!comment_start)

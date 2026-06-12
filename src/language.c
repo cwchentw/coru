@@ -164,7 +164,7 @@ language_t detect_target_language(char *path)
 
     line[0] = '\0';
 
-    while(fgets(line, size, fp)) {
+    while(fgets(line, (int) size, fp)) {
         if (size == strlen(line)) {
             if ('\n' != line[size-1]) {
                 /* Double the size of the buffer. */
@@ -241,7 +241,7 @@ ERROR_LANGUAGE:
     return LANGUAGE_UNKNOWN;
 }
 
-char * language_to_string(language_t lang)
+const char * language_to_string(language_t lang)
 {
     switch (lang) {
     case LANGUAGE_C:

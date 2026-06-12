@@ -96,7 +96,7 @@ uncoru_load_fs(
         goto ERROR_UNCORU_LOAD;
     }
 
-    while (fgets(line, sz_line, stream)) {
+    while (fgets(line, (int) sz_line, stream)) {
         if (sz_line == strlen(line)) {
             if ('\n' != line[sz_line-1]) {
                 sz_line <<= 1;

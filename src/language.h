@@ -32,7 +32,7 @@
 #define STRING_MAKE    "Make"
 
 language_t detect_target_language(char *path);
-char * language_to_string(language_t lang);
+const char * language_to_string(language_t lang);
 
 #define is_language_equal(a, b) ((a) == (b))
 
