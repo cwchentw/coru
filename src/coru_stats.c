@@ -31,7 +31,7 @@ coru_stats_t * coru_stats_load_fs(FILE *stream)
     if (!stats)
         goto ERROR_CORU_STATS;
 
-    while (fgets(line, line_size, stream)) {
+    while (fgets(line, (int) line_size, stream)) {
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size - 1]) {
                 line_size <<= 1;
@@ -70,7 +70,7 @@ ERROR_CORU_STATS:
     return NULL;
 }
 
-static coru_stats_t * coru_stats_new()
+static coru_stats_t * coru_stats_new(void)
 {
     coru_stats_t *stats = (coru_stats_t *) malloc(sizeof(coru_stats_t));
     if (!stats) {

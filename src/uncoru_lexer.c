@@ -88,10 +88,9 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 #endif
     {
         size_t i;
+        size_t j;
         for (i = 0; i < strlen(input); i++) {
             if (SPACE == input[i]) {
-                size_t j;
-
                 /* Scan greedily. */
                 for (j = i; j < strlen(input); j++) {
                     if (SPACE != input[j])
@@ -216,8 +215,6 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                     return FALSE;
             }
             else if (isdigit(input[i])) {
-                size_t j;
-
                 for (j = i; j < strlen(input); j++) {
                     if (!isdigit(input[j]))
                         break;
@@ -249,8 +246,6 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 i = j - 1;
             }
             else if (IS_COMMENT_START(input[i])) {
-                size_t j;
-
                 for (j = i;
                      j < strlen(input) && j - i < strlen(self->comment_start);
                      j++) {
@@ -280,8 +275,6 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 i = j - 1;
             }
             else if (IS_COMMENT_END(input[i])) {
-                size_t j;
-
                 for (j = i;
                      j < strlen(input) && j - i < strlen(self->comment_end);
                      j++) {
@@ -312,8 +305,6 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
             }
             else if (IS_CODE(input[i])) {
             SCAN_CODE:
-                size_t j;
-
                 for (j = i; j < strlen(input); j++) {
                     if (!IS_CODE(input[j]))
                         break;

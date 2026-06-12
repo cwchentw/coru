@@ -1,8 +1,9 @@
+#include <stddef.h>
 #include "utf8_utils.h"
 
-int get_visual_width(const char *str)
+size_t get_visual_width(const char *str)
 {
-    int width = 0;
+    size_t width = 0;
     while (*str) {
         if ((*str & 0xC0) != 0x80) {
             if (*str & 0x80) {

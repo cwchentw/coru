@@ -66,6 +66,7 @@ ERROR_CORU:
 static BOOL coru_run_load(coru_argument_t * arg)
 {
     FILE *fp = NULL;
+    coru_doc_t *doc = NULL;
 
 #if _MSC_VER
     if (0 != fopen_s(&fp, coru_argument_path(arg), "r"))
@@ -127,7 +128,6 @@ static BOOL coru_run_load(coru_argument_t * arg)
 
     BOOL is_all = coru_argument_is_all(arg);
 
-    coru_doc_t *doc = NULL;
     if (is_all) {
         doc = coru_doc_load_all_fs(fp, lang);
         if (!doc) {

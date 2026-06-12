@@ -32,7 +32,7 @@ uncoru_stats_t * uncoru_stats_load_fs(FILE *stream)
     if (!stats)
         goto ERROR_UNCORU_STATS;
 
-    while (fgets(line, line_size, stream)) {
+    while (fgets(line, (int) line_size, stream)) {
         if (line_size == strlen(line)) {
             if ('\n' != line[line_size-1]) {
                 line_size <<= 1;
