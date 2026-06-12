@@ -4,15 +4,6 @@
 #include "uncoru_metadata.h"
 #include "print.h"
 
-void uncoru_help_version(void)
-{
-    PUTS("%s", UNCORU_VERSION);
-}
-
-void uncoru_help_license(void)
-{
-    PUTS("%s", UNCORU_LICENSE);
-}
 
 /*-------1---------2---------3---------4---------5---------6---------7---------8*/
 /*345678901234567890123456789012345678901234567890123456789012345678901234567890*/

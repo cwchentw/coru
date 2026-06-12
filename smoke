@@ -38,9 +38,13 @@ DEMO_DIR="${CWD}/demo"
 CORU="${BIN_DIR}/coru"
 UNCORU="${BIN_DIR}/uncoru"
 
+SMOKE_RUN "$CORU" -v
+SMOKE_RUN "$CORU" --license
 SMOKE_RUN "$CORU" "${DEMO_DIR}/coru/hello.cpp"
 SMOKE_RUN "$CORU" "${DEMO_DIR}/coru/hello_utf8.c"
 TEST_RUN valgrind "$CORU" -pas "${DEMO_DIR}/coru/HelloWorld.lpr"
+SMOKE_RUN "$UNCORU" -v
+SMOKE_RUN "$UNCORU" --license
 SMOKE_RUN "$UNCORU" "${DEMO_DIR}/uncoru/hello.cpp"
 SMOKE_RUN "$UNCORU" "${DEMO_DIR}/uncoru/hello_utf8.c"
 TEST_RUN valgrind "$UNCORU" -pas "${DEMO_DIR}/uncoru/HelloWorld.lpr"
