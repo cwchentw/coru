@@ -6,11 +6,6 @@
 #include "uncoru.h"
 #include "uncoru_stats.h"
 
-struct uncoru_stats_t {
-    size_t width;
-    size_t height;
-};
-
 static uncoru_stats_t * uncoru_stats_new(void);
 static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line);
 
@@ -98,40 +93,4 @@ static BOOL uncoru_stats_eval(uncoru_stats_t *self, char *line)
     uncoru_stats_set_height(self, uncoru_stats_height(self) + 1);
 
     return TRUE;
-}
-
-void uncoru_stats_delete(void *self)
-{
-    if (!self)
-        return;
-
-    free(self);
-}
-
-size_t uncoru_stats_width(uncoru_stats_t *self)
-{
-    assert(self);
-
-    return self->width;
-}
-
-size_t uncoru_stats_height(uncoru_stats_t *self)
-{
-    assert(self);
-
-    return self->height;
-}
-
-void uncoru_stats_set_width(uncoru_stats_t *self, size_t width)
-{
-    assert(self);
-
-    self->width = width;
-}
-
-void uncoru_stats_set_height(uncoru_stats_t *self, size_t height)
-{
-    assert(self);
-
-    self->height = height;
 }

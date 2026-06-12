@@ -4,13 +4,17 @@
 #include <stdio.h>
 #include "uncoru.h"
 
-typedef struct uncoru_stats_t uncoru_stats_t;
+typedef struct uncoru_stats_t {
+    size_t width;
+    size_t height;
+} uncoru_stats_t;
 
 uncoru_stats_t * uncoru_stats_load_fs(FILE *stream);
-void uncoru_stats_delete(void *self);
-size_t uncoru_stats_width(uncoru_stats_t *self);
-size_t uncoru_stats_height(uncoru_stats_t *self);
-void uncoru_stats_set_width(uncoru_stats_t *self, size_t width);
-void uncoru_stats_set_height(uncoru_stats_t *self, size_t height);
+
+#define uncoru_stats_delete(self) (free((self)))
+#define uncoru_stats_width(self) ((self)->width)
+#define uncoru_stats_height(self) ((self)->height)
+#define uncoru_stats_set_width(self, w) ((self)->width = (w))
+#define uncoru_stats_set_height(self, h) ((self)->height = (h))
 
 #endif  /* UNCORU_STATS_H */
