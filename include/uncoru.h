@@ -9,7 +9,7 @@
 
 /* Valid target language. */
 #ifndef _LANGUAGE_TYPE_IS_DEFINED
-    typedef char language_t;
+    typedef unsigned char language_t;
     #define _LANGUAGE_TYPE_IS_DEFINED
 #endif
 

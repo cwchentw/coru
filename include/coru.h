@@ -49,7 +49,7 @@ const char * coru_doc_string(const coru_doc_t *self);
 void coru_doc_delete(coru_doc_t *self);
 
 #ifdef __cplusplus
-}
+}  /* exetern "c" */
 #endif
 
 #endif  /* CORU_H */
