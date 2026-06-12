@@ -1,10 +1,6 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#ifdef _WIN32
-    #include <windows.h>
-#endif
-
 #include "boolean.h"
 #include "coru.h"
 

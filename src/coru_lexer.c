@@ -58,7 +58,7 @@ static BOOL _coru_lexer_push(coru_lexer_t *self, coru_token_t *token);
 
 BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
 {
-#if DEBUG
+#ifdef DEBUG
     PUTERR("Source to scan: -->%s<--", input);
 #endif
     {
@@ -89,7 +89,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!spaces)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Space as token: -->%s<--", spaces);
             #endif
 
@@ -110,7 +110,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!tab)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("TAB as token: -->%s<--", tab);
             #endif
 
@@ -128,7 +128,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Single quote as token: -->%s<--", quote);
             #endif
 
@@ -147,7 +147,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Double quote as token: -->%s<--", quote);
             #endif
 
@@ -166,7 +166,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!backslash)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Backslash as token: -->%s<--", backslash);
             #endif
 
@@ -184,7 +184,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 char *ampersand = string_allocate("&");
                 if (!ampersand)
                     return FALSE;
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Ampersand as token: -->%s<--", ampersand);
             #endif
 
@@ -202,7 +202,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 char *backtick = string_allocate("`");
                 if (!backtick)
                     return FALSE;
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Backtick as token: -->%s<--", backtick);
             #endif
 
@@ -239,7 +239,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 if (!code)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Code as token: -->%s<--", code);
             #endif
 
@@ -256,7 +256,7 @@ BOOL coru_lexer_lex(coru_lexer_t *self, char *input)
                 i = j - 1;
             }
             else {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Left char: -->%c<--", input[i]);
             #endif
                 /* Trade-off: unknown characters are ignored instead of producing errors.

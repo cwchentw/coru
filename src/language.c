@@ -34,7 +34,7 @@ language_t detect_target_language(char *path)
 
     ext[0] = '\0';
 
-#if _MSC_VER
+#ifdef _MSC_VER
     sprintf_s(ext, sz, "%s", sp + index);
 #else
     sprintf(ext, "%s", sp + index);
@@ -139,7 +139,7 @@ language_t detect_target_language(char *path)
     char *line = NULL;
     char *more_line = NULL;
 
-#if _MSC_VER
+#ifdef _MSC_VER
     if (0 != fopen_s(&fp, path, "r")) {
         goto ERROR_LANGUAGE;
     }
@@ -147,7 +147,7 @@ language_t detect_target_language(char *path)
     fp = fopen(path, "r");
 #endif
     if (!fp) {
-    #if DEBUG
+    #ifdef DEBUG
         PUTERR("Unable to load file: %s", path);
     #endif
         goto ERROR_LANGUAGE;
@@ -156,7 +156,7 @@ language_t detect_target_language(char *path)
     size_t size = 150;  /* A sensible default line width. */
     line = (char *) malloc(size * sizeof(char));
     if (!line) {
-    #if DEBUG
+    #ifdef DEBUG
         PUTERR("Failed to allocate line");
     #endif
         goto ERROR_LANGUAGE;
@@ -171,7 +171,7 @@ language_t detect_target_language(char *path)
                 size <<= 1;
                 more_line = realloc(line, size);
                 if (!more_line) {
-                #if DEBUG
+                #ifdef DEBUG
                     PUTERR("Failed to reallocate line");
                 #endif
                     goto ERROR_LANGUAGE;

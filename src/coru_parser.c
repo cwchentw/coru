@@ -52,7 +52,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
         coru_ast_t *ast = NULL;
 
         if (token && CORU_TOKEN_SINGLE_QUOTE == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform single quote token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -106,7 +106,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             }
         }
         else if (token && CORU_TOKEN_DOUBLE_QUOTE == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform double quote token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -160,7 +160,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             }
         }
         else if (token && CORU_TOKEN_BACKSLASH == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform backslash token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -174,7 +174,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && CORU_TOKEN_AMPERSAND == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform ampersand token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -188,7 +188,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && CORU_TOKEN_BACKTICK == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform backtoken token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -202,7 +202,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && CORU_TOKEN_TAB == coru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform TAB token: (%d) -->%s<--",
                     coru_token_type(token), coru_token_text(token));
             #endif
@@ -216,7 +216,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);
         }
         else if (token && IS_CODE_TOKEN(coru_token_type(token))) {
-        #if DEBUG
+        #ifdef DEBUG
             PUTERR("Pass code token: (%d) -->%s<--",
                 coru_token_type(token), coru_token_text(token));
         #endif
@@ -225,7 +225,7 @@ BOOL coru_parser_parse(coru_parser_t *self, coru_lexer_t *lexer)
             token = coru_lexer_next(lexer);  /* Pass. */
         }
         else {
-            #if DEBUG
+            #ifdef DEBUG
                 if (token)
                     PUTERR("Pass other token: (%d) -->%s<--",
                         coru_token_type(token), coru_token_text(token));

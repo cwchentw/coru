@@ -66,7 +66,7 @@ struct coru_ast_t {
 coru_ast_t * coru_ast_new(CORU_AST_TYPE ast_t)
 {
     if (!_is_valid_ast_type(ast_t)) {
-#if DEBUG
+#ifdef DEBUG
         DEBUG_INFO("Invalid Coru AST type");
 #endif
         return NULL;

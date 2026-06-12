@@ -47,12 +47,12 @@ BOOL uncoru_eval_eval(
         goto ERROR_UNCORU_EVAL;
 
     uncoru_lexer_set_comment_start(&lexer, comment_start);
-#if DEBUG
+#ifdef DEBUG
     PUTERR("The start comment: -->%s<--", uncoru_lexer_comment_start(lexer));
 #endif
 
     uncoru_lexer_set_comment_end(&lexer, comment_end);
-#if DEBUG
+#ifdef DEBUG
     PUTERR("The end comment: -->%s<--", uncoru_lexer_comment_end(lexer));
 #endif
 
@@ -94,7 +94,7 @@ BOOL uncoru_eval_eval(
 
             char *txt = uncoru_ast_text(ast);
 
-        #if DEBUG
+        #ifdef DEBUG
             if (txt)
                 PUTERR("Print text to output: -->%s<--", txt);
         #endif

@@ -86,7 +86,7 @@ static BOOL uncoru_run_load(uncoru_argument_t *arg)
     if (is_language_equal(LANGUAGE_UNKNOWN, lang))
         goto ERROR_LOAD;
 
-#if _MSC_VER
+#ifdef _MSC_VER
     if (0 != fopen_s(&fp, uncoru_argument_path(arg), "r"))
         goto ERROR_LOAD;
 #else

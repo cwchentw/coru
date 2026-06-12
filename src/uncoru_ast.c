@@ -75,7 +75,7 @@ struct uncoru_ast_t {
 uncoru_ast_t * uncoru_ast_new(UNCORU_AST_TYPE ast_t)
 {
     if (!_is_valid_ast_type(ast_t)) {
-#if DEBUG
+#ifdef DEBUG
         DEBUG_INFO("Invalid uncoru AST type");
 #endif
         return NULL;

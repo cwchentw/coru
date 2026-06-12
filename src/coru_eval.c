@@ -87,7 +87,7 @@ BOOL coru_eval_eval(coru_eval_t *self,
     size_t width_new = coru_stats_width(stats) + width_number \
         + strlen(END_OF_LINE) + 1;
 
-    #if DEBUG
+    #ifdef DEBUG
         PUTS("Destination width: %lu", width_new);
     #endif
 

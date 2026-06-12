@@ -83,7 +83,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
 {
     assert(self);
 
-#if DEBUG
+#ifdef DEBUG
     PUTERR("Source to scan: -->%s<--", input);
 #endif
     {
@@ -106,7 +106,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!spaces)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Space as token: -->%s<--", spaces);
             #endif
 
@@ -127,7 +127,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!tab)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("TAB as token: -->%s<--", tab);
             #endif
 
@@ -145,7 +145,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Single quote as token: -->%s<--", quote);
             #endif
 
@@ -164,7 +164,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!quote)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Double quote as token: -->%s<--", quote);
             #endif
 
@@ -182,7 +182,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 char *backslash = string_allocate("\\");
                 if (!backslash)
                     return FALSE;
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Backslash as token: -->%s<--", backslash);
             #endif
 
@@ -200,7 +200,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 char *ampersand = string_allocate("&");
                 if (!ampersand)
                     return FALSE;
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Backslash as token: -->%s<--", ampersand);
             #endif
 
@@ -229,7 +229,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!integer)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Integer as token: -->%s<--", integer);
             #endif
 
@@ -260,7 +260,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!comment)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Comment start as token: -->%s<--", comment);
             #endif
 
@@ -289,7 +289,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!comment)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Comment end as token: -->%s<--", comment);
             #endif
 
@@ -319,7 +319,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 if (!code)
                     return FALSE;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Code as token: -->%s<--", code);
             #endif
 
@@ -336,7 +336,7 @@ BOOL uncoru_lexer_lex(uncoru_lexer_t *self, char *input)
                 i = j - 1;
             }
             else {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Left char: -->%c<--", input[i]);
             #endif
                 /* Pass. */

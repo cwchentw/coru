@@ -15,24 +15,22 @@
 #endif
 
 /* Custom boolean type. */
-#if _WIN32
-    #include <windows.h>
-#else
+#ifndef _WINDOWS_
 #ifdef __cplusplus
     #ifndef _BOOL_IS_DEFINED
         typedef bool BOOL;
         #define FALSE  false
         #define TRUE   true
         #define _BOOL_IS_DEFINED
-    #endif  /* BOOL */
+    #endif
 #else
     #if __STDC_VERSION__ < 199901L
         #ifndef _BOOL_IS_DEFINED
-            typedef unsigned char BOOL;
+            typedef char BOOL;
             #define FALSE  0
             #define TRUE   1
             #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
+        #endif
     #else
         #ifndef _BOOL_IS_DEFINED
             #include <stdbool.h>
@@ -40,9 +38,9 @@
             #define FALSE  false
             #define TRUE   true
             #define _BOOL_IS_DEFINED
-        #endif  /* BOOL */
-    #endif  /* C89 */
-#endif  /* __cplusplus */
+        #endif
+    #endif
+#endif
 #endif
 
 #ifdef __cplusplus

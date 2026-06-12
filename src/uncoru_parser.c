@@ -59,7 +59,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform a SINGLE-QUOTED STRING token");
             #endif
 
@@ -118,7 +118,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform a DOUBLE-QUOTED STRING token");
             #endif
 
@@ -177,7 +177,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform SPACE token: (%d) -->%s<--",
                     uncoru_token_type(token), uncoru_token_text(token));
             #endif
@@ -194,7 +194,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform TAB token: (%d) -->%s<--",
                     uncoru_token_type(token), uncoru_token_text(token));
             #endif
@@ -211,7 +211,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform BACKSLASH token: (%d) -->%s<--",
                     uncoru_token_type(token), uncoru_token_text(token));
             #endif
@@ -228,7 +228,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
             /* Consume a token. */
             token = uncoru_lexer_next(lexer);
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Transform AMPERSAND token: (%d) -->%s<--",
                     uncoru_token_type(token), uncoru_token_text(token));
             #endif
@@ -244,7 +244,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
         else {
             /* Parse a number comment. */
             if (token && UNCORU_TOKEN_COMMENT_START == uncoru_token_type(token)) {
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Try to parse space in a line number.");
             #endif
                 uncoru_token_t *tokenSpace = uncoru_lexer_peek_n(lexer, 1);
@@ -254,7 +254,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                 else if (UNCORU_TOKEN_SPACE != uncoru_token_type(tokenSpace))
                     goto PARSE_CODE_AST;
 
-            #if DEBUG
+            #ifdef DEBUG
                 PUTERR("Try to parse integer in a line number.");
             #endif
                 uncoru_token_t *tokenInt = uncoru_lexer_peek_n(lexer, 2);
@@ -265,7 +265,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                     goto PARSE_CODE_AST;
 
                 if (0 != strcmp("", uncoru_lexer_comment_end(lexer))) {
-                #if DEBUG
+                #ifdef DEBUG
                     PUTERR("Try to parse space in a line number.");
                 #endif
                     uncoru_token_t *tokenSpace2 = uncoru_lexer_peek_n(lexer, 3);
@@ -275,7 +275,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                     else if (UNCORU_TOKEN_SPACE != uncoru_token_type(tokenSpace2))
                         goto PARSE_CODE_AST;
 
-                #if DEBUG
+                #ifdef DEBUG
                     PUTERR("Try to prase end comment in a line number.")
                 #endif
                     uncoru_token_t *tokenCommentEnd = uncoru_lexer_peek_n(lexer, 4);
@@ -327,7 +327,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                     }
                 }
 
-            #if DEBUG
+            #ifdef DEBUG
                 if (ast)
                     PUTERR("Transform a LINE NUMBER ast");
             #endif
@@ -351,7 +351,7 @@ BOOL uncoru_parser_parse(uncoru_parser_t *self, uncoru_lexer_t *lexer)
                 token = uncoru_lexer_peek_n(lexer, 0);
             }
 
-            #if DEBUG
+            #ifdef DEBUG
                 if (ast)
                     PUTERR("Transform a CODE ast");
             #endif

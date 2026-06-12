@@ -68,7 +68,7 @@ static BOOL coru_run_load(coru_argument_t * arg)
     FILE *fp = NULL;
     coru_doc_t *doc = NULL;
 
-#if _MSC_VER
+#ifdef _MSC_VER
     if (0 != fopen_s(&fp, coru_argument_path(arg), "r"))
         goto ERROR_LOAD;
 #else
@@ -95,7 +95,7 @@ static BOOL coru_run_load(coru_argument_t * arg)
     if (is_language_equal(LANGUAGE_UNKNOWN, lang))
         goto ERROR_LOAD;
 
-#if DEBUG
+#ifdef DEBUG
     if (is_language_equal(lang, LANGUAGE_UNKNOWN)) {
         PUTERR("Unsupported language");
     } else {
@@ -103,9 +103,9 @@ static BOOL coru_run_load(coru_argument_t * arg)
     }
 #endif
 
-#if _MSC_VER
+#ifdef _MSC_VER
     if (0 != fopen_s(&fp, coru_argument_path(arg), "r")) {
-    #if DEBUG
+    #ifdef DEBUG
         PUTERR("Failed to open file at %s", coru_argument_path(arg));
     #endif
         goto ERROR_LOAD;
@@ -113,14 +113,14 @@ static BOOL coru_run_load(coru_argument_t * arg)
 #else
     fp = fopen(coru_argument_path(arg), "r");
     if (!fp) {
-    #if DEBUG
+    #ifdef DEBUG
         PUTERR("Failed to open file at %s", coru_argument_path(arg));
     #endif
         goto ERROR_LOAD;
     }
 #endif
 
-#if DEBUG
+#ifdef DEBUG
     PUTS("Source width: %lu", coru_stats_width(stats));
     PUTS("Source height: %lu", coru_stats_height(stats));
     /* Add stats for non-comment lines. */
