@@ -27,15 +27,16 @@
 #define  LANGUAGE_PHP      11
 #define  LANGUAGE_JS       12
 #define  LANGUAGE_GO       13
-#define  LANGUAGE_RUST     14
-#define  LANGUAGE_OBJC     15
-#define  LANGUAGE_OBJCPP   16
-#define  LANGUAGE_SWIFT    17
-#define  LANGUAGE_CSH      18
-#define  LANGUAGE_SH       19
-#define  LANGUAGE_PS       20
-#define  LANGUAGE_CMAKE    21
-#define  LANGUAGE_MAKE     22
+#define  LANGUAGE_OCAML    14
+#define  LANGUAGE_RUST     15
+#define  LANGUAGE_OBJC     16
+#define  LANGUAGE_OBJCPP   17
+#define  LANGUAGE_SWIFT    18
+#define  LANGUAGE_CSH      19
+#define  LANGUAGE_SH       20
+#define  LANGUAGE_PS       21
+#define  LANGUAGE_CMAKE    22
+#define  LANGUAGE_MAKE     23
 
 #ifdef __cplusplus
 extern "C" {

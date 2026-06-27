@@ -25,6 +25,7 @@ static comment_text_t comment_single_start[] = {
     { STRING_PHP, "/*" },     /* PHP */
     { STRING_JS, "/*" },      /* JavaScript */
     { STRING_GO, "/*" },      /* Golang */
+    { STRING_OCAML, "(*" },   /* OCaml */
     { STRING_RUST, "/*" },    /* Rust */
     { STRING_OBJC, "/*" },    /* Objective-C */
     { STRING_OBJCPP, "/*" },  /* Objective-C++ */
@@ -61,6 +62,7 @@ static comment_text_t comment_single_end[] = {
     { STRING_PHP, "*/" },     /* PHP */
     { STRING_JS, "*/" },      /* JavaScript */
     { STRING_GO, "*/" },      /* Golang */
+    { STRING_OCAML, "*)" },   /* OCaml */
     { STRING_RUST, "*/" },    /* Rust */
     { STRING_OBJC, "*/" },    /* Objective-C */
     { STRING_OBJCPP, "*/" },  /* Objective-C++ */
@@ -97,6 +99,7 @@ static comment_text_t comment_multiple_start[] = {
     { STRING_PHP, "/*" },     /* PHP */
     { STRING_JS, "/*" },      /* JavaScript */
     { STRING_GO, "/*" },      /* Golang */
+    { STRING_OCAML, "(*" },   /* OCaml */
     { STRING_RUST, "/*" },    /* Rust */
     { STRING_OBJC, "/*" },    /* Objective-C */
     { STRING_OBJCPP, "/*" },  /* Objective-C++ */
@@ -133,6 +136,7 @@ static comment_text_t comment_multiple_end[] = {
     { STRING_PHP, "*/" },     /* PHP */
     { STRING_JS, "*/" },      /* JavaScript */
     { STRING_GO, "*/" },      /* Golang */
+    { STRING_OCAML, "*)" },   /* OCaml */
     { STRING_RUST, "*/" },    /* Rust */
     { STRING_OBJC, "*/" },    /* Objective-C */
     { STRING_OBJCPP, "*/" },  /* Objective-C++ */

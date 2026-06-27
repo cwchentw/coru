@@ -86,6 +86,7 @@ Currently supported programming languages include:
 - Swift
 - Go
 - Rust
+- OCaml
 - C shell and derivatives
 - Bourne shell and derivatives
 - PowerShell

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "coru.h"
 #include "cstring.h"
 #include "language.h"
 #include "print.h"
@@ -105,6 +106,9 @@ language_t detect_target_language(char *path)
     }
     else if (string_is_equal(".go", ext)) {
         lang = LANGUAGE_GO;
+    }
+    else if (string_is_equal(".ml", ext)) {
+        lang = LANGUAGE_OCAML;
     }
     else if (string_is_equal(".rs", ext)) {
         lang = LANGUAGE_RUST;
@@ -270,6 +274,8 @@ const char * language_to_string(language_t lang)
         return STRING_JS;
     case LANGUAGE_GO:
         return STRING_GO;
+    case LANGUAGE_OCAML:
+        return STRING_OCAML;
     case LANGUAGE_RUST:
         return STRING_RUST;
     case LANGUAGE_OBJC:

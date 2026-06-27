@@ -17,6 +17,7 @@
 #define STRING_PHP     "PHP"
 #define STRING_JS      "JavaScript"
 #define STRING_GO      "Golang"
+#define STRING_OCAML   "OCaml"
 #define STRING_RUST    "Rust"
 #define STRING_OBJC    "Objective-C"
 #define STRING_OBJCPP  "Objective-C++"

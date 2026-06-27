@@ -69,6 +69,7 @@ void uncoru_help_help(FILE *stream)
     fprintf(stream, "    PHP%s", END_OF_LINE);
     fprintf(stream, "    JavaScript%s", END_OF_LINE);
     fprintf(stream, "    Golang%s", END_OF_LINE);
+    fprintf(stream, "    OCaml%s", END_OF_LINE);
     fprintf(stream, "    Rust%s", END_OF_LINE);
     fprintf(stream, "    Objective-C and Objective++%s", END_OF_LINE);
     fprintf(stream, "    Swift%s", END_OF_LINE);
