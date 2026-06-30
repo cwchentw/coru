@@ -5,21 +5,6 @@ The resulting code remains valid source code and can still be compiled or execut
 
 Such commented source files are primarily intended for use in **programming tutorials and demonstrative code snippets**, where line numbers help readers follow explanations more easily.
 
-## Project Status
-
-`coru` is usable and has been tested on several platforms.
-
-The current implementation contains some known architectural limitations. These issues generally **do not affect the basic functionality of the tool**, but they may make the internal codebase harder to extend or maintain collaboratively without future refactoring.
-
-At the moment, the project can be described as:
-
-- usable for practical purposes
-- primarily maintained by the original author
-- open to bug reports and small improvements
-- potentially subject to internal refactoring in future versions
-
-If you plan to build upon the codebase or contribute large changes, please note that some internal components may change in later revisions.
-
 ## coru and its Companion Program
 
 The `coru` toolset consists of two small utilities:
@@ -29,7 +14,7 @@ The `coru` toolset consists of two small utilities:
 
 These tools allow source code to move freely between **teaching materials** and **normal development environments**.
 
-## Why coru?
+## Rationale
 
 When writing programming tutorials, demonstrative code snippets are essential. However, beginners often find it difficult to follow explanations when no clear reference points are provided.
 
@@ -57,6 +42,21 @@ This provides several advantages:
 - the same snippet works across **web pages, books, slides, and documents**
 
 If line numbers are no longer needed, the companion program `uncoru` can remove them and restore the original clean source.
+
+## Project Status
+
+`coru` is usable and has been tested on several platforms.
+
+The current implementation contains some known architectural limitations. These issues generally **do not affect the basic functionality of the tool**, but they may make the internal codebase harder to extend or maintain collaboratively without future refactoring.
+
+At the moment, the project can be described as:
+
+- usable for practical purposes
+- primarily maintained by the original author
+- open to bug reports and small improvements
+- potentially subject to internal refactoring in future versions
+
+If you plan to build upon the codebase or contribute large changes, please note that some internal components may change in later revisions.
 
 ## System Requirements
 
